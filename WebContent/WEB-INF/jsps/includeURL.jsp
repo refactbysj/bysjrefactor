@@ -19,9 +19,6 @@
     <link type="text/css"
           href="<%=basePath%>/bootstrap/css/bootstrap.min.css" rel="stylesheet"
           media="screen">
-    <link href="<%=basePath%>/date/css/bootstrap-datetimepicker.min.css"
-          rel="stylesheet" media="screen">
-
     <!--glyphicons 图标  font-awesome    -->
     <link type="text/css"
           href="<%=basePath%>/bootstrap/fonts/glyphicons-halflings-regular.eot"
@@ -35,9 +32,8 @@
     <link type="text/css"
           href="<%=basePath%>/font-awesome/css/font-awesome.min.css"
           rel="stylesheet"/>
-    <!--  时间范围选择器-->
-    <%-- <link rel="stylesheet" type="text/css" media="all"
-        href="<%=basePath%>dateTime/daterangepicker-bs3.css" /> --%>
+
+
     <!--icheck  -->
     <link type="text/css" href="<%=basePath%>/iCheck/blue.css"
           rel="stylesheet"/>
@@ -54,18 +50,6 @@
     <script type="text/javascript" src="<%=basePath%>/static/easyui/jquery.dialog.js" charset="utf-8"></script>
     <script type="text/javascript"
             src="<%=basePath%>/bootstrap/js/bootstrap.min.js"></script>
-    <!--  datetimepicker-->
-    <script type="text/javascript"
-            src="<%=basePath%>/date/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-    <script type="text/javascript"
-            src="<%=basePath%>/date/js/locales/bootstrap-datetimepicker.fr.js"
-            charset="UTF-8"></script>
-    <script type="text/javascript"
-            src="<%=basePath%>/date/js/locales/bootstrap-datetimepicker.zh-CN.js"
-            charset="UTF-8"></script>
-    <!--daterangepicker  -->
-    <%-- <script type="text/javascript" src="<%=basePath%>dateTime/moment.js"></script>
-    <script type="text/javascript"src="<%=basePath%>dateTime/daterangepicker.js"></script> --%>
 
 
     <script type="text/javascript" src="<%=basePath%>/js/myAlert.js"></script>
@@ -82,6 +66,6 @@
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/static/easyui/themes/icon.css"/>
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/css/docs.css"/>
     <script type="text/javascript" src="<%=basePath%>/static/easyui/jquery.easyui.min.js"></script>
-    <%--<script type="text/javascript" src="<%=basePath%>/static/extJs.js" charset="utf-8"></script>--%>
+    <script type="text/javascript" src="<%=basePath%>/static/extJs.js" charset="utf-8"></script>
 
 </head>
