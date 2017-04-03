@@ -10,7 +10,7 @@
     <title>毕业管理系统</title>
     <script type="text/javascript">
         /*  获取浏览器的高度和宽度，并且为导航栏和右边的页面分配高度*/
-        function getContentSize() {
+        /*function getContentSize() {
             var wh = document.documentElement.clientHeight;
             var cw = document.documentElement.clientWidth;
             var nw = document.getElementById("navigation").clientWidth;
@@ -27,11 +27,11 @@
         }
 
         window.onload = getContentSize;
-        window.onresize = getContentSize;
+        window.onresize = getContentSize;*/
 
         /*  设置加载页面*/
         //获取浏览器页面可见高度和宽度
-        var _PageHeight = document.documentElement.clientHeight, _PageWidth = document.documentElement.clientWidth;
+        /*var _PageHeight = document.documentElement.clientHeight, _PageWidth = document.documentElement.clientWidth;
         //计算loading框距离顶部和左部的距离（loading框的宽度为215px，高度为61px）
         var _LoadingTop = _PageHeight > 61 ? (_PageHeight - 61) / 2 : 0, _LoadingLeft = _PageWidth > 215 ? (_PageWidth - 215) / 2
             : 0;
@@ -55,7 +55,7 @@
                 var loadingMask = document.getElementById('loadingDiv');
                 loadingMask.parentNode.removeChild(loadingMask);
             }
-        }
+        }*/
     </script>
     <script type="text/javascript">
         function logout() {
