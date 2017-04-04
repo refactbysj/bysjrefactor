@@ -15,6 +15,9 @@
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
             + path + "/";
 %>
+
+<c:set var="basePath" value="<%=basePath%>"/>
+
 <head>
     <link type="text/css"
           href="<%=basePath%>/bootstrap/css/bootstrap.min.css" rel="stylesheet"
@@ -43,6 +46,8 @@
 
     <link type="text/css" href="<%=basePath%>/css/index.css" rel="stylesheet"/>
 
+    <link type="text/css" href="<%=basePath%>/css/bysj.css" rel="stylesheet"/>
+
 
     <script type="text/javascript"
             src="<%=basePath%>/jquery/jquery-1.9.1.min.js" charset="UTF-8"></script>
@@ -61,7 +66,10 @@
     <%--自定义的弹出框--%>
     <script type="text/javascript" src="<%=basePath%>/js/xcConfirm.js"></script>
 
-    <%--引入easyui--%>
+    <!-- [my97日期时间控件] -->
+    <script type="text/javascript" src="<%=basePath%>/static/My97DatePicker/WdatePicker.js" charset="utf-8"></script>
+
+<%--引入easyui--%>
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/static/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/static/easyui/themes/icon.css"/>
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/css/docs.css"/>

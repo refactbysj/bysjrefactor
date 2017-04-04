@@ -6,7 +6,6 @@ import com.newview.bysj.domain.SchoolSupervisionReport;
 import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.jpaRepository.MyRepository;
-import com.newview.bysj.other.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

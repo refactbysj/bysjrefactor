@@ -4,7 +4,7 @@ import com.newview.bysj.domain.Actor;
 import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.domain.User;
 import com.newview.bysj.exception.MessageException;
-import com.newview.bysj.other.Common;
+import com.newview.bysj.util.Common;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -364,11 +364,11 @@ public class CommonHelper {
      * @param strTime 需要获取时间对象的字符串
      * @return 当前字符串对应的Calendar对象
      */
-    public static Calendar getCalendarByString(String strTime) {
+    public static Calendar getCalendarByString(String strTime,String pattern) {
         //创建一个calendar对象
         Calendar calendar = Calendar.getInstance();
         //创建一个格式化日期类
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
             //对字符串进行格式化
             Date date = simpleDateFormat.parse(strTime);

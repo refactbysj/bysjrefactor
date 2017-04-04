@@ -9,7 +9,7 @@ import com.newview.bysj.exception.MessageException;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.jpaRepository.MyRepository;
 import com.newview.bysj.myAnnotation.MethodDescription;
-import com.newview.bysj.other.PageCondition;
+import com.newview.bysj.util.PageCondition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

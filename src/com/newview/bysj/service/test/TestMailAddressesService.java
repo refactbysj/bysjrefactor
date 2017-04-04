@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import com.newview.bysj.domain.Actor;
 import com.newview.bysj.domain.Mail;
 import com.newview.bysj.domain.MailAddresses;
-import com.newview.bysj.other.PageCondition;
+import com.newview.bysj.util.PageCondition;
 import com.newview.bysj.service.ActorService;
 import com.newview.bysj.service.MailAddressesService;
 import com.newview.bysj.service.MailService;

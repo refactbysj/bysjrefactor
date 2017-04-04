@@ -54,7 +54,6 @@
     <servlet-name>bysj3</servlet-name>
     <url-pattern>*.json</url-pattern>
   </servlet-mapping>
-  <!-- ？？？？？？？？？？ -->
   <filter>
     <filter-name>openEntityManagerInViewFilter</filter-name>
     <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
@@ -81,6 +80,16 @@
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
         <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+
+    <!-- 浏览器不支持put,delete等method,由该filter将/xxx?_method=delete转换为标准的http delete方法 -->
+    <filter>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
   <!-- webService配置 -->
     <!--<servlet>

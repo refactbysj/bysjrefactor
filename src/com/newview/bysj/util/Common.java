@@ -1,4 +1,4 @@
-package com.newview.bysj.other;
+package com.newview.bysj.util;
 
 /**
  * 项目中需要使用的一些常量
