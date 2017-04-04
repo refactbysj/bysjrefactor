@@ -1,10 +1,9 @@
 package com.newview.bysj.service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import com.newview.bysj.dao.HolidayAndVacationDao;
+import com.newview.bysj.domain.HolidayAndVacation;
+import com.newview.bysj.jpaRepository.MyRepository;
+import com.newview.bysj.myAnnotation.MethodDescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +12,10 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.newview.bysj.dao.HolidayAndVacationDao;
-import com.newview.bysj.domain.HolidayAndVacation;
-import com.newview.bysj.jpaRepository.MyRepository;
-import com.newview.bysj.myAnnotation.MethodDescription;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 @Service("holidayAndVacationService")
 public class HolidayAndVacationService extends BasicService<HolidayAndVacation, Integer> {
@@ -33,7 +32,7 @@ public class HolidayAndVacationService extends BasicService<HolidayAndVacation, 
 
     @MethodDescription(value = "")
     public Page<HolidayAndVacation> getPageByTutor(Integer pageNo, Integer pageSize, String description) {
-        pageNo = (pageNo - 1) * pageSize;
+        pageNo = pageNo - 1;
         Page<HolidayAndVacation> result = holidayAndVacationDao.findAll(new Specification<HolidayAndVacation>() {
             @Override
             public Predicate toPredicate(Root<HolidayAndVacation> root, CriteriaQuery<?> query, CriteriaBuilder cb) {

@@ -1,4 +1,4 @@
-package com.newview.bysj.other;
+package com.newview.bysj.util;
 
 /**
  * 评审操作需要在jsp中用到的常量

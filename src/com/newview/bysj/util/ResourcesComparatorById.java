@@ -1,4 +1,4 @@
-package com.newview.bysj.other;
+package com.newview.bysj.util;
 
 import java.util.Comparator;
 

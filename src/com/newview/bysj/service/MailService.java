@@ -21,7 +21,7 @@ import com.newview.bysj.domain.Mail;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.jpaRepository.MyRepository;
 import com.newview.bysj.myAnnotation.MethodDescription;
-import com.newview.bysj.other.PageCondition;
+import com.newview.bysj.util.PageCondition;
 
 @Service("mailService")
 public class MailService extends BasicService<Mail, Integer> {

@@ -1,4 +1,4 @@
-package com.newview.bysj.other;
+package com.newview.bysj.util;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;

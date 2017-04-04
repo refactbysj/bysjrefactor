@@ -3,7 +3,6 @@ package com.newview.bysj.service;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.jpaRepository.MyRepository;
 import com.newview.bysj.myAnnotation.MethodDescription;
-import com.newview.bysj.other.PageCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

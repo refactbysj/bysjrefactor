@@ -140,7 +140,7 @@
 
         //打开新的Table
         function addTab(params) {
-            var iframe = '<iframe src="' + params.url + '" frameborder="0" style="border:0;width:100%;height:1200px;"></iframe>';
+            var iframe = '<iframe src="' + params.url + '" frameborder="0" style="border:0;width:100%;height:100%;"></iframe>';
             var t = $('#index_tabs');
             var opts = {
                 title: params.title,
