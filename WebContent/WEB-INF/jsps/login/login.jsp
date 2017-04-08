@@ -77,13 +77,13 @@
                    placeholder="Password" oncontextmenu="return false"
                    onpaste="return false"/>
         </div>
-        <div>
+        <%--<div>
             <input name="identifyingCode" type="text" maxlength="4"
                    style="width: 100px" id="checkNumber" autocomplete="off" placeholder="验证码"/> <span
                 id="checkImageSpan"> <img onclick="changeCode()"
                                           src="<%=basePath%>kaptcha/getKaptchaImage.html" id="checkImage"/></span><a
                 href="#" onclick="changeCode()">换一张</a>
-        </div>
+        </div>--%>
         <input id="submit" type="submit" value="登录" class="btn btn-success"/>
     </form>
 </div>

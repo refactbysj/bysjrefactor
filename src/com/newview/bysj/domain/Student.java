@@ -1,7 +1,7 @@
 package com.newview.bysj.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -64,6 +64,7 @@ public class Student extends Actor {
         return "Student []";
     }
 
+    @JsonIgnore
     public Tutor getTutor() {
         return tutor;
     }
@@ -71,6 +72,7 @@ public class Student extends Actor {
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
+
 
     public StudentClass getStudentClass() {
         return studentClass;
@@ -81,6 +83,7 @@ public class Student extends Actor {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public GraduateProject getGraduateProject() {
         return graduateProject;
     }
@@ -89,6 +92,7 @@ public class Student extends Actor {
         this.graduateProject = graduateProject;
     }
 
+    @JsonIgnore
     public ReplyGroup getReplyGroup() {
         return replyGroup;
     }
