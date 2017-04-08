@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<meta http-equiv="pragram" content="no-cache">
 
 <script type="text/javascript">
 
@@ -64,7 +63,6 @@
             <div style="padding: 10px;">
                 <span style="color:grey;">结束时间：</span>
                 <input id="endtime" class="Wdate" onclick="WdatePicker({minDate:'#F{$dp.$D(\'starttime\')}'})" type="text" value="${holidayEndTime}" name="endTime" required="required">
-
             </div>
 
     原因：<span style="color: grey;">(200字以内，字数：<span id="wordCount">0</span>/200)</span>

@@ -269,8 +269,12 @@ public class ProjectOfTimeController extends BaseController {
         if (editId != null) {
             if (holidayAndVacationService.findById(editId) != null) {
                 HolidayAndVacation holidayAndVacation = holidayAndVacationService.findById(editId);
-                modelMap.put("holidayStartTime", simpleDateFormat.format(holidayAndVacation.getBeginTime().getTime()));
-                modelMap.put("holidayEndTime", simpleDateFormat.format(holidayAndVacation.getEndTime().getTime()));
+                if (holidayAndVacation.getBeginTime() != null) {
+                    modelMap.put("holidayStartTime", simpleDateFormat.format(holidayAndVacation.getBeginTime().getTime()));
+                }
+                if (holidayAndVacation.getEndTime() != null) {
+                    modelMap.put("holidayEndTime", simpleDateFormat.format(holidayAndVacation.getEndTime().getTime()));
+                }
                 modelMap.put("description", holidayAndVacation.getDescription());
                 modelMap.put("editId", editId);
             } else {
