@@ -64,10 +64,6 @@
                     checkbox: true,
                     width: '5%'
                 }, {
-                    title: '班级',
-                    field: 'studentClass.description',
-                    width: '30%'
-                }, {
                     title: '姓名',
                     field: 'name',
                     width: '30%'
@@ -75,6 +71,13 @@
                     title: '学号',
                     field: 'no',
                     width: '30%'
+                }, {
+                    title: '班级',
+                    field: 'studentClass.description',
+                    width: '30%',
+                    formatter: function (value, row, index) {
+                        return row.studentClass.description;
+                    }
                 }]]
 
             });
@@ -185,7 +188,7 @@
             <a class="easyui-linkbutton" href="javascript:void(0)" onclick="searchFun()"
                data-options="iconCls:'icon-search'">查询</a>
             <a class="easyui-linkbutton" href="javascript:void(0)" onclick="cancelFun()"
-               data-options="iconCls:'icon-cancel'">清空</a>
+               data-options="iconCls:'icon-clear'">清空</a>
         </form>
 
     </div>

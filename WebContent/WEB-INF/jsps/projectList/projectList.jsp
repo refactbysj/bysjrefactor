@@ -10,6 +10,7 @@
 <head>
     <%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
     <script type="text/javascript">
+        var projectGrid;
         $(function () {
             var url = '';
             //我申报的题目
@@ -20,10 +21,12 @@
             else {
                 url = '${basePath}process/getProjectsData.html';
             }
-            $("#projectTable").datagrid({
+            projectGrid = $("#projectTable").datagrid({
                 url: url,
                 striped: true,
                 pagination:true,
+                pageSize: 15,
+                pageList: [10, 15, 20, 30, 40, 60],
                 fit:true,
                 idField:'id',
                 singleSelect:true,
@@ -100,12 +103,13 @@
                     width:'5%',
                     field: 'auditByDirector.approve',
                     formatter: function (value, row, index) {
-                        if (value == null) {
-                            return '在审';
-                        } else if (value == true) {
-                            return '已通过';
+                        var info = row.auditByDirector.approve;
+                        if (info == null) {
+                            return '<span style="color: cornflowerblue;">在审</span>';
+                        } else if (info) {
+                            return '<span>已通过<span>';
                         } else {
-                            return '已退回';
+                            return '<span style="color: red">已退回<span>';
                         }
                     }
                 }, {
@@ -204,8 +208,36 @@
         }
 
 
-        function editProject(id) {
+        //添加或修改课题
+        function editProject(url, id) {
+            var title = '';
+            if (id == null || id == '') {
+                title = '添加课题';
+            } else {
+                title = '修改课题';
+                url = url + '?editId=' + id;
+            }
+            parent.$.modalDialog({
+                href: url,
+                width: 700,
+                height: 500,
+                modal: true,
+                title: title,
+                buttons: [{
+                    text: '取消',
+                    handler: function () {
+                        parent.$.modalDialog.handler.dialog('close');
+                    }
+                }, {
+                    text: '提交',
+                    handler: function () {
+                        parent.$.modalDialog.project_Grid = projectGrid;
+                        var f = parent.$.modalDialog.handler.find("#editProject");
+                        f.submit();
+                    }
+                }]
 
+            })
         }
 
         //查看课题详情
@@ -291,19 +323,17 @@
                         </a>--%>
                     <c:choose>
                         <c:when test="${ABLE_TO_UPDATE==1}">
-                            <a href="<%=basePath%>process/addOrEditDesignProject.html" data-toggle="modal"
-                               id="addDesignModel"
-                               data-backdrop="static" data-keyboard="false"
-                               data-target="#editProjectModal"
-                               class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-plus">添加设计题目</span>
+                            <a href="javascript:void(0)"
+                               onclick="editProject('${basePath}process/addOrEditDesignProject.html')"
+                               id="addDesignModel" data-options="iconCls:'icon-add'"
+                               class="easyui-linkbutton">
+                                添加设计题目
                             </a>
-                            <a href="<%=basePath%>process/addOrEditPaperProject.html" data-toggle="modal"
-                               id="addPaperModel"
-                               data-backdrop="static" data-keyboard="false"
-                               data-target="#editProjectModal"
-                               class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-plus">添加论文题目</span>
+                            <a href="javascript:void(0)"
+                               onclick="editProject('${basePath}process/addOrEditPaperProject.html')"
+                               id="addPaperModel" data-options="iconCls:'icon-add'"
+                               class="easyui-linkbutton">
+                                添加论文题目
                             </a>
                         </c:when>
                         <c:otherwise>
@@ -321,7 +351,7 @@
                 题目：
             <input type="text" class="easyui-textbox" name="title" value="${title}">
             <a class="easyui-linkbutton" onclick="searchFun()" data-options="iconCls:'icon-search'">查询</a>
-            <a class="easyui-linkbutton" onclick="clearFun()" data-options="iconCls:'icon-cancel'">清空</a>
+            <a class="easyui-linkbutton" onclick="clearFun()" data-options="iconCls:'icon-clear'">清空</a>
 
         </form>
     </div>

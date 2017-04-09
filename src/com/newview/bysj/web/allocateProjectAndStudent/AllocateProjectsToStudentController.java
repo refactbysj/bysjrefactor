@@ -7,6 +7,7 @@ import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.exception.MessageException;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.web.baseController.BaseController;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,7 +28,7 @@ import java.util.List;
 @RequestMapping("process")
 public class AllocateProjectsToStudentController extends BaseController {
 
-    //private static final Logger logger = Logger.getLogger(AllocateProjectsToStudentController.class);
+    private static final Logger logger = Logger.getLogger(AllocateProjectsToStudentController.class);
 
     /**
      * 本方法有两个功能，给学生分配题目和获取已分配的学生

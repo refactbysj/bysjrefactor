@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
@@ -57,20 +56,20 @@ public class MyProjectListController extends BaseController {
      * @param modelMap           需要是jsp中获取的数据
      * @param httpSession        用于获取当前的用户
      * @param title              用于检索的题目的名称
-     * @param pageNo             当前页
-     * @param pageSize           每页的条数
+     * @param page             当前页
+     * @param rows           每页的条数
      * @param httpServletRequest 用于获取请求的路径
      */
     @RequestMapping(value = "/myProjects.html", method = RequestMethod.POST)
     @ResponseBody
-    public PageInfo listMyProjectsPost(ModelMap modelMap, HttpSession httpSession, String title, Integer pageNo, Integer pageSize, HttpServletRequest httpServletRequest) {
+    public PageInfo listMyProjectsPost(ModelMap modelMap, HttpSession httpSession, String title, Integer page, Integer rows, HttpServletRequest httpServletRequest) {
         PageInfo pageInfo = new PageInfo();
         Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
         HashMap<String, String> condition = new HashMap<>();
         if (title != null) {
             condition.put("title", title.trim());
         }
-        Page<GraduateProject> graduateProjectPage = graduateProjectService.getPagesByProposerWithConditions(tutor, pageNo, pageSize, condition);
+        Page<GraduateProject> graduateProjectPage = graduateProjectService.getPagesByProposerWithConditions(tutor, page, rows, condition);
         modelMap.put("actionUrl", httpServletRequest.getRequestURI());
         pageInfo.setTotal((int) graduateProjectPage.getTotalElements());
         pageInfo.setRows(graduateProjectPage.getContent());
@@ -83,14 +82,14 @@ public class MyProjectListController extends BaseController {
      *
      * @param modelMap    用于存储需要被列出的设计题目
      * @param httpSession 当前会话,用于获取tutor
-     * @param pageNo      当前页
-     * @param pageSize    每页的条数
+     * @param page      当前页
+     * @param rows    每页的条数
      * @return jsp页面
      */
     @RequestMapping("/listMyDesignProjects.html")
-    public String listMyDesignProjectsGet(ModelMap modelMap, HttpSession httpSession, Integer pageNo, Integer pageSize) {
+    public String listMyDesignProjectsGet(ModelMap modelMap, HttpSession httpSession, Integer page, Integer rows) {
         Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
-        Page<DesignProject> designProjectPage = designProjectService.getDesignProjectByProposer(tutor, pageNo, pageSize);
+        Page<DesignProject> designProjectPage = designProjectService.getDesignProjectByProposer(tutor, page, rows);
         CommonHelper.paging(modelMap, designProjectPage, "listProjects");
         //用于在jsp中根据不同的条件来设置不同的路径
         GraduateProjectHelper.display(modelMap, 0);
@@ -105,14 +104,14 @@ public class MyProjectListController extends BaseController {
      *
      * @param modelMap    用于存储被列出的论文题目
      * @param httpSession 当前会话
-     * @param pageNo      当前页
-     * @param pageSize    每页的条数
+     * @param page      当前页
+     * @param rows    每页的条数
      * @return jsp页面
      */
     @RequestMapping("/listMyPaperProjects.html")
-    public String listMyPaperProjectsGet(ModelMap modelMap, HttpSession httpSession, Integer pageNo, Integer pageSize) {
+    public String listMyPaperProjectsGet(ModelMap modelMap, HttpSession httpSession, Integer page, Integer rows) {
         Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
-        Page<PaperProject> paperProjectPage = paperProjectService.getPaperProjectByProposer(tutor, pageNo, pageSize);
+        Page<PaperProject> paperProjectPage = paperProjectService.getPaperProjectByProposer(tutor, page, rows);
         CommonHelper.paging(modelMap, paperProjectPage, "listProjects");//用于在jsp中根据不同的条件来设置不同的路径
         GraduateProjectHelper.display(modelMap, 0);
         //用于设置当前时间是否在允许的修改时间之间
@@ -188,7 +187,7 @@ public class MyProjectListController extends BaseController {
      */
     @RequestMapping(value = "/cloneProjectById.html")
     @ResponseBody
-    public Result cloneProjectById(Integer cloneId, HttpSession httpSession, HttpServletResponse httpServletResponse) {
+    public Result cloneProjectById(Integer cloneId, HttpSession httpSession) {
         Result result = new Result();
         try {
             GraduateProject graduateProject = new GraduateProject();
