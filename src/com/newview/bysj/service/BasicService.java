@@ -224,7 +224,6 @@ public abstract class BasicService<T extends Serializable, PK extends Serializab
      */
     @MethodDescription("按外键查找对象列表，匹配方式为相等")
     public List<T> list(String propertyName, Class entityClass, Object propertyValue) {
-        System.out.println("已跳入service层的方法");
         List<T> list = basicDao.findAll(new Specification<T>() {
 
             @SuppressWarnings("unchecked")
@@ -238,7 +237,6 @@ public abstract class BasicService<T extends Serializable, PK extends Serializab
             }
 
         });
-        System.out.println("已跳出service层方法");
         return list;
     }
 

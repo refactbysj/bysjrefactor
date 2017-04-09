@@ -104,7 +104,7 @@
 
         //查看所有已分配的学生
         function viewAllAllocatedStudent() {
-            var url = '<%=basePath%>process/getDepartStu.html?hasTutor=${true}';
+            var url = '<%=basePath%>process/getDepartAllocatedStu.html';
             parent.$.modalDialog({
                 title: '已分配学生',
                 href: url,
@@ -112,17 +112,10 @@
                 height: 400,
                 modal: true,
                 buttons: [{
-                    text: '取消',
-                    iconCls: 'icon-cancel',
+                    text: '关闭',
                     handler: function () {
                         parent.$.modalDialog.handler.dialog('close');
-                    }
-                }, {
-                    text: '确定',
-                    iconCls: 'icon-add',
-                    handler: function () {
-                        parent.$.modalDialog.student_dataGrid = studentGrid;
-                        cancelStudent();
+                        $("#studentTable").datagrid('load');
                     }
                 }]
 

@@ -8,6 +8,7 @@ import com.newview.bysj.util.Result;
 import com.newview.bysj.web.baseController.BaseController;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,13 +71,13 @@ public class AllocateStudentsController extends BaseController {
     }
 
     /**
-     * 获取教研室所有未分配或是已分配学生
+     * 获取教研室所有未分配学生
      */
     @RequestMapping(value = "/getDepartStu.html", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo getDepartmentStudent(HttpSession httpSession, Boolean hasTutor, QueryCondition queryMap, String no, String name) {
         Tutor tutor = tutorService.findById(CommonHelper.getCurrentTutor(httpSession).getId());
-        //获取所有未分配或是已分配的学生
+        //获取所有未分配学生
         List<Student> studentList = studentService.getStudentsByDepartmentWithoutTutor(tutor.getDepartment(), hasTutor, queryMap.getQuery(no, name));
         PageInfo pageInfo = new PageInfo();
         if (studentList != null && studentList.size() > 0) {
@@ -85,6 +86,23 @@ public class AllocateStudentsController extends BaseController {
         }
         return pageInfo;
     }
+
+    /**
+     * 获取教研室所有已分配学生
+     */
+    @RequestMapping("/getDepartAllocatedStu.html")
+    public String getDepartAllocatedStu(HttpSession httpSession, Model model) {
+        Tutor tutor = tutorService.findById(CommonHelper.getCurrentTutor(httpSession).getId());
+        //获取所有未分配学生
+        List<Student> studentList = studentService.getStudentsByDepartmentWithoutTutor(tutor.getDepartment(), true, null);
+        List<Tutor> tutorList = tutor.getDepartment().getTutor();
+        model.addAttribute("studentList", studentList);
+        model.addAttribute("tutorList", tutorList);
+        model.addAttribute("studentCount", studentList.size());
+        return "allocate/allocatedStudents";
+    }
+
+
 
     /**
      * 获取该教研室的老师

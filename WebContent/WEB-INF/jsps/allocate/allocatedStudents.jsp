@@ -9,30 +9,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal"
-            aria-hidden="true">×
-    </button>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4">
-                <h4 class="modal-title" id="myModalLabel">
-                    已分配学生，共${studentCount}个</h4>
-            </div>
-            <div class="col-md-5">
-                <p style="color: red">(已分配课题的学生不能删除！)</p>
-            </div>
-        </div>
-    </div>
 
-
-</div>
 <script type="text/javascript">
 
+
     function cancelStudent() {
-        progressLoad();
         var studentId = null;
         var i = 0;
+        var count = $("input[type='checkbox']:checked").length;
+        if (count == 0 || count == '') {
+            $.messager.alert("提示", "请选择学生", "warning");
+            return false;
+        }
         $("input[type='checkbox']:checked").each(function () {
             if (i == 0) {
                 studentId = $(this).val() + ",";
@@ -47,6 +35,7 @@
         studentId = studentId.substring(0, studentId.length - 1);
         $.messager.confirm("询问", "确认删除已分配的学生？", function (t) {
             if (t) {
+                progressLoad();
                 $.ajax({
                     url: '/bysj3/process/delStudents.html',
                     data: {"stuIds": studentId},
@@ -54,11 +43,12 @@
                     type: 'post',
                     success: function (result) {
                         progressClose();
-                        result = $.parseJSON(result);
+                        console.log(result);
                         if (result.success) {
                             $.messager.alert("提示", result.msg, "info");
-                            parent.$.modalDialog.student_dataGrid.datagrid("reload");
-                            parent.$.modalDialog.handler.dialog("close");
+                            $("input[type='checkbox']:checked").each(function () {
+
+                            });
                         } else {
                             $.messager.alert("警告", result.msg, "warning");
                         }
@@ -84,8 +74,11 @@
     }
 
 </script>
-<div class="modal-body">
-    <span class="light-info" style="width: 100%;">请选择需要删除的学生</span> <br>
+<h4 class="modal-title" id="myModalLabel">
+    已分配学生，共${studentCount}个</h4>
+<p style="color: red">(已分配课题的学生不能删除！)</p>
+
+<span class="light-info" style="width: 100%;">请选择需要删除的学生</span> <br>
     <c:choose>
         <c:when test="${studentCount>0}">
             <c:forEach items="${tutorList}" var="tutor">
@@ -112,16 +105,18 @@
                     <div class="tutorStudentList" id="tutorStudent${tutor.id}"
                          style="display: none">
                         <c:forEach items="${tutor.student}" var="student">
-                            <input type="checkbox" value="${student.id}"
-                                   id="studentCheckbox${student.id}"><i class="icon icon-remove-circle"></i>
-                            <span>${student.name} <c:choose>
-                                <c:when test="${empty student.graduateProject}">
-                                    (课题：无)&nbsp;&nbsp;&nbsp;
-                                </c:when>
-                                <c:otherwise>
-                                    (课题：有)&nbsp;&nbsp;&nbsp;
-                                </c:otherwise>
-                            </c:choose></span>
+                            <div>
+                                <input type="checkbox" value="${student.id}"
+                                       id="studentCheckbox${student.id}"><i class="icon icon-remove-circle"></i>
+                                <span>${student.name} <c:choose>
+                                    <c:when test="${empty student.graduateProject}">
+                                        (课题：无)&nbsp;&nbsp;&nbsp;
+                                    </c:when>
+                                    <c:otherwise>
+                                        (课题：有)&nbsp;&nbsp;&nbsp;
+                                    </c:otherwise>
+                                </c:choose></span>
+                            </div>
                         </c:forEach>
                     </div>
                     <br>
@@ -135,11 +130,6 @@
             </div>
         </c:otherwise>
     </c:choose>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-    </button>
-    <button type="button" onclick="cancelStudent()" class="btn btn-primary">
-        提交更改
-    </button>
-</div>
+<a onclick="cancelStudent()" style="float: right;margin-right: 10%" class="easyui-linkbutton" href="javascript:void(0)">
+    提交更改</a>
+
