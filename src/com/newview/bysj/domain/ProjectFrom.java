@@ -1,18 +1,13 @@
 package com.newview.bysj.domain;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 题目来源
@@ -64,6 +59,7 @@ public class ProjectFrom implements Serializable {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public List<GraduateProject> getGraduateProject() {
         return graduateProject;
     }

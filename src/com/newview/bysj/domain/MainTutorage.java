@@ -1,5 +1,6 @@
 package com.newview.bysj.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -51,6 +52,7 @@ public class MainTutorage extends Tutorage {
         this.tutor = tutor;
     }
 
+    @JsonIgnore
     public GraduateProject getGraduateProject() {
         return graduateProject;
     }

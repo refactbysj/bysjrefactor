@@ -1,17 +1,11 @@
 package com.newview.bysj.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 考察
@@ -76,6 +70,7 @@ public class Quiz implements Serializable {
         this.remark = remark;
     }
 
+    @JsonIgnore
     public GraduateProject getGraduateProject() {
         return graduateProject;
     }

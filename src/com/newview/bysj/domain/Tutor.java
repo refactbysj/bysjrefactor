@@ -92,6 +92,7 @@ public abstract class Tutor extends Actor {
     @JsonIgnore
     private List<GraduateProject> proposedGraduateProject;
 
+    @JsonIgnore
     public List<GraduateProject> getProposedGraduateProject() {
         return proposedGraduateProject;
     }
