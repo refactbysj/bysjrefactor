@@ -1,5 +1,6 @@
 package com.newview.bysj.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -100,6 +101,7 @@ public class Schedule implements Serializable {
         this.audit = audit;
     }
 
+    @JsonIgnore
     public GraduateProject getGraduateProject() {
         return graduateProject;
     }

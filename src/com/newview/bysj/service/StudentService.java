@@ -275,6 +275,8 @@ public class StudentService extends BasicService<Student, Integer> {
                     } else {
                         predicates.add(cb.isNull(root.get("tutor").as(Tutor.class)));
                     }
+                } else {
+                    predicates.add(cb.isNull(root.get("tutor").as(Tutor.class)));
                 }
                 //predicates.add(cb.isNull(root.get("tutor").as(Tutor.class)));
                 if (queryMap != null) {

@@ -137,6 +137,7 @@ ReplyGroup implements Serializable {
         this.version = version;
     }
 
+    @JsonIgnore
     public List<GraduateProject> getGraduateProject() {
         return graduateProject;
     }

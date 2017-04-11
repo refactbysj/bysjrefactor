@@ -1,21 +1,12 @@
 package com.newview.bysj.domain;
 
-import java.io.Serializable;
-import java.util.Calendar;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Calendar;
 
 /**
  * 指导记录
@@ -114,6 +105,7 @@ public class GuideRecord implements Serializable {
         this.classRoom = classRoom;
     }
 
+    @JsonIgnore
     public GraduateProject getGraduateProject() {
         return graduateProject;
     }

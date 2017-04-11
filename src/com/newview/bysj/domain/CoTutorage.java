@@ -1,13 +1,13 @@
 package com.newview.bysj.domain;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * 合作指导
@@ -52,6 +52,7 @@ public class CoTutorage extends Tutorage {
         this.tutor = tutor;
     }
 
+    @JsonIgnore
     public GraduateProject getGraduateProject() {
         return graduateProject;
     }

@@ -1,7 +1,7 @@
 package com.newview.bysj.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -92,6 +92,7 @@ public abstract class Tutor extends Actor {
     @JsonIgnore
     private List<GraduateProject> proposedGraduateProject;
 
+    @JsonIgnore
     public List<GraduateProject> getProposedGraduateProject() {
         return proposedGraduateProject;
     }
@@ -102,6 +103,7 @@ public abstract class Tutor extends Actor {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public List<ReplyGroup> getTutorAsLeaderToReplyGroups() {
         return tutorAsLeaderToReplyGroups;
     }
@@ -158,6 +160,7 @@ public abstract class Tutor extends Actor {
         this.signPictureURL = signPictureURL;
     }
 
+    @JsonIgnore
     public Department getDepartment() {
         return department;
     }
@@ -166,6 +169,7 @@ public abstract class Tutor extends Actor {
         this.department = department;
     }
 
+    @JsonIgnore
     public ProTitle getProTitle() {
         return proTitle;
     }
@@ -174,6 +178,7 @@ public abstract class Tutor extends Actor {
         this.proTitle = proTitle;
     }
 
+    @JsonIgnore
     public Degree getDegree() {
         return degree;
     }
@@ -183,6 +188,7 @@ public abstract class Tutor extends Actor {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public List<MainTutorage> getMainTutorage() {
         return mainTutorage;
     }
@@ -192,6 +198,7 @@ public abstract class Tutor extends Actor {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public List<CoTutorage> getCoTutorage() {
         return coTutorage;
     }
@@ -201,6 +208,7 @@ public abstract class Tutor extends Actor {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public List<Student> getStudent() {
         return student;
     }
@@ -210,6 +218,7 @@ public abstract class Tutor extends Actor {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public List<GraduateProject> getGraduateProjectToReview() {
         return graduateProjectToReview;
     }
@@ -220,6 +229,7 @@ public abstract class Tutor extends Actor {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public List<ReplyGroup> getReplyGroup() {
         return replyGroup;
     }
@@ -229,6 +239,7 @@ public abstract class Tutor extends Actor {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public List<RemarkTemplate> getRemarkTemplates() {
         return remarkTemplates;
     }

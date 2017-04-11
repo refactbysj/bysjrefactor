@@ -1,22 +1,14 @@
 package com.newview.bysj.domain;
 
-import java.io.Serializable;
-import java.util.Calendar;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -75,6 +67,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    @JsonIgnore
     public Integer getId() {
         return id;
     }
@@ -83,6 +76,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
+    @JsonIgnore
     public String getUsername() {
         return username;
     }
@@ -91,6 +85,7 @@ public class User implements Serializable {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -99,6 +94,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    @JsonIgnore
     public Integer getLoginTime() {
         return loginTime;
     }
@@ -107,6 +103,7 @@ public class User implements Serializable {
         this.loginTime = loginTime;
     }
 
+    @JsonIgnore
     public String getLastLoginIp() {
         return lastLoginIp;
     }
@@ -115,6 +112,7 @@ public class User implements Serializable {
         this.lastLoginIp = lastLoginIp;
     }
 
+    @JsonIgnore
     public Calendar getLastLoginTime() {
         return lastLoginTime;
     }
@@ -123,6 +121,7 @@ public class User implements Serializable {
         this.lastLoginTime = lastLoginTime;
     }
 
+    @JsonIgnore
     public Boolean getConstraintOfLogin() {
         return constraintOfLogin;
     }
@@ -131,6 +130,7 @@ public class User implements Serializable {
         this.constraintOfLogin = constraintOfLogin;
     }
 
+    @JsonIgnore
     public Actor getActor() {
         return actor;
     }
@@ -139,6 +139,7 @@ public class User implements Serializable {
         this.actor = actor;
     }
 
+    @JsonIgnore
     public List<UserRole> getUserRole() {
         return userRole;
     }

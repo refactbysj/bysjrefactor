@@ -9,13 +9,24 @@
 <html>
 <head>
     <%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
-
     <script type="text/javascript">
+        var projectGrid;
         $(function () {
-            $("#projectTable").datagrid({
-                url: '${basePath}process/getProjectsData.html',
+            var url = '';
+            //我申报的题目
+            if (${ifShowAll=='0'}) {
+                url = '${basePath}process/myProjects.html';
+            }
+            //查询现有题目
+            else {
+                url = '${basePath}process/getProjectsData.html';
+            }
+            projectGrid = $("#projectTable").datagrid({
+                url: url,
                 striped: true,
                 pagination:true,
+                pageSize: 15,
+                pageList: [10, 15, 20, 30, 40, 60],
                 fit:true,
                 idField:'id',
                 singleSelect:true,
@@ -66,7 +77,7 @@
                     title: '类别',
                     align:'center',
                     field: 'category',
-                    width:'4%',
+                    width: '6%',
                     formatter: function (value, row, index) {
                         if (value == null || value == '') {
                             return '未设置';
@@ -77,38 +88,45 @@
                 }, {
                     title: '出题教师',
                     align:'center',
-                    field: 'name',
-                    width:'8%'
+                    field: 'proposer.name',
+                    width: '8%',
+                    formatter: function (value, row, index) {
+                        if (row.proposer) {
+                            return row.proposer.name;
+                        } else {
+                            return value;
+                        }
+                    }
                 }, {
                     title: '审核状态',
                     align:'center',
                     width:'5%',
                     field: 'auditByDirector.approve',
                     formatter: function (value, row, index) {
-                        if (value == null) {
-                            return '在审';
-                        } else if (value == true) {
-                            return '已通过';
+                        var info = row.auditByDirector.approve;
+                        if (info == null) {
+                            return '<span style="color: cornflowerblue;">在审</span>';
+                        } else if (info) {
+                            return '<span>已通过<span>';
                         } else {
-                            return '已退回';
+                            return '<span style="color: red">已退回<span>';
                         }
                     }
                 }, {
                     title: '操作',
-                    width:'14%',
+                    width: '18%',
                     align:'center',
                     field: 'action',
                     formatter: function (value, row, index) {
                         var str = '';
                         if (${ACTION_EDIT_PROJECT!=null&&ACTION_EDIT_PROJECT==true}) {
-                            str += $.formatString('<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'{0}\')">修改</a>', row.id);
-                            str += $.formatString('<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-edit\'" onclick="detailProject(\'{0}\')">显示详情</a>', row.id)
+                            str += $.formatString('<a href="javascript:void(0)" class="editBtn" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'{0}\')"></a>', row.id);
                         }
                         if (${ifShowAll=='0'}) {
-                            if (${ABLE_TO_UPDATE==1}) {
-                                str += $.formatString('<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'{0}\')">修改</a>', row.id);
-                                str += $.formatString('<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-cancel\'" onclick="delProject(\'{0}\')">删除</a>', row.id);
-                                str += $.formatString('<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-cancel\'" onclick="cloneProject(\'{0}\')">克隆</a>', row.id);
+                            if (${ABLE_TO_UPDATE=='1'}) {
+                                str += $.formatString('<a href="javascript:void(0)" class="editBtn" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'{0}\')"></a>', row.id);
+                                str += $.formatString('<a href="javascript:void(0)" class="cloneBtn" data-options="plain:true,iconCls:\'icon-cancel\'" onclick="cloneProject(\'{0}\')"></a>', row.id);
+                                str += $.formatString('<a href="javascript:void(0)" class="delBtn" data-options="plain:true,iconCls:\'icon-cancel\'" onclick="delProject(\'{0}\')"></a>', row.id);
                             } else {
                                 str += '不在修改时间范围内';
                             }
@@ -119,67 +137,113 @@
                 }, {
                     title: '详情',
                     align:'center',
-                    width:'2%',
-                    field: 'action',
+                    width: '8%',
+                    field: 'action1',
                     formatter: function (value, row, index) {
                         var str = '';
-                        if (${ifShowAll=='0'||ifShowAll=='1'}) {
-                            str += $.formatString('<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-edit\'" onclick="detailProject(\'{0}\')">显示详情</a>', row.id)
-                        }
+                        str += $.formatString('<a href="javascript:void(0)" class="detailBtn" data-options="plain:true,iconCls:\'icon-edit\'" onclick="detailProject(\'{0}\')"></a>', row.id);
                         return str;
                     }
-                }]]
+                }]],
+                onLoadSuccess: function (data) {
+                    $('.editBtn').linkbutton({text: '修改', plain: true, iconCls: 'icon-edit'});
+                    $(".delBtn").linkbutton({text: '删除', plain: true, iconCls: 'icon-cancel'});
+                    $(".cloneBtn").linkbutton({text: '克隆', plain: true, iconCls: 'icon-reload'});
+                    $('.detailBtn').linkbutton({text: '显示详情', plain: true, iconCls: 'icon-more'});
+                }
             })
         });
 
-        $("#123").on("hidden.bs.modal", function () {
-            $(this).removeData("bs.modal");
-        });
-
         function cloneProject(projectId) {
+            progressLoad();
             $.ajax({
                 url: '/bysj3/process/cloneProjectById.html',
                 data: {"cloneId": projectId},
                 dataType: 'json',
                 type: 'get',
-                success: function (data) {
-                    myAlert("克隆成功");
-                    window.location = '/bysj3/process/myProjects.html';
+                success: function (result) {
+                    progressClose();
+                    if (result.success) {
+                        $.messager.alert('提示', result.msg, 'info');
+                        $("#projectTable").datagrid('reload');
+                    } else {
+                        $.messager.alert('警告', result.msg, 'warning');
+                    }
                     return true;
                 },
                 error: function () {
-                    myAlert("克隆失败，请稍后再试");
+                    $.messager.alert('错误', '网络错误，请联系管理员', 'error');
                     return false;
                 }
             });
         }
 
+        //删除课题
         function delProject(delId) {
-            //var confirmDel = window.confirm("确认删除？");
-            window.wxc.xcConfirm("确认删除", "confirm", {
-                onOk: function () {
+            $.messager.confirm('询问', '确认删除？', function (t) {
+                if (t) {
+                    progressLoad();
                     $.ajax({
                         url: '/bysj3/process/delProject.html',
                         data: {"delId": delId},
                         dataType: 'json',
                         type: 'POST',
-                        success: function (data) {
-                            $("#project" + delId).remove();
-                            /*var projectCount = $("#viewCount").text();
-                             $("#viewCount").html(projectCount - 1);*/
-                            changPageCount();
-                            myAlert("删除成功！");
+                        success: function (result) {
+                            progressClose();
+                            if (result.success) {
+                                $.messager.alert('提示', result.msg, 'info');
+                                $("#projectTable").datagrid('reload');
+                            } else {
+                                $.messager.alert('警告', result.msg, 'warning');
+                            }
                             return true;
                         },
                         error: function () {
-                            myAlert("网络故障，请稍后再试！");
+                            $.messager.alert("错误", '删除失败，请联系管理员', 'error');
                             return false;
                         }
                     });
                 }
             });
+        }
 
 
+        //添加或修改课题
+        function editProject(url, id) {
+            var title = '';
+            if (id == null || id == '') {
+                title = '添加课题';
+            } else {
+                title = '修改课题';
+                url = url + '?editId=' + id;
+            }
+            parent.$.modalDialog({
+                href: url,
+                width: 700,
+                height: 500,
+                modal: true,
+                title: title,
+                buttons: [{
+                    text: '取消',
+                    handler: function () {
+                        parent.$.modalDialog.handler.dialog('close');
+                    }
+                }, {
+                    text: '提交',
+                    handler: function () {
+                        parent.$.modalDialog.project_Grid = projectGrid;
+                        var f = parent.$.modalDialog.handler.find("#editProject");
+                        f.submit();
+                    }
+                }]
+
+            })
+        }
+
+        //查看课题详情
+        function detailProject(id) {
+            var url = '${basePath}process/showDetail.html?graduateProjectId=' + id;
+            showProjectDetail(url);
         }
 
 
@@ -189,7 +253,16 @@
             })
         }
 
+        //查询
+        function searchFun() {
+            $("#projectTable").datagrid('load', $.serializeObject($("#titleForm")));
+        }
 
+        //清空查询条件
+        function clearFun() {
+            $("#titleForm input").val('');
+            $("#projectTable").datagrid('load', {});
+        }
     </script>
 
 </head>
@@ -210,7 +283,7 @@
                     <a
                             <c:if test="${viewProjectTitle=='design'}">class="btn btn-primary btn-sm" </c:if>
                             <c:if test="${viewProjectTitle!='design'}">class="btn btn-default btn-sm"</c:if>
-                            href="javascript:void(0)" onclick="viewProject('设计')">
+                            href="javascript:void(0)" onclick="viewProject('设计题目')">
                         <span class="glyphicon glyphicon-adjust">查看设计题目</span>
                             <%--<i class="icon-coffee"></i>查看设计题目--%>
                     </a>
@@ -218,7 +291,7 @@
                             <c:if test="${viewProjectTitle=='paper'}">class="btn btn-primary btn-sm" </c:if>
                             <c:if test="${viewProjectTitle!='paper'}">class="btn btn-default btn-sm"</c:if>
                             class="btn btn-default"
-                            href="javascript:void(0)" onclick="viewProject('论文')">
+                            href="javascript:void(0)" onclick="viewProject('论文题目')">
                         <span class="glyphicon glyphicon-adjust">查看论文题目</span>
                             <%--<i class="icon-desktop"></i>查看论文题目--%>
                     </a>
@@ -236,34 +309,31 @@
                     <a
                             <c:if test="${viewProjectTitle=='design'}">class="btn btn-primary btn-sm" </c:if>
                             <c:if test="${viewProjectTitle!='design'}">class="btn btn-default btn-sm"</c:if>
-                            href="javascript:void(0)" onclick="viewProject('设计')">
+                            href="javascript:void(0)" onclick="viewProject('设计题目')">
                         <span class="glyphicon glyphicon-adjust">查看设计题目</span>
                     </a>
                     <a
                             <c:if test="${viewProjectTitle=='paper'}">class="btn btn-primary btn-sm" </c:if>
                             <c:if test="${viewProjectTitle!='paper'}">class="btn btn-default btn-sm"</c:if>
-                            href="javascript:void(0)" onclick="viewProject('论文')">
+                            href="javascript:void(0)" onclick="viewProject('论文题目')">
                         <span class="glyphicon glyphicon-adjust">查看论文题目</span>
                     </a>
                         <%--<a class="btn btn-default" href="test.html" data-toggle="modal" data-target="#test">
                             <span class="glyphicon-book">测试</span>
                         </a>--%>
-                    <br><br>
                     <c:choose>
                         <c:when test="${ABLE_TO_UPDATE==1}">
-                            <a href="<%=basePath%>process/addOrEditDesignProject.html" data-toggle="modal"
-                               id="addDesignModel"
-                               data-backdrop="static" data-keyboard="false"
-                               data-target="#editProjectModal"
-                               class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-plus">添加设计题目</span>
+                            <a href="javascript:void(0)"
+                               onclick="editProject('${basePath}process/addOrEditDesignProject.html')"
+                               id="addDesignModel" data-options="iconCls:'icon-add'"
+                               class="easyui-linkbutton">
+                                添加设计题目
                             </a>
-                            <a href="<%=basePath%>process/addOrEditPaperProject.html" data-toggle="modal"
-                               id="addPaperModel"
-                               data-backdrop="static" data-keyboard="false"
-                               data-target="#editProjectModal"
-                               class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-plus">添加论文题目</span>
+                            <a href="javascript:void(0)"
+                               onclick="editProject('${basePath}process/addOrEditPaperProject.html')"
+                               id="addPaperModel" data-options="iconCls:'icon-add'"
+                               class="easyui-linkbutton">
+                                添加论文题目
                             </a>
                         </c:when>
                         <c:otherwise>
@@ -277,13 +347,11 @@
         </c:choose>
     </div>
     <div style="margin-right: 10%;float: right;">
-        <form action="${actionUrl}" class="form-inline" role="form">
-            <div class="form-group">
+        <form id="titleForm">
                 题目：
-                <%--value=${title}用来获取当前查询题目的名称 --%>
-                <input type="text" class="easyui-textbox" name="title" value="${title}" required="required">
-                <button class="easyui-linkbutton" type="submit" data-options="iconCls:'icon-search'">查询</button>
-            </div>
+            <input type="text" class="easyui-textbox" name="title" value="${title}">
+            <a class="easyui-linkbutton" onclick="searchFun()" data-options="iconCls:'icon-search'">查询</a>
+            <a class="easyui-linkbutton" onclick="clearFun()" data-options="iconCls:'icon-clear'">清空</a>
 
         </form>
     </div>
