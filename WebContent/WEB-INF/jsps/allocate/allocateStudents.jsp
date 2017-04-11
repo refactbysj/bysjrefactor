@@ -44,7 +44,7 @@
                     }
                 }]],
                 onLoadSuccess: function () {
-                    $(".editBtn").linkbutton({text: '匹配', iconCls: 'icon-edit'});
+                    $(".editBtn").linkbutton({text: '匹配', iconCls: 'icon-ok'});
                     $(".viewBtn").linkbutton({text: '查看', iconCls: 'icon-search'});
                 }
 
@@ -174,11 +174,11 @@
 </head>
 <body>
 <div id="head" style="margin-top: 1%">
-    <div style="float:left;margin-left: 1%;position: absolute;top: 10px">
+    <div style="float:left;margin-left: 1%;position: absolute;top: 10px;width: 30%">
         <a class="easyui-linkbutton" onclick="viewAllAllocatedStudent()" href="javascript:void(0)"> 已分配学生
         </a>
     </div>
-    <div style="position: absolute;top: 10px;right: 10%">
+    <div style="position: absolute;top: 10px;right: 10%;width: 60%;">
         <form id="searchForm">
             <span style="color: grey;">学生姓名:</span><input type="text" value="${name}" name="name"
                                                           class="easyui-textbox" id="name" placeholder="请输入学生姓名">
