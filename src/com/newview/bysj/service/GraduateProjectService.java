@@ -6,7 +6,6 @@ import com.newview.bysj.exception.MessageException;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.jpaRepository.MyRepository;
 import com.newview.bysj.myAnnotation.MethodDescription;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service("graduateProjectService")
@@ -63,6 +63,46 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
         this.basicDao = basicDao;
         graduateProjectDao = (GraduateProjectDao) basicDao;
     }
+
+
+    @MethodDescription("根据是否通过和题目名称等条件获取教研室课题")
+    public Page<GraduateProject> getPageByAuditedDirectorAndCondition(Map<String, String> conditionMap, Tutor director, Department department, Integer pageNo, Integer pageSize, Boolean approve) {
+        pageNo = CommonHelper.getPageNo(pageNo, pageSize);
+        pageSize = CommonHelper.getPageSize(pageSize);
+        //获取department内的所有课题
+        Page<GraduateProject> result = graduateProjectDao.findAll(new Specification<GraduateProject>() {
+            @Override
+            public Predicate toPredicate(Root<GraduateProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                //获取department内的所有课题
+                predicates.add(cb.equal(root.get("proposer").get("department").as(Department.class), department));
+                //已送审的才能进行审核
+                predicates.add(cb.equal(root.get("proposerSubmitForApproval").as(Boolean.class), true));
+                //未分配学生的课题
+                predicates.add(cb.isNull(root.get("student").as(Student.class)));
+                //不能审核自己的题目
+                predicates.add(cb.notEqual(root.get("proposer").as(Tutor.class), director));
+                //限制条件的查询
+                for (String key : conditionMap.keySet()) {
+                    String value = conditionMap.get(key);
+                    if (value != null) {
+                        predicates.add(cb.like(root.get(key).as(String.class), "%" + value + "%"));
+                    }
+                }
+                //教研室审核通过的题目
+                if (approve != null)
+                    predicates.add(cb.equal(root.get("auditByDirector").get("approve").as(Boolean.class), approve));
+                //获取当年的报题
+                predicates.add(cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear()));
+                Predicate[] p = new Predicate[predicates.size()];
+                query.where(cb.and(predicates.toArray(p)));
+                return query.getRestriction();
+            }
+        }, new PageRequest(pageNo, pageSize, new Sort(Sort.Direction.DESC, "id")));
+        return result;
+    }
+
+
 
     @MethodDescription("获取通过教研室审核的所有课题")
     public Page<GraduateProject> getPageByAuditedDirector(Tutor director, Department department, Integer pageNo, Integer pageSize, Boolean approve) {
