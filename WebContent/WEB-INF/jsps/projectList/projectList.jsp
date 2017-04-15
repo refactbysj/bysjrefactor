@@ -18,8 +18,12 @@
                 url = '${basePath}process/myProjects.html';
             }
             //查询现有题目
-            else {
+            else if (${ifShowAll=='1'}) {
                 url = '${basePath}process/getProjectsData.html';
+            }
+            //更改老师毕业设计
+            else if (${changProject=='1'}) {
+                url = '${basePath}process/getChangProjectData.html';
             }
             projectGrid = $("#projectTable").datagrid({
                 url: url,
@@ -120,11 +124,11 @@
                     formatter: function (value, row, index) {
                         var str = '';
                         if (${ACTION_EDIT_PROJECT!=null&&ACTION_EDIT_PROJECT==true}) {
-                            str += $.formatString('<a href="javascript:void(0)" class="editBtn" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'{0}\')"></a>', row.id);
+                            str += $.formatString('<a href="javascript:void(0)" class="editBtn" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'0\',\'{0}\')"></a>', row.id);
                         }
                         if (${ifShowAll=='0'}) {
                             if (${ABLE_TO_UPDATE=='1'}) {
-                                str += $.formatString('<a href="javascript:void(0)" class="editBtn" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'{0}\')"></a>', row.id);
+                                str += $.formatString('<a href="javascript:void(0)" class="editBtn" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'0\',\'{0}\')"></a>', row.id);
                                 str += $.formatString('<a href="javascript:void(0)" class="cloneBtn" data-options="plain:true,iconCls:\'icon-cancel\'" onclick="cloneProject(\'{0}\')"></a>', row.id);
                                 str += $.formatString('<a href="javascript:void(0)" class="delBtn" data-options="plain:true,iconCls:\'icon-cancel\'" onclick="delProject(\'{0}\')"></a>', row.id);
                             } else {
@@ -211,11 +215,13 @@
         //添加或修改课题
         function editProject(url, id) {
             var title = '';
+            console.log("url:" + url);
+            console.log('id:' + id);
             if (id == null || id == '') {
                 title = '添加课题';
             } else {
                 title = '修改课题';
-                url = url + '?editId=' + id;
+                url = '${basePath}process/editProject.html?editId=' + id;
             }
             parent.$.modalDialog({
                 href: url,
@@ -225,11 +231,13 @@
                 title: title,
                 buttons: [{
                     text: '取消',
+                    iconCls: 'icon-cancel',
                     handler: function () {
                         parent.$.modalDialog.handler.dialog('close');
                     }
                 }, {
                     text: '提交',
+                    iconCls: 'icon-ok',
                     handler: function () {
                         parent.$.modalDialog.project_Grid = projectGrid;
                         var f = parent.$.modalDialog.handler.find("#editProject");

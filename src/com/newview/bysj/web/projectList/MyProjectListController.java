@@ -170,13 +170,27 @@ public class MyProjectListController extends BaseController {
             throw new MessageException("获取课题失败");
         }
         modelMap.put("actionUrl", httpServletRequest.getRequestURI());
-        return "editProject/editProject";
+        return "addEditProject/addEditProject";
     }
 
+    /**
+     * 编辑课题提交
+     */
     @RequestMapping(value = "/editProject.html", method = RequestMethod.POST)
-    public String editProject(HttpSession httpSession, Integer year, Integer majorId, @ModelAttribute("toEditProject") GraduateProject graduateProject) {
-        graduateProjectService.addOrUpdateProject(graduateProject, httpSession, year, majorId);
-        return "redirect:/process/myProjects.html";
+    @ResponseBody
+    public Result editProject(HttpSession httpSession, Integer year, Integer majorId, @ModelAttribute("toEditProject") GraduateProject graduateProject) {
+        Result result = new Result();
+        try {
+            graduateProjectService.addOrUpdateProject(graduateProject, httpSession, year, majorId);
+            result.setSuccess(true);
+            result.setMsg("修改课题成功");
+        } catch (Exception e) {
+            logger.error("修改课题失败" + e);
+            e.printStackTrace();
+            result.setMsg("修改课题失败");
+        }
+
+        return result;
     }
 
     /**
