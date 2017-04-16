@@ -66,8 +66,7 @@
     <%--自定义的弹出框--%>
     <script type="text/javascript" src="<%=basePath%>/js/xcConfirm.js"></script>
 
-    <!-- [my97日期时间控件] -->
-    <script type="text/javascript" src="<%=basePath%>/static/My97DatePicker/WdatePicker.js" charset="utf-8"></script>
+
 
 <%--引入easyui--%>
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/static/easyui/themes/default/easyui.css">
@@ -77,6 +76,7 @@
     <script type="text/javascript" src="<%=basePath%>/static/extJs.js" charset="utf-8"></script>
     <script type="text/javascript" src="<%=basePath%>/static/easyui/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
     <script type="text/javascript" src="${basePath}/js/project.js" charset="UTF-8"></script>
-
-
+    <!-- [my97日期时间控件] -->
+    <script language="javascript" type="text/javascript"
+            src="<%=basePath%>/static/My97DatePicker/WdatePicker.js"></script>
 </head>

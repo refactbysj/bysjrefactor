@@ -6,8 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-
 <script type="text/javascript">
 
 
@@ -57,12 +55,15 @@
 <form id="holidayAddForm"  onsubmit="return checkvalue()" method="post">
             <div style="padding: 10px;">
                 <span style="color: grey;">开始时间：</span>
-                <input id="starttime" class="Wdate" onclick="WdatePicker()" type="text" value="${holidayStartTime}" name="startTime" required="required">
+                <input id="holidaystarttime" class="Wdate" onclick="WdatePicker()" type="text"
+                       value="${holidayStartTime}" name="startTime" required="required">
 
             </div>
             <div style="padding: 10px;">
                 <span style="color:grey;">结束时间：</span>
-                <input id="endtime" class="Wdate" onclick="WdatePicker({minDate:'#F{$dp.$D(\'starttime\')}'})" type="text" value="${holidayEndTime}" name="endTime" required="required">
+                <input id="holidayendtime" class="Wdate"
+                       onclick="WdatePicker({minDate:'#F{$dp.$D(\'holidaystarttime\')}'})" type="text"
+                       value="${holidayEndTime}" name="endTime" required="required">
             </div>
 
     原因：<span style="color: grey;">(200字以内，字数：<span id="wordCount">0</span>/200)</span>
