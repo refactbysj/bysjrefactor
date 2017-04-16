@@ -128,7 +128,13 @@
                         }
                         if (${ifShowAll=='0'}) {
                             if (${ABLE_TO_UPDATE=='1'}) {
-                                str += $.formatString('<a href="javascript:void(0)" class="editBtn" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'0\',\'{0}\')"></a>', row.id);
+                                var info = row.auditByDirector.approve;
+                                //如果审核已通过，则不能修改论文
+                                if (info) {
+                                    str += $.formatString('<a href="javascript:void(0)" class="editBtn" data-options="plain:true,iconCls:\'icon-edit\',disabled:true" onclick="editProject(\'0\',\'{0}\')"></a>', row.id);
+                                } else {
+                                    str += $.formatString('<a href="javascript:void(0)" class="editBtn" data-options="plain:true,iconCls:\'icon-edit\'" onclick="editProject(\'0\',\'{0}\')"></a>', row.id);
+                                }
                                 str += $.formatString('<a href="javascript:void(0)" class="cloneBtn" data-options="plain:true,iconCls:\'icon-cancel\'" onclick="cloneProject(\'{0}\')"></a>', row.id);
                                 str += $.formatString('<a href="javascript:void(0)" class="delBtn" data-options="plain:true,iconCls:\'icon-cancel\'" onclick="delProject(\'{0}\')"></a>', row.id);
                             } else {
@@ -157,6 +163,7 @@
                 }
             })
         });
+
 
         function cloneProject(projectId) {
             progressLoad();

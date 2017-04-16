@@ -5,6 +5,7 @@
   Time: 12:45
   To change this template use File | Settings | File Templates.
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <script type="text/javascript">
@@ -40,7 +41,7 @@
         <span style="color: grey;">开始时间：</span>
 
         <input id="starttime" name="startTime" type="text"
-               onClick="WdatePicker({maxDate:'#F{$dp.$D(\'endtime\')}',minDate:'%y-%M-%d'})"
+               onClick="WdatePicker({maxDate:'#F{$dp.$D(\'endtime\')}'})"
                value="${projectTimeSpanStartTime}" required="required"
                class="Wdate"/>
         <input type="hidden" id="dtp_input1" value=""/>

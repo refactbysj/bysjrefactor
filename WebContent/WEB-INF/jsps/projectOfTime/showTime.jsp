@@ -26,12 +26,15 @@
                     field:'beginTime',
                     width:'12%',
                     formatter:function (value, row, index) {
-                        return value;
+                        return formatString(value);
                     }
                 },{
                     title:'结束时间',
                     field:'endTime',
-                    width:'12%'
+                    width: '12%',
+                    formatter: function (value, row, index) {
+                        return formatString(value);
+                    }
                 },{
                     title:'原因',
                     field:'description',
@@ -57,7 +60,18 @@
         });
 
 
+        function formatString(value) {
+            if (value != null && value != '') {
+                var beginDate = new Date(value);
+                var year = beginDate.getFullYear() + '年';
+                var month = beginDate.getMonth() + 1 + '月';
+                var day = beginDate.getDate() + '日';
+                return year + month + day;
+            } else {
+                return '';
+            }
 
+        }
 
         function addOrEditTime(url,title) {
             $("#setTimeWindow").dialog({
