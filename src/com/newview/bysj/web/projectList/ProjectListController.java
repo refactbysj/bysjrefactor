@@ -36,7 +36,7 @@ public class ProjectListController extends BaseController {
 
     //跳转到课题列表页面
     @RequestMapping(value = "/listProjects.html", method = RequestMethod.GET)
-    public String listAllProjectsByGet( ModelMap modelMap, String title, Integer pageNo, Integer pageSize, HttpServletRequest httpServletRequest) {
+    public String listAllProjectsByGet(ModelMap modelMap) {
         GraduateProjectHelper.viewDesignOrPaper(modelMap, GraduateProjectHelper.VIEW_ALL);
         GraduateProjectHelper.display(modelMap, 1);
         return "projectList/projectList";

@@ -105,7 +105,7 @@
                 $.messager.confirm('询问', '确认匹配选中的学生和题目？', function (t) {
                     if (t) {
                         $.ajax({
-                            url: '/bysj3/process/allocateProjectsToStudents.html',
+                            url: '${basePath}process/allocateProjectsToStudents.html',
                             type: 'POST',
                             dataType: 'json',
                             data: {"studentId": getStudentId, "graduateProjectId": graduateProjectId},

@@ -168,7 +168,7 @@
         function cloneProject(projectId) {
             progressLoad();
             $.ajax({
-                url: '/bysj3/process/cloneProjectById.html',
+                url: '${basePath}process/cloneProjectById.html',
                 data: {"cloneId": projectId},
                 dataType: 'json',
                 type: 'get',
@@ -195,7 +195,7 @@
                 if (t) {
                     progressLoad();
                     $.ajax({
-                        url: '/bysj3/process/delProject.html',
+                        url: '${basePath}process/delProject.html',
                         data: {"delId": delId},
                         dataType: 'json',
                         type: 'POST',

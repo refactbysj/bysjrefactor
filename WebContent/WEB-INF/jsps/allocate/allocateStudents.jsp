@@ -140,7 +140,7 @@
                 $.messager.confirm("询问", "确认匹配选中的老师和学生?", function (r) {
                     if (r) {
                         $.ajax({
-                            url: '/bysj3/process/allocateStudents.html',
+                            url: '${basePath}process/allocateStudents.html',
                             type: 'POST',
                             dataType: 'json',
                             data: {"stuIds": studentIds, "tutorId": tutorId},

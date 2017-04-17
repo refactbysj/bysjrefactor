@@ -81,7 +81,7 @@
             window.wxc.xcConfirm("确认修改？", "confirm", {
                 onOk: function () {
                     $.ajax({
-                        url: '/bysj3/updatePassword.html',
+                        url: '${basePath}updatePassword.html',
                         data: {"oldPassword": oldpw, "newPassword": newpw},
                         type: 'POST',
                         success: function (data) {
@@ -198,7 +198,7 @@
                 </li>
                 <sec:authorize ifNotGranted="ROLE_STUDENT">
                     <li>
-                        <a href="/bysj3/updateInfo.html" data-toggle="modal" data-target="#updateInfo">
+                        <a href="${basePath}updateInfo.html" data-toggle="modal" data-target="#updateInfo">
                           <span style="color: whitesmoke;">
                             <i class="icon-edit"></i> 修改个人信息
                           </span>
@@ -305,7 +305,7 @@
      aria-hidden="true" aria-labelledby="modelOpeningReportTime">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/bysj3/updatePassword.html" method="post" onsubmit="return checkPassword()">
+            <form action="${basePath}updatePassword.html" method="post" onsubmit="return checkPassword()">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"
                             aria-hidden="true">×
