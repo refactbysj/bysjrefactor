@@ -1,5 +1,6 @@
 package com.newview.bysj.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -58,6 +59,7 @@ public class OpenningReport implements Serializable {
      * @generated
      */
     @OneToOne
+    @JsonIgnore
     private PaperProject paperProject;
 
     public OpenningReport() {
