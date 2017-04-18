@@ -128,12 +128,19 @@ public class TaskDocManageController extends BaseController {
         Student student = taskDoc.getGraduateProject().getStudent();
         String fileName = "任务书-" + student.getNo() + "-" + student.getName() + "-" + taskDoc.getGraduateProject().getTitle();
         File taskFile = new File(taskDoc.getUrl());
-        String extendName = taskFile.getName().substring(taskFile.getName().lastIndexOf("."));
-        if (taskDoc.getGraduateProject().getSubTitle() != null && !Objects.equals(taskDoc.getGraduateProject().getSubTitle(), "")) {
-            fileName = fileName + "-" + taskDoc.getGraduateProject().getSubTitle() + extendName;
-        } else {
-            fileName = fileName + extendName;
+
+        String extendName;
+        try {
+            extendName = taskFile.getName().substring(taskFile.getName().lastIndexOf("."));
+            if (taskDoc.getGraduateProject().getSubTitle() != null && !Objects.equals(taskDoc.getGraduateProject().getSubTitle(), "")) {
+                fileName = fileName + "-" + taskDoc.getGraduateProject().getSubTitle() + extendName;
+            } else {
+                fileName = fileName + extendName;
+            }
+        } catch (Exception e) {
+            LOGGER.error("任务书重命名失败" + e);
         }
+
         String url = taskDoc.getUrl();
         return CommonHelper.download(httpSession, url, fileName);
     }

@@ -11,7 +11,7 @@
 
     //下载
     function downLoad(id) {
-        window.location.href = '${basePath}student/download/taskDoc.html?taskDocId=' + id;
+        window.location.href = '${basePath}tutor/downLoadTaskDoc.html?projectId=' + id;
     }
 </script>
 
@@ -66,7 +66,7 @@
                                 <td>
                                     <a class="easyui-linkbutton" onclick="showDetail(${graduateProject.id})"
                                        href="javascript:void(0)" data-options="iconCls:'icon-more',plain:true">显示细节 </a>
-                                    <a class="easyui-linkbutton" onclick="downLoad(${graduateProject.taskDoc.id})"
+                                    <a class="easyui-linkbutton" onclick="downLoad(${graduateProject.id})"
                                        href="javascript:void(0)" data-options="iconCls:'icon-blank',plain:true">下载</a>
                                         <%--student/download/taskDoc.html?taskDocId=${graduateProject.taskDoc.id}--%>
                                 </td>
