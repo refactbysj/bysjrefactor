@@ -2,15 +2,20 @@
          pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
 
+<script type="text/javascript">
+    //显示细节
+    function showDetail(id) {
+        var url = '${basePath}process/showDetail.html?graduateProjectId=' + id;
+        showProjectDetail(url);
+    }
+
+    //下载
+    function downLoad(id) {
+        window.location.href = '${basePath}student/download/taskDoc.html?taskDocId=' + id;
+    }
+</script>
 
 <div class="container-fluid" style="width: 100%">
-    <div class="row-fluid">
-        <ul class="breadcrumb">
-            <li>毕业设计流程</li>
-            <li>查看任务书<span class="divider">/</span>
-            </li>
-        </ul>
-    </div>
     <div class="row">
         <c:choose>
             <c:when test="${not empty message}">
@@ -21,15 +26,14 @@
                         class="table table-striped table-bordered table-hover datatable">
                     <thead>
                     <tr>
-                        <th>题目名称</th>
-                        <th>副标题</th>
+                        <th width="30%">题目名称</th>
+                        <th width="10%">副标题</th>
                         <th>年份</th>
                         <th>类别</th>
                         <th>学生姓名</th>
                         <th>班级</th>
                         <th>学号</th>
                         <th>主指导</th>
-                        <th>课题详情</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -58,11 +62,13 @@
                                 <td>${graduateProject.student.studentClass.description}</td>
                                 <td>${graduateProject.student.no}</td>
                                 <td>${graduateProject.mainTutorage.tutor.name}</td>
-                                <td><a class="btn btn-primary btn-xs"
-                                       href="/bysj3/process/showDetail.html?graduateProjectId=${graduateProject.id}"
-                                       data-toggle="modal" data-target="#showDetail">显示细节 </a></td>
-                                <td><a type="button"
-                                       href="/bysj3/student/download/taskDoc.html?taskDocId=${graduateProject.taskDoc.id}">下载</a>
+
+                                <td>
+                                    <a class="easyui-linkbutton" onclick="showDetail(${graduateProject.id})"
+                                       href="javascript:void(0)" data-options="iconCls:'icon-more',plain:true">显示细节 </a>
+                                    <a class="easyui-linkbutton" onclick="downLoad(${graduateProject.taskDoc.id})"
+                                       href="javascript:void(0)" data-options="iconCls:'icon-blank',plain:true">下载</a>
+                                        <%--student/download/taskDoc.html?taskDocId=${graduateProject.taskDoc.id}--%>
                                 </td>
                             </tr>
                         </c:otherwise>
@@ -71,12 +77,5 @@
                 </table>
             </c:otherwise>
         </c:choose>
-    </div>
-</div>
-
-<div class="modal fade" id="showDetail" tabindex="-1" role="dialog"
-     aria-hidden="true" aria-labelledby="modelOpeningReportTime">
-    <div class="modal-dialog">
-        <div class="modal-content"></div>
     </div>
 </div>
