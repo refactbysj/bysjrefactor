@@ -1,6 +1,6 @@
 package com.newview.bysj.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -80,7 +80,7 @@ public class TaskDoc implements Serializable {
         this.url = url;
     }
 
-    @JsonIgnore
+    @JsonBackReference
     public GraduateProject getGraduateProject() {
         return graduateProject;
     }

@@ -484,7 +484,7 @@ public class CommonHelper {
     public static String fileUpload(MultipartFile file, HttpSession httpSession, String folderName, String fileName) {
         // 文件夹名称：应用程序的根路径+上传目录
         String folder = CommonHelper.getUploadPath(httpSession);
-        logger.error("file:  " + file.getOriginalFilename() + "   fileIndexOf" + file.getOriginalFilename().lastIndexOf("."));
+        logger.info("file:  " + file.getOriginalFilename() + "   fileIndexOf" + file.getOriginalFilename().lastIndexOf("."));
         // 文件的扩展名
         String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."),
                 file.getOriginalFilename().length());

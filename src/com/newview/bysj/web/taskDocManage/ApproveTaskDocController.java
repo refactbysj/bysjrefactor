@@ -1,123 +1,207 @@
 package com.newview.bysj.web.taskDocManage;
 
 import com.newview.bysj.domain.Audit;
+import com.newview.bysj.domain.GraduateProject;
 import com.newview.bysj.domain.TaskDoc;
 import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.helper.CommonHelper;
+import com.newview.bysj.util.PageInfo;
+import com.newview.bysj.util.Result;
 import com.newview.bysj.web.baseController.BaseController;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ApproveTaskDocController extends BaseController {
+
+    private static final Logger LOGGER = Logger.getLogger(ApproveTaskDocController.class);
+
     @RequestMapping("/approveTaskDoc")
-    public String list(ModelMap modelMap, Integer pageNo, Integer pageSize) {
-        modelMap.put("pageNo", pageNo);
-        modelMap.put("pageSize", pageSize);
-        //根据jsp中不同角色跳转到不同的对应方法
-        return "taskDoc/redirectToRole";
+    public String list() {
+
+        return "taskDoc/approveTaskDoc";
     }
 
     //通过教研室主任获取任务书
     @RequestMapping("getTaskDocsByDirector")
-    public String getDocByDepartment(HttpSession httpSession, HttpServletRequest httpServletRequest, ModelMap modelMap, Integer pageNo, Integer pageSize, Boolean approve) {
+    @ResponseBody
+    public PageInfo getDocByDepartment(HttpSession httpSession, Integer page, Integer rows, Boolean approve, String title) {
+        PageInfo pageInfo = new PageInfo();
         //获取当前用户
         Tutor director = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
         //获取教研室主任的任务书
-        Page<TaskDoc> taskDoc = taskDocService.getAuditedTaskDocByDirector(director, approve, pageNo, pageSize);
-        CommonHelper.pagingHelp(modelMap, taskDoc, "taskDoces", CommonHelper.getRequestUrl(httpServletRequest), taskDoc.getTotalElements());
-        modelMap.addAttribute("actionUrl", CommonHelper.getRequestUrl(httpServletRequest));
-        return "taskDoc/approveTaskDoc";
+        Page<TaskDoc> taskDoc = taskDocService.getAuditedTaskDocByDirector(director, approve, page, rows, title);
+        pageInfo.setRows(this.getProjectByTask(taskDoc.getContent()));
+        pageInfo.setTotal((int) taskDoc.getTotalElements());
+        return pageInfo;
+    }
+
+    private List<GraduateProject> getProjectByTask(List<TaskDoc> taskDocList) {
+        List<GraduateProject> graduateProjects = new ArrayList<>();
+        if (taskDocList != null && taskDocList.size() > 0) {
+            for (TaskDoc doc : taskDocList) {
+                graduateProjects.add(doc.getGraduateProject());
+            }
+        }
+        return graduateProjects;
     }
 
     //通过院长获取任务书
     @RequestMapping("getTaskDocsByDean")
-    public String getDocByDean(HttpSession httpSession, HttpServletRequest httpServletRequest, ModelMap modelMap, Integer pageNo, Integer pageSize, Boolean approve) {
+    @ResponseBody
+    public PageInfo getDocByDean(HttpSession httpSession, Integer page, Integer rows, Boolean approve, String title) {
+        PageInfo pageInfo = new PageInfo();
         //获取当前用户
         Tutor Dean = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
         //获取院长的任务书
-        Page<TaskDoc> taskDoc = taskDocService.getAuditedTaskDocByDean(Dean, approve, pageNo, pageSize);
-        CommonHelper.pagingHelp(modelMap, taskDoc, "taskDoces", CommonHelper.getRequestUrl(httpServletRequest), taskDoc.getTotalElements());
-        modelMap.addAttribute("actionUrl", CommonHelper.getRequestUrl(httpServletRequest));
-        return "taskDoc/approveTaskDoc";
+        Page<TaskDoc> taskDoc = taskDocService.getAuditedTaskDocByDean(Dean, approve, page, rows, title);
+        pageInfo.setRows(this.getProjectByTask(taskDoc.getContent()));
+        pageInfo.setTotal((int) taskDoc.getTotalElements());
+        return pageInfo;
     }
 
     //通过院长，教研室主任获取任务书
     @RequestMapping("getTaskDocsByDirectorAndDean")
-    public String getDocByDepartmentandDean(HttpSession httpSession, HttpServletRequest httpServletRequest, ModelMap modelMap, Integer pageNo, Integer pageSize, Boolean approve) {
+    @ResponseBody
+    public PageInfo getDocByDepartmentandDean(HttpSession httpSession, Integer page, Integer rows, Boolean approve, String title) {
+        PageInfo pageInfo = new PageInfo();
         //获取当前用户
         Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
         //获取院长教研室主任的任务书
-        Page<TaskDoc> taskDoc = taskDocService.getAuditedTaskDocByDirectorAndDean(tutor, approve, pageNo, pageSize);
-        CommonHelper.pagingHelp(modelMap, taskDoc, "taskDoces", CommonHelper.getRequestUrl(httpServletRequest), taskDoc.getTotalElements());
-        modelMap.addAttribute("actionUrl", CommonHelper.getRequestUrl(httpServletRequest));
-        return "taskDoc/approveTaskDoc";
+        Page<TaskDoc> taskDoc = taskDocService.getAuditedTaskDocByDirectorAndDean(tutor, approve, page, rows, title);
+        pageInfo.setRows(this.getProjectByTask(taskDoc.getContent()));
+        pageInfo.setTotal((int) taskDoc.getTotalElements());
+        return pageInfo;
     }
 
     //教研室主任审核通过
     @RequestMapping(value = "approveTaskDocByDepartment.html")
-    public void approvedByDirector(HttpServletResponse httpServletResponse, HttpSession httpSession, Integer taskDocId) {
-        //获取当前用户
-        Tutor tutor = tutorService.findById(CommonHelper.getCurrentTutor(httpSession).getId());
-        updateApprovedByDirector(taskDocId, tutor, true);
-        CommonHelper.buildSimpleJson(httpServletResponse);
+    @ResponseBody
+    public Result approvedByDirector(HttpSession httpSession, Integer taskDocId) {
+        Result result = new Result();
+        try {
+            //获取当前用户
+            Tutor tutor = tutorService.findById(CommonHelper.getCurrentTutor(httpSession).getId());
+            updateApprovedByDirector(taskDocId, tutor, true);
+            result.setSuccess(true);
+            result.setMsg("审核成功");
+        } catch (Exception e) {
+            result.setMsg("审核失败");
+            e.printStackTrace();
+            LOGGER.error("审核失败" + e);
+        }
+        return result;
+
     }
 
     //院长审核通过
     @RequestMapping(value = "approveTaskDocByDean.html")
-    public void approvedByDean(HttpServletResponse httpServletResponse, HttpSession httpSession, Integer taskDocId) {
-        //获取当前用户
-        Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
-        updateApprovedByDean(taskDocId, tutor, true);
-        CommonHelper.buildSimpleJson(httpServletResponse);
+    @ResponseBody
+    public Result approvedByDean(HttpSession httpSession, Integer taskDocId) {
+        Result result = new Result();
+        try {
+            //获取当前用户
+            Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
+            updateApprovedByDean(taskDocId, tutor, true);
+            result.setSuccess(true);
+            result.setMsg("审核成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("审核失败" + e);
+            result.setMsg("审核失败");
+        }
+        return result;
+
     }
 
     //教研室主任和院长审核通过
     @RequestMapping(value = "approveTaskDocByDirectorAndDean.html")
-    public void approvedByDirectorAndDean(HttpServletResponse httpServletResponse, HttpSession httpSession, Integer taskDocId) {
-        //获取当前用户
-        Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
-        updateApprovedByDirector(taskDocId, tutor, true);
-        updateApprovedByDean(taskDocId, tutor, true);
-        CommonHelper.buildSimpleJson(httpServletResponse);
+    @ResponseBody
+    public Result approvedByDirectorAndDean(HttpSession httpSession, Integer taskDocId) {
+        Result result = new Result();
+        try {
+            //获取当前用户
+            Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
+            updateApprovedByDirector(taskDocId, tutor, true);
+            updateApprovedByDean(taskDocId, tutor, true);
+            result.setSuccess(true);
+            result.setMsg("审核成功");
+        } catch (Exception e) {
+            result.setMsg("审核失败");
+            e.printStackTrace();
+            LOGGER.error("审核失败" + e);
+        }
+        return result;
     }
 
     //教研室主任退回
     @RequestMapping("rejectTaskDocByDepartment.html")
-    public void rejectByDirector(HttpServletResponse httpServletResponse, HttpSession httpSession, Integer taskDocId) {
-        //获取当前用户
-        Tutor tutor = tutorService.findById(CommonHelper.getCurrentTutor(httpSession).getId());
-        updateApprovedByDirector(taskDocId, tutor, false);
-        CommonHelper.buildSimpleJson(httpServletResponse);
+    @ResponseBody
+    public Result rejectByDirector(HttpSession httpSession, Integer taskDocId) {
+        Result result = new Result();
+        try {
+            //获取当前用户
+            Tutor tutor = tutorService.findById(CommonHelper.getCurrentTutor(httpSession).getId());
+            updateApprovedByDirector(taskDocId, tutor, false);
+            result.setSuccess(true);
+            result.setMsg("退回成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("教研室主任退回任务书失败" + e);
+            result.setMsg("退回失败");
+
+        }
+        return result;
+
     }
 
     //院长退回
     @RequestMapping("rejectTaskDocByDean")
-    public void rejectByDean(HttpServletResponse httpServletResponse, HttpSession httpSession, Integer taskDocId) {
-        //获取当前用户
-        Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
-        updateApprovedByDean(taskDocId, tutor, false);
-        CommonHelper.buildSimpleJson(httpServletResponse);
+    public Result rejectByDean(HttpSession httpSession, Integer taskDocId) {
+        Result result = new Result();
+        try {
+            //获取当前用户
+            Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
+            updateApprovedByDean(taskDocId, tutor, false);
+            result.setSuccess(true);
+            result.setMsg("退回成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("院长退回任务书失败" + e);
+            result.setMsg("退回失败");
+        }
+        return result;
     }
 
     //院长教研室主任退回
     @RequestMapping(value = "rejectTaskDocByDirectorAndDean.html")
-    public void rejectByDirectorAndDean(HttpServletResponse httpServletResponse, HttpSession httpSession, Integer taskDocId) {
-        //获取当前用户
-        Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
-        updateApprovedByDirector(taskDocId, tutor, false);
-        updateApprovedByDean(taskDocId, tutor, false);
-        CommonHelper.buildSimpleJson(httpServletResponse);
+    @ResponseBody
+    public Result rejectByDirectorAndDean(HttpSession httpSession, Integer taskDocId) {
+        Result result = new Result();
+        try {
+            //获取当前用户
+            Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
+            updateApprovedByDirector(taskDocId, tutor, false);
+            updateApprovedByDean(taskDocId, tutor, false);
+            result.setSuccess(true);
+            result.setMsg("退回成功");
+        } catch (Exception e) {
+            result.setMsg("退回失败");
+            e.printStackTrace();
+            LOGGER.error("院长退回任务书失败" + e);
+        }
+        return result;
     }
 
     //修改院长的audit
-    public void updateApprovedByDean(Integer taskDocId, Tutor tutor, Boolean approve) {
+    private void updateApprovedByDean(Integer taskDocId, Tutor tutor, Boolean approve) {
         //获取要审核的任务书
         TaskDoc taskDoc = taskDocService.findById(taskDocId);
         Audit auditByDean = taskDoc.getAuditByBean();
@@ -134,7 +218,7 @@ public class ApproveTaskDocController extends BaseController {
     }
 
     //修改教研室主任的audit
-    public void updateApprovedByDirector(Integer taskDocId, Tutor tutor, Boolean approve) {
+    private void updateApprovedByDirector(Integer taskDocId, Tutor tutor, Boolean approve) {
         //获取要审核的任务书
         TaskDoc taskDoc = taskDocService.findById(taskDocId);
         Audit auditByDirector = taskDoc.getAuditByDepartmentDirector();

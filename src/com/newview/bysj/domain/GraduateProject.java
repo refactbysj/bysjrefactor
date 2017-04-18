@@ -1,6 +1,6 @@
 package com.newview.bysj.domain;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -52,7 +52,6 @@ public class GraduateProject implements Serializable {
     @Column(length = 500)
     private String reference;
     //报题：送审
-    @JsonIgnore
     private Boolean proposerSubmitForApproval;
     /*
      * 总分
@@ -110,7 +109,6 @@ public class GraduateProject implements Serializable {
      * 任务书
      * 一对一
      */
-    @JsonIgnore
     @OneToOne(mappedBy = "graduateProject")
     private TaskDoc taskDoc;
 
@@ -118,42 +116,36 @@ public class GraduateProject implements Serializable {
      * 答辩小组
      * 多对一
      */
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "replyGroup_id")
     private ReplyGroup replyGroup;
     /*
      * 评价阶段：指导教师评审表
      */
-    @JsonIgnore
     @Embedded
     private CommentByTutor commentByTutor;
     /*
      * 时间
      * 一对多
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "graduateProject", cascade = CascadeType.ALL)
     private List<Schedule> schedules;
     /*
      * 主指导
      * 一对一
      */
-    @JsonIgnore
     @OneToOne
     private MainTutorage mainTutorage;
     /*
      * 合作指导
      * 一对多
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "graduateProject", cascade = CascadeType.ALL)
     private List<CoTutorage> coTutorage;
     /*
 	 *答辩小组意见 
 	 */
 
-    @JsonIgnore
     @Embedded
     private CommentByGroup commentByGroup;
 	/*
@@ -167,14 +159,12 @@ public class GraduateProject implements Serializable {
      * 答辩委员会审核题目
      * 一对一
      */
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     private Audit totalScoreAuditByChairman;
     /*
      * 评阅人
      * 多对一
      */
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "reviewer_id")
     private Tutor reviewer;
@@ -182,20 +172,17 @@ public class GraduateProject implements Serializable {
      * 评分阶段：评阅人评阅结论
      * 一对一
      */
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     private Audit auditByReviewer;
     /*
      *评分阶段： 指导教师评阅结论
      * 一对一
      */
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     private Audit auditByTutor;
     /*
      * 评阅人审评表
      */
-    @JsonIgnore
     @Embedded
     private CommentByReviewer commentByReviewer;
 
@@ -203,14 +190,12 @@ public class GraduateProject implements Serializable {
      * 指导记录
      * 一对多
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "graduateProject", cascade = CascadeType.ALL)
     private List<GuideRecord> guideRecord;
     /*
      * 指导时间
      * 一对一，单向
      */
-    @JsonIgnore
     @OneToOne
     private GuideDay guideDay;
 
@@ -233,28 +218,24 @@ public class GraduateProject implements Serializable {
      * 考察
      * 一对多
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "graduateProject", cascade = CascadeType.ALL)
     private List<Quiz> quiz;
     /*
      * 阶段成果
      * 一对多
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "graduateProject", cascade = CascadeType.ALL)
     private List<StageAchievement> stageAchievement;
     /*
      * 校优毕业论文
      * 一对一
      */
-    @JsonIgnore
     @OneToOne(mappedBy = "graduateProject", cascade = CascadeType.ALL)
     private SchoolExcellentProject schoolExcellentProject;
     /*
      * 省优毕业论文
      * 一对一
      */
-    @JsonIgnore
     @OneToOne(mappedBy = "graudateProject", cascade = CascadeType.ALL)
     private ProvinceExcellentProject provinceExcellentProject;
 
@@ -421,6 +402,7 @@ public class GraduateProject implements Serializable {
     public void setStudent(Student student) {
         this.student = student;
     }
+
 
     public TaskDoc getTaskDoc() {
         return taskDoc;

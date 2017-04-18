@@ -1,7 +1,7 @@
 package com.newview.bysj.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -51,6 +51,7 @@ ReplyGroup implements Serializable {
      *
      * @generated
      */
+    @JsonIgnore
     @OneToMany(mappedBy = "replyGroup")
     private List<GraduateProject> graduateProject;
     /**
