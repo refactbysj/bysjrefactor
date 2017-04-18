@@ -222,8 +222,6 @@
         //添加或修改课题
         function editProject(url, id) {
             var title = '';
-            console.log("url:" + url);
-            console.log('id:' + id);
             if (id == null || id == '') {
                 title = '添加课题';
             } else {
