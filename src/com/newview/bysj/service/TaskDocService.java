@@ -1,34 +1,27 @@
 package com.newview.bysj.service;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpSession;
-
+import com.newview.bysj.dao.AuditDao;
+import com.newview.bysj.dao.TaskDocDao;
+import com.newview.bysj.domain.*;
+import com.newview.bysj.exception.MessageException;
+import com.newview.bysj.helper.CommonHelper;
+import com.newview.bysj.jpaRepository.MyRepository;
+import com.newview.bysj.myAnnotation.MethodDescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.newview.bysj.dao.AuditDao;
-import com.newview.bysj.dao.TaskDocDao;
-import com.newview.bysj.domain.Audit;
-import com.newview.bysj.domain.Department;
-import com.newview.bysj.domain.GraduateProject;
-import com.newview.bysj.domain.School;
-import com.newview.bysj.domain.StudentClass;
-import com.newview.bysj.domain.TaskDoc;
-import com.newview.bysj.domain.Tutor;
-import com.newview.bysj.exception.MessageException;
-import com.newview.bysj.helper.CommonHelper;
-import com.newview.bysj.jpaRepository.MyRepository;
-import com.newview.bysj.myAnnotation.MethodDescription;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service("taskDocService")
 public class TaskDocService extends BasicService<TaskDoc, Integer> {
@@ -86,7 +79,7 @@ public class TaskDocService extends BasicService<TaskDoc, Integer> {
      * @param approved 如果为true代表查看审核通过的，如果为false代表查看未通过的，如果为null代表查看所有的
      */
     @MethodDescription("获取能被教研室主任审核的任务书")
-    public Page<TaskDoc> getAuditedTaskDocByDirector(Tutor tutor, Boolean approved, Integer pageNo, Integer pageSize) {
+    public Page<TaskDoc> getAuditedTaskDocByDirector(Tutor tutor, Boolean approved, Integer pageNo, Integer pageSize, String title) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
         pageSize = CommonHelper.getPageSize(pageSize);
         Page<TaskDoc> result = taskDocDao.findAll(new Specification<TaskDoc>() {
@@ -100,6 +93,9 @@ public class TaskDocService extends BasicService<TaskDoc, Integer> {
                 predicates.add(cb.notEqual(root.get("graduateProject").get("mainTutorage").get("tutor"), tutor));
                 if (approved != null) {
                     predicates.add(cb.equal(root.get("auditByDepartmentDirector").get("approve").as(Boolean.class), approved));
+                }
+                if (title != null && !Objects.equals("", title)) {
+                    predicates.add(cb.and(cb.like(root.get("graduateProject").get("title").as(String.class), "%" + title + "%")));
                 }
                 //当年的任务书
                 //predicates.add(cb.equal(root.get("graduateProject").get("year").as(Integer.class),CommonHelper.getYear()));
@@ -136,13 +132,12 @@ public class TaskDocService extends BasicService<TaskDoc, Integer> {
      * @param approved 如果为true查看院长审核通过的，如果为false查看院长审核未通过的，如果为null只能查看教研室主任审核通过的
      */
     @MethodDescription("获取能被院长审核的任务书")
-    public Page<TaskDoc> getAuditedTaskDocByDean(Tutor tutor, Boolean approved, Integer pageNo, Integer pageSize) {
+    public Page<TaskDoc> getAuditedTaskDocByDean(Tutor tutor, Boolean approved, Integer pageNo, Integer pageSize, String title) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
         pageSize = CommonHelper.getPageSize(pageSize);
         Page<TaskDoc> result = taskDocDao.findAll(new Specification<TaskDoc>() {
             @Override
             public Predicate toPredicate(Root<TaskDoc> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 List<Predicate> predicates = new ArrayList<Predicate>();
                 //所有本教研室学生的任务书
                 predicates.add(cb.equal(root.get("graduateProject").get("student").get("studentClass").get("major").get("department").as(Department.class), tutor.getDepartment()));
@@ -155,6 +150,11 @@ public class TaskDocService extends BasicService<TaskDoc, Integer> {
                     //院长只能看到教研室主任审核通过的任务书
                     predicates.add(cb.equal(root.get("auditByDepartmentDirector").get("approve").as(Boolean.class), true));
                 }
+
+                if (title != null && !Objects.equals("", title)) {
+                    predicates.add(cb.and(cb.like(root.get("graduateProject").get("title").as(String.class), "%" + title + "%")));
+                }
+
                 //当年的任务书
                 predicates.add(cb.equal(root.get("graduateProject").get("year").as(Integer.class), CommonHelper.getYear()));
                 Predicate[] p = new Predicate[predicates.size()];
@@ -165,7 +165,7 @@ public class TaskDocService extends BasicService<TaskDoc, Integer> {
     }
 
     @MethodDescription("同时拥有教研室主任和院长角色能够审核的任务书")
-    public Page<TaskDoc> getAuditedTaskDocByDirectorAndDean(Tutor tutor, Boolean approved, Integer pageNo, Integer pageSize) {
+    public Page<TaskDoc> getAuditedTaskDocByDirectorAndDean(Tutor tutor, Boolean approved, Integer pageNo, Integer pageSize, String title) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
         pageSize = CommonHelper.getPageSize(pageSize);
         Page<TaskDoc> result = taskDocDao.findAll(new Specification<TaskDoc>() {
@@ -185,6 +185,9 @@ public class TaskDocService extends BasicService<TaskDoc, Integer> {
                         //审核教研室主任审核通过的任务书，院长是否通过根据approved
                         predicates.add(cb.or(cb.equal(root.get("auditByDepartmentDirector").get("approve").as(Boolean.class), false), cb.equal(root.get("auditByBean").get("approve").as(Boolean.class), false)));
                     }
+                }
+                if (title != null && !Objects.equals("", title)) {
+                    predicates.add(cb.and(cb.like(root.get("graduateProject").get("title").as(String.class), "%" + title + "%")));
                 }
                 //当年的任务书
                 predicates.add(cb.equal(root.get("graduateProject").get("year").as(Integer.class), CommonHelper.getYear()));

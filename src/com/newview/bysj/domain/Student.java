@@ -1,7 +1,6 @@
 package com.newview.bysj.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -24,7 +23,6 @@ public class Student extends Actor {
      *
      * @generated
      */
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "tutor_id")
     private Tutor tutor;
@@ -42,13 +40,11 @@ public class Student extends Actor {
      *
      * @generated
      */
-    @JsonIgnore
     @OneToOne(mappedBy = "student")
     private GraduateProject graduateProject;
 
     @ManyToOne
     @JoinColumn(name = "replyGroup_id")
-    @JsonIgnore
     private ReplyGroup replyGroup;
 
     public Student() {
@@ -82,7 +78,6 @@ public class Student extends Actor {
         this.studentClass = studentClass;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public GraduateProject getGraduateProject() {
         return graduateProject;
