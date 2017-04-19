@@ -5,6 +5,7 @@ import com.newview.bysj.domain.*;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.jpaRepository.MyRepository;
 import com.newview.bysj.myAnnotation.MethodDescription;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,16 +20,17 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service("paperProjectService")
 public class PaperProjectService extends BasicService<PaperProject, Integer> {
 
+    private static final Logger LOGGER = Logger.getLogger(PaperProjectService.class);
     PaperProjectDao paperProjectDao;
 
     @Override
     @Autowired
     public void setDasciDao(MyRepository<PaperProject, Integer> basicDao) {
-        // TODO Auto-generated method stub
         this.basicDao = basicDao;
         paperProjectDao = (PaperProjectDao) basicDao;
     }
@@ -40,7 +42,6 @@ public class PaperProjectService extends BasicService<PaperProject, Integer> {
         Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
             @Override
             public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 //通过课题提交人查询
                 Predicate c1 = cb.equal(root.get("proposer").as(Tutor.class), proposer);
                 Predicate c2 = cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear());
@@ -58,12 +59,43 @@ public class PaperProjectService extends BasicService<PaperProject, Integer> {
         Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
             @Override
             public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 Predicate c1 = cb.equal(root.get("mainTutorage").get("tutor").as(Tutor.class), mainTutorage);
                 Predicate c2 = cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear());
                 //教研室审核通过的课题
                 Predicate c3 = cb.equal(root.get("auditByDirector").get("approve").as(Boolean.class), true);
                 query.where(cb.and(c1, c2, c3));
+                return query.getRestriction();
+            }
+        }, new PageRequest(pageNo, pageSize, new Sort(Direction.DESC, "id")));
+        return result;
+
+    }
+
+    @MethodDescription("查询论文-通过课题主指导")
+    public Page<PaperProject> getPaperProjectByMainTutorageAndCondition(Tutor mainTutorage, Integer pageNo, Integer pageSize, String title, Boolean approve) {
+        pageNo = CommonHelper.getPageNo(pageNo, pageSize);
+        pageSize = CommonHelper.getPageSize(pageSize);
+        Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
+            @Override
+            public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Predicate c1 = cb.equal(root.get("mainTutorage").get("tutor").as(Tutor.class), mainTutorage);
+                Predicate c2 = cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear());
+                Predicate c4 = null;
+                Predicate c5 = null;
+                if (title != null && !Objects.equals("", title)) {
+                    c4 = cb.like(root.get("title").as(String.class), "%" + title + "%");
+                }
+                try {
+                    if (approve != null) {
+                        c5 = cb.equal(root.get("openningReport").get("auditByTutor").get("approve").as(Boolean.class), approve);
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("添加是否通过条件失败");
+                }
+
+                //教研室审核通过的课题
+                Predicate c3 = cb.equal(root.get("auditByDirector").get("approve").as(Boolean.class), true);
+                query.where(cb.and(c1, c2, c3, c4, c5));
                 return query.getRestriction();
             }
         }, new PageRequest(pageNo, pageSize, new Sort(Direction.DESC, "id")));
@@ -78,7 +110,6 @@ public class PaperProjectService extends BasicService<PaperProject, Integer> {
         Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
             @Override
             public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 //教研室下的所有课题
                 Predicate c1 = cb.equal(root.get("major").get("department").as(Department.class), department);
                 //开题报告不能为空
@@ -101,7 +132,6 @@ public class PaperProjectService extends BasicService<PaperProject, Integer> {
         Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
             @Override
             public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 //教研室下的所有课题
                 Predicate c1 = cb.equal(root.get("major").get("department").as(Department.class), mainTutorage.getDepartment());
                 //指导教师的课题
@@ -117,6 +147,54 @@ public class PaperProjectService extends BasicService<PaperProject, Integer> {
         return result;
     }
 
+    @MethodDescription("查询论文-同时拥有教研室主任和指导教师角色")
+    public Page<PaperProject> getPaperProjectByMainTutorageAndDepartmentAndCondition(Tutor mainTutorage, Integer pageNo, Integer pageSize, String title, Boolean approve) {
+        pageNo = CommonHelper.getPageNo(pageNo, pageSize);
+        pageSize = CommonHelper.getPageSize(pageSize);
+        Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
+            @Override
+            public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                //教研室下的所有课题
+                Predicate c1 = cb.equal(root.get("major").get("department").as(Department.class), mainTutorage.getDepartment());
+                //指导教师的课题
+                Predicate c2 = cb.equal(root.get("mainTutorage").get("tutor").as(Tutor.class), mainTutorage);
+                //所在教研室的所有课题或者是作为主指导
+                Predicate c3 = cb.or(c1, c2);
+                Predicate c4 = cb.isNotNull(root.get("openningReport").as(OpenningReport.class));
+                Predicate c5 = cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear());
+                Predicate c6 = null;
+                Predicate c7 = null;
+                Predicate c8 = null;
+                if (title != null && !Objects.equals("", title)) {
+                    c6 = cb.like(root.get("title").as(String.class), "%" + title + "%");
+                }
+                try {
+                    if (approve != null) {
+                        c7 = cb.equal(root.get("openningReport").get("auditByTutor").get("approve").as(Boolean.class), approve);
+                        c8 = cb.equal(root.get("openningReport").get("auditByDepartmentDirector").get("approve").as(Boolean.class), approve);
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("添加是否通过条件失败");
+                }
+                if (c6 != null && c7 != null) {
+                    query.where(cb.and(c3, c4, c5, c6, c7, c8));
+
+                } else if (c6 == null && c7 != null) {
+                    query.where(cb.and(c3, c4, c5, c7, c8));
+
+                } else if (c6 != null && c7 == null) {
+                    query.where(cb.and(c3, c4, c5, c6));
+
+                } else {
+                    query.where(cb.and(c3, c4, c5));
+
+                }
+                return query.getRestriction();
+            }
+        }, new PageRequest(pageNo, pageSize));
+        return result;
+    }
+
     @MethodDescription("查询论文-通过学院")
     public Page<PaperProject> getPaperProjectBySchool(School school, Integer pageNo, Integer pageSize) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
@@ -124,7 +202,6 @@ public class PaperProjectService extends BasicService<PaperProject, Integer> {
         Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
             @Override
             public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 //学院下的所有课题
                 Predicate c1 = cb.equal(root.get("major").get("department").get("school").as(School.class), school);
                 Predicate c2 = cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear());
@@ -143,7 +220,6 @@ public class PaperProjectService extends BasicService<PaperProject, Integer> {
         Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
             @Override
             public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 List<Predicate> predicates = new ArrayList<Predicate>();
                 //学院下的所有课题
                 predicates.add(cb.equal(root.get("major").get("department").get("school").as(School.class), school));
@@ -171,7 +247,6 @@ public class PaperProjectService extends BasicService<PaperProject, Integer> {
         Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
             @Override
             public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 List<Predicate> predicates = new ArrayList<Predicate>();
                 if (title != null) {
                     predicates.add(cb.like(root.get("title").as(String.class), "%" + title + "%"));
@@ -197,7 +272,6 @@ public class PaperProjectService extends BasicService<PaperProject, Integer> {
         Page<PaperProject> result = paperProjectDao.findAll(new Specification<PaperProject>() {
             @Override
             public Predicate toPredicate(Root<PaperProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 Predicate c1 = cb.equal(root.get("major").get("department").as(Department.class), tutor.getDepartment());
                 Predicate c2 = cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear());
                 query.where(cb.and(c1, c2));
