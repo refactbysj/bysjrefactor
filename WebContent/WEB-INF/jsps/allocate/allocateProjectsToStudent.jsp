@@ -172,7 +172,7 @@
     <div id="alloctedBtn" style="float: left;position: absolute;top: 10px;left: 10px">
         <a href="javascript:void(0)" onclick="viewAllocatedProject()" class="easyui-linkbutton">已分配学生和课题</a>
     </div>
-    <div id="searchDiv" style="float:right;position: absolute;top: 10px;right: 10%">
+    <div id="searchDiv" style="float:right;position: absolute;top: 10px;right: 5%">
         <form id="searchForm">
 
             <span style="color: grey;">学生姓名:</span><input type="text" name="name" value="${name}"

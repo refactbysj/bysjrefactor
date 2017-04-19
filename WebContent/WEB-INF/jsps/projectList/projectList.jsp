@@ -260,12 +260,6 @@
         }
 
 
-        function viewProject(category) {
-            $("#projectTable").datagrid('load',{
-                category:category
-            })
-        }
-
         //查询
         function searchFun() {
             $("#projectTable").datagrid('load', $.serializeObject($("#titleForm")));
@@ -273,67 +267,18 @@
 
         //清空查询条件
         function clearFun() {
-            $("#titleForm input").val('');
+            $("input[name=category]").attr('checked', false);
+            $("#projectTitle").val('');
             $("#projectTable").datagrid('load', {});
         }
     </script>
 
 </head>
 <body>
-<div id="head">
-    <div style="float: left;margin-left: 1%">
+<div style="float: left;margin-left: 1%;margin-top: 10px">
         <c:choose>
-            <c:when test="${ifShowAll == '1' }">
-                <div class="form-group">
-                    <a
-                            <c:if test="${viewProjectTitle=='all'}">class="btn btn-primary btn-sm" </c:if>
-                            <c:if test="${viewProjectTitle!='all'}">class="btn btn-default btn-sm"</c:if>
-                            href="<%=basePath%>process/listProjects.html">
-                        <span class="glyphicon glyphicon-adjust">查看全部题目</span>
-                            <%-- <i class="icon-home"></i>查看全部题目--%>
-
-                    </a>
-                    <a
-                            <c:if test="${viewProjectTitle=='design'}">class="btn btn-primary btn-sm" </c:if>
-                            <c:if test="${viewProjectTitle!='design'}">class="btn btn-default btn-sm"</c:if>
-                            href="javascript:void(0)" onclick="viewProject('设计题目')">
-                        <span class="glyphicon glyphicon-adjust">查看设计题目</span>
-                            <%--<i class="icon-coffee"></i>查看设计题目--%>
-                    </a>
-                    <a
-                            <c:if test="${viewProjectTitle=='paper'}">class="btn btn-primary btn-sm" </c:if>
-                            <c:if test="${viewProjectTitle!='paper'}">class="btn btn-default btn-sm"</c:if>
-                            class="btn btn-default"
-                            href="javascript:void(0)" onclick="viewProject('论文题目')">
-                        <span class="glyphicon glyphicon-adjust">查看论文题目</span>
-                            <%--<i class="icon-desktop"></i>查看论文题目--%>
-                    </a>
-                </div>
-
-            </c:when>
             <c:when test="${ifShowAll=='0'}">
                 <div class="form-group">
-                    <a
-                            <c:if test="${viewProjectTitle=='all'}">class="btn btn-primary btn-sm" </c:if>
-                            <c:if test="${viewProjectTitle!='all'}">class="btn btn-default btn-sm"</c:if>
-                            href="<%=basePath%>process/myProjects.html">
-                        <span class="glyphicon glyphicon-adjust">查看全部题目</span>
-                    </a>
-                    <a
-                            <c:if test="${viewProjectTitle=='design'}">class="btn btn-primary btn-sm" </c:if>
-                            <c:if test="${viewProjectTitle!='design'}">class="btn btn-default btn-sm"</c:if>
-                            href="javascript:void(0)" onclick="viewProject('设计题目')">
-                        <span class="glyphicon glyphicon-adjust">查看设计题目</span>
-                    </a>
-                    <a
-                            <c:if test="${viewProjectTitle=='paper'}">class="btn btn-primary btn-sm" </c:if>
-                            <c:if test="${viewProjectTitle!='paper'}">class="btn btn-default btn-sm"</c:if>
-                            href="javascript:void(0)" onclick="viewProject('论文题目')">
-                        <span class="glyphicon glyphicon-adjust">查看论文题目</span>
-                    </a>
-                        <%--<a class="btn btn-default" href="test.html" data-toggle="modal" data-target="#test">
-                            <span class="glyphicon-book">测试</span>
-                        </a>--%>
                     <c:choose>
                         <c:when test="${ABLE_TO_UPDATE==1}">
                             <a href="javascript:void(0)"
@@ -359,19 +304,19 @@
             </c:when>
         </c:choose>
     </div>
-    <div style="margin-right: 10%;float: right;">
+<div style="margin-right: 5%;float: right;margin-top: 10px">
         <form id="titleForm">
                 题目：
-            <input type="text" class="easyui-textbox" name="title" value="${title}">
+            <input type="text" class="easyui-textbox" id="projectTitle" name="title"/>
+            <input type="radio" name="category" value="论文题目"/>论文
+            <input type="radio" name="category" value="设计题目"/>设计
+            <input type="radio" name="category" value="${null}"/>全部
             <a class="easyui-linkbutton" onclick="searchFun()" data-options="iconCls:'icon-search'">查询</a>
             <a class="easyui-linkbutton" onclick="clearFun()" data-options="iconCls:'icon-clear'">清空</a>
 
         </form>
     </div>
-</div>
-<div style="height: 90%;width: 100%;">
     <table id="projectTable" style="height: 100%"></table>
-</div>
 
 </body>
 </html>

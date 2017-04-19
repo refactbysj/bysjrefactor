@@ -178,7 +178,7 @@
         <a class="easyui-linkbutton" onclick="viewAllAllocatedStudent()" href="javascript:void(0)"> 已分配学生
         </a>
     </div>
-    <div style="position: absolute;top: 10px;right: 10%;width: 60%;">
+    <div style="position: absolute;top: 10px;right: 5%;">
         <form id="searchForm">
             <span style="color: grey;">学生姓名:</span><input type="text" value="${name}" name="name"
                                                           class="easyui-textbox" id="name" placeholder="请输入学生姓名">

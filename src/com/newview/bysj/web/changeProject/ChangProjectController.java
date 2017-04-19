@@ -69,12 +69,12 @@ public class ChangProjectController extends BaseController {
     @ResponseBody
     public PageInfo getChangProjectData(HttpSession httpSession,
                                         Integer page, Integer rows,
-                                        QueryCondition queryCondition, String title) {
+                                        QueryCondition queryCondition, String title, String category) {
         PageInfo pageInfo = new PageInfo();
         //获取当前tutor
         Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
         //根据查询条件，获取当前用户所在教研室的所有课题
-        Page<GraduateProject> graduateProjectPage = graduateProjectService.getPageByLimit(tutor, page, rows, queryCondition.projectQuery(title));
+        Page<GraduateProject> graduateProjectPage = graduateProjectService.getPageByLimit(tutor, page, rows, queryCondition.projectQuery(title), category);
         pageInfo.setRows(graduateProjectPage.getContent());
         pageInfo.setTotal((int) graduateProjectPage.getTotalElements());
         return pageInfo;

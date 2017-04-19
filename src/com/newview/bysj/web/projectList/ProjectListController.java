@@ -1,8 +1,6 @@
 package com.newview.bysj.web.projectList;
 
-import com.newview.bysj.domain.DesignProject;
 import com.newview.bysj.domain.GraduateProject;
-import com.newview.bysj.domain.PaperProject;
 import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.util.PageInfo;
@@ -55,7 +53,7 @@ public class ProjectListController extends BaseController {
      */
     @RequestMapping(value = "/getProjectsData.html", method = RequestMethod.POST)
     @ResponseBody
-    public PageInfo listAllProjectsByPost(HttpSession httpSession, ModelMap modelMap, String title, Integer page,Integer rows, HttpServletRequest httpServletRequest) {
+    public PageInfo listAllProjectsByPost(HttpSession httpSession, ModelMap modelMap, String title, Integer page, Integer rows, HttpServletRequest httpServletRequest, String category) {
         PageInfo pageInfo = new PageInfo();
         Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
         //用于存放模糊查询的条件,键为属性名，值为属性值
@@ -64,7 +62,7 @@ public class ProjectListController extends BaseController {
             condition.put("title", title);
             modelMap.put("title", title);
         }
-        Page<GraduateProject> graduateProjectsByPage = graduateProjectService.getPageByLimit(tutor, page, rows, condition);
+        Page<GraduateProject> graduateProjectsByPage = graduateProjectService.getPageByLimit(tutor, page, rows, condition, category);
         /*CommonHelper.pagingHelp(modelMap, graduateProjectsByPage, "listProjects", httpServletRequest.getRequestURI(), graduateProjectsByPage.getTotalElements());
         GraduateProjectHelper.addProjectPageNumToModel(modelMap, graduateProjectsByPage);*/
         pageInfo.setRows(graduateProjectsByPage.getContent());
@@ -80,7 +78,7 @@ public class ProjectListController extends BaseController {
 
 
 
-    //获取设计类型的课题
+    /*//获取设计类型的课题
     @RequestMapping("/listDesignProjects.html")
     public String listAllDesignProjects(HttpSession httpSession, ModelMap modelMap, Integer pageNo, Integer pageSize, HttpServletRequest httpServletRequest) {
         Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
@@ -102,7 +100,7 @@ public class ProjectListController extends BaseController {
         GraduateProjectHelper.viewDesignOrPaper(modelMap, GraduateProjectHelper.VIEW_PAPAER);
         GraduateProjectHelper.display(modelMap, 1);
         return "projectTitle/listAllProjects";
-    }
+    }*/
 
 
 }
