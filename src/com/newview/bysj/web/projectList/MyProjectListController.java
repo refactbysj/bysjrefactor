@@ -1,8 +1,6 @@
 package com.newview.bysj.web.projectList;
 
-import com.newview.bysj.domain.DesignProject;
 import com.newview.bysj.domain.GraduateProject;
-import com.newview.bysj.domain.PaperProject;
 import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.exception.MessageException;
 import com.newview.bysj.helper.CommonHelper;
@@ -62,14 +60,14 @@ public class MyProjectListController extends BaseController {
      */
     @RequestMapping(value = "/myProjects.html", method = RequestMethod.POST)
     @ResponseBody
-    public PageInfo listMyProjectsPost(ModelMap modelMap, HttpSession httpSession, String title, Integer page, Integer rows, HttpServletRequest httpServletRequest) {
+    public PageInfo listMyProjectsPost(ModelMap modelMap, HttpSession httpSession, String title, Integer page, Integer rows, HttpServletRequest httpServletRequest, String category) {
         PageInfo pageInfo = new PageInfo();
         Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
         HashMap<String, String> condition = new HashMap<>();
         if (title != null) {
             condition.put("title", title.trim());
         }
-        Page<GraduateProject> graduateProjectPage = graduateProjectService.getPagesByProposerWithConditions(tutor, page, rows, condition);
+        Page<GraduateProject> graduateProjectPage = graduateProjectService.getPagesByProposerWithConditions(tutor, page, rows, condition, category);
         modelMap.put("actionUrl", httpServletRequest.getRequestURI());
         pageInfo.setTotal((int) graduateProjectPage.getTotalElements());
         pageInfo.setRows(graduateProjectPage.getContent());
@@ -86,7 +84,7 @@ public class MyProjectListController extends BaseController {
      * @param rows    每页的条数
      * @return jsp页面
      */
-    @RequestMapping("/listMyDesignProjects.html")
+    /*@RequestMapping("/listMyDesignProjects.html")
     public String listMyDesignProjectsGet(ModelMap modelMap, HttpSession httpSession, Integer page, Integer rows) {
         Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
         Page<DesignProject> designProjectPage = designProjectService.getDesignProjectByProposer(tutor, page, rows);
@@ -97,7 +95,7 @@ public class MyProjectListController extends BaseController {
         GraduateProjectHelper.setMyProjectDisplay(tutor, modelMap, constraintOfProposeProjectService);
         GraduateProjectHelper.viewDesignOrPaper(modelMap, GraduateProjectHelper.VIEW_DESIGN);
         return "projectTitle/listAllProjects";
-    }
+    }*/
 
     /**
      * 列出此用户的论文题目
@@ -108,7 +106,7 @@ public class MyProjectListController extends BaseController {
      * @param rows    每页的条数
      * @return jsp页面
      */
-    @RequestMapping("/listMyPaperProjects.html")
+    /*@RequestMapping("/listMyPaperProjects.html")
     public String listMyPaperProjectsGet(ModelMap modelMap, HttpSession httpSession, Integer page, Integer rows) {
         Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
         Page<PaperProject> paperProjectPage = paperProjectService.getPaperProjectByProposer(tutor, page, rows);
@@ -119,7 +117,7 @@ public class MyProjectListController extends BaseController {
         GraduateProjectHelper.viewDesignOrPaper(modelMap, GraduateProjectHelper.VIEW_PAPAER);
         return "projectTitle/listAllProjects";
     }
-
+*/
 
     /**
      * 查看论文的详细情况

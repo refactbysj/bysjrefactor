@@ -180,7 +180,7 @@
 </head>
 <body>
 <div id="headDiv">
-    <div id="searchDiv" style="float: left;margin-left: 2%;position: absolute;top:1%">
+    <div id="searchDiv" style="position: absolute;top:10px;right:5%">
         <form id="searchForm">
             <span style="color: grey;">老师姓名:</span>
             <input type="text"

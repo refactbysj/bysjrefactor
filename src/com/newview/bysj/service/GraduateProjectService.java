@@ -22,10 +22,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service("graduateProjectService")
@@ -370,7 +367,7 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
     }
 
     @MethodDescription("在有限制条件下，获取当前用户教研室所有老师的课题")
-    public Page<GraduateProject> getPageByLimit(Tutor tutor, Integer pageNo, Integer pageSize, HashMap<String, String> conditionMap) {
+    public Page<GraduateProject> getPageByLimit(Tutor tutor, Integer pageNo, Integer pageSize, HashMap<String, String> conditionMap, String category) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
         pageSize = CommonHelper.getPageSize(pageSize);
         Page<GraduateProject> result = graduateProjectDao.findAll(new Specification<GraduateProject>() {
@@ -386,6 +383,9 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
                     if (value != null) {
                         predicates.add(cb.like(root.get(key).as(String.class), "%" + value + "%"));
                     }
+                }
+                if (category != null && !Objects.equals("", category)) {
+                    predicates.add((cb.equal(root.get("category").as(String.class), category)));
                 }
                 predicates.add(cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear()));
                 Predicate[] p = new Predicate[predicates.size()];
@@ -528,7 +528,7 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
     }
 
     @MethodDescription("根据title获取所有发布者的课题")
-    public Page<GraduateProject> getPagesByProposerWithConditions(Tutor proposer, Integer pageNo, Integer pageSize, HashMap<String, String> conditionMap) {
+    public Page<GraduateProject> getPagesByProposerWithConditions(Tutor proposer, Integer pageNo, Integer pageSize, HashMap<String, String> conditionMap, String category) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
         pageSize = CommonHelper.getPageSize(pageSize);
         Page<GraduateProject> result = graduateProjectDao.findAll(new Specification<GraduateProject>() {
@@ -542,6 +542,9 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
                 for (String key : conditionMap.keySet()) {
                     String value = conditionMap.get(key);
                     predicates.add(cb.like(root.get(key), "%" + value + "%"));
+                }
+                if (category != null && !Objects.equals("", category)) {
+                    predicates.add(cb.equal(root.get("category").as(String.class), category));
                 }
                 Predicate[] p = new Predicate[predicates.size()];
                 query.where(cb.and(predicates.toArray(p)));

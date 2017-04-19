@@ -42,7 +42,7 @@ public class ApproveProjectController extends BaseController {
      * @return approveProjects/approveProjectOfTutor.jsp
      */
     @RequestMapping(value = "/searchProjectByNameAndTitle.html", method = RequestMethod.POST)
-    public String getGraduateProjectByLimit(HttpSession httpSession, String tutorName, String title, ModelMap modelMap, HttpServletRequest httpServletRequest) {
+    public String getGraduateProjectByLimit(HttpSession httpSession, String tutorName, String title, ModelMap modelMap, HttpServletRequest httpServletRequest, String category) {
         //获取当前tutor
         Tutor tutor = tutorService.findById(CommonHelper.getCurrentTutor(httpSession).getId());
         //用于存放查询条件
@@ -54,13 +54,7 @@ public class ApproveProjectController extends BaseController {
             Tutor conditionTutor = tutorService.uniqueResult("name", tutorName);
             conditionMap.put("proposer", conditionTutor.toString());
         }
-        /*
-        分页查询
-
-		pageNo和pageSize赋值为空，存在查询结果不能翻页的问题，应动态的传入pageNo和pageSize参数！！！
-
-		 */
-        Page<GraduateProject> graduateProjectPage = graduateProjectService.getPageByLimit(tutor, null, null, conditionMap);
+        Page<GraduateProject> graduateProjectPage = graduateProjectService.getPageByLimit(tutor, null, null, conditionMap, category);
         //添加在Map中
         CommonHelper.pagingHelp(modelMap, graduateProjectPage, "graduateProjectEvaluate", httpServletRequest.getRequestURI(), graduateProjectPage.getTotalElements());
         modelMap.put("contentSize", graduateProjectPage.getContent().size());
