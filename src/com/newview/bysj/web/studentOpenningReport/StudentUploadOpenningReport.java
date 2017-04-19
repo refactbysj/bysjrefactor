@@ -96,10 +96,10 @@ public class StudentUploadOpenningReport extends BaseController {
         }
 
         String folderName = "openningReport";
-        String extendName = openningReportFile.getOriginalFilename().substring(openningReportFile.getOriginalFilename().lastIndexOf("."));
-        Student student = paperProject.getStudent();
-        String fileName = student.getName() + student.getNo() + extendName;
-        String url = CommonHelper.fileUpload(openningReportFile, httpSession, folderName, fileName);
+        //String extendName = openningReportFile.getOriginalFilename().substring(openningReportFile.getOriginalFilename().lastIndexOf("."));
+        //Student student = paperProject.getStudent();
+        //String fileName = student.getName() + student.getNo() + extendName;
+        String url = CommonHelper.fileUpload(openningReportFile, httpSession, folderName, openningReportFile.getOriginalFilename());
         openningReport.setSubmittedByStudent(true);
         openningReport.setUrl(url);
         openningReportService.update(openningReport);

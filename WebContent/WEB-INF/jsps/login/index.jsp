@@ -228,11 +228,11 @@
     <%--页面左侧菜单栏--%>
     <div data-options="region:'west',title:'菜单',split:true" style="width:15%;overflow-x: hidden">
         <div class="bs-docs-sidebar">
-            <ul class="nav nav-list bs-docs-sidenav" id="navb" style="margin-top: 0">
+            <ul class="nav nav-list bs-docs-sidenav" id="navb" style="width: 100%;margin-top: 0">
                 <!-- 全部的导航栏就这一个foreach，,你需要在这里更改样式 -->
                 <c:forEach items="${parentResourceList}" var="parentResource">
-                    <li><a data-toggle="collapse" data-parent="#accordion" 
-                           style="color: dodgerblue;background-color:ghostwhite;width: 80%;font-size: medium"
+                    <li><a data-toggle="collapse" data-parent="#accordion"
+                           style="color: dodgerblue;background-color:ghostwhite;width: 100%;font-size: medium"
                            href="#collapse${parentResource.id }"> <c:choose>
                         <c:when test="${parentResource.id == 1}">
                             <span class="glyphicon glyphicon-bell">${parentResource.description}</span>
