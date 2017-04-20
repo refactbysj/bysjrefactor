@@ -120,8 +120,5 @@
         org.springframework.web.util.Log4jConfigListener
       </listener-class>
     </listener>
-    <!--用于监听在线的用户数量 -->
-    <listener>
-        <listener-class>com.newview.bysj.listener.OnlineListener</listener-class>
-    </listener>
+
 </web-app>
