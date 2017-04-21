@@ -146,7 +146,6 @@ public class Department implements Serializable {
         this.tutor = tutor;
     }
 
-    @JsonBackReference
     public List<ReplyGroup> getReplyGroup() {
         return replyGroup;
     }
@@ -155,7 +154,6 @@ public class Department implements Serializable {
         this.replyGroup = replyGroup;
     }
 
-    @JsonBackReference
     public List<RemarkTemplate> getRemarkTemplate() {
         return remarkTemplate;
     }
