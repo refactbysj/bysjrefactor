@@ -54,11 +54,9 @@
 
 
     <!--配置打印报表的视图解析器-->
-    <!--<bean id="jasperReportResolver" class="org.springframework.web.servlet.view.XmlViewResolver"
-          p:location="classpath:/report-views.xml" p:order="0"/>-->
-    <!--配置打印报表的视图解析器
-        视图配置
-        <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="10"/> -->
+    <bean id="jasperReportResolver" class="org.springframework.web.servlet.view.XmlViewResolver"
+          p:location="classpath:/report-views.xml" p:order="0"/>
+
 
     <!-- 用于拦截请求的URL -->
     <mvc:interceptors>

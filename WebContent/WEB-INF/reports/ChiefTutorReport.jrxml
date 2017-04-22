@@ -528,7 +528,7 @@
 				<textElement>
 					<font fontName="宋体" size="14" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 				</textElement>
-				<text><![CDATA[字数]]></text>
+                <text><![CDATA[外文字数]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="208" y="167" width="100" height="20" uuid="2dae3850-e8eb-40e6-bc9a-f84c05d0f16b"/>
