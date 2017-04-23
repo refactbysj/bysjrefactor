@@ -1,7 +1,6 @@
 package com.newview.bysj.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -55,7 +54,6 @@ public class ProjectType implements Serializable {
         this.description = description;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public List<GraduateProject> getGraduateProject() {
         return graduateProject;

@@ -100,7 +100,6 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
     }
 
 
-
     @MethodDescription("获取通过教研室审核的所有课题")
     public Page<GraduateProject> getPageByAuditedDirector(Tutor director, Department department, Integer pageNo, Integer pageSize, Boolean approve) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
@@ -207,20 +206,19 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
         Page<GraduateProject> result = graduateProjectDao.findAll(new Specification<GraduateProject>() {
             @Override
             public Predicate toPredicate(Root<GraduateProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 List<Predicate> predicates = new ArrayList<Predicate>();
                 //获取教研室的所有课题
                 predicates.add(cb.equal(root.get("proposer").get("department").get("id").as(Integer.class), departmentId));
                 //学生不为空
                 predicates.add(cb.isNotNull(root.get("student").as(Student.class)));
                 //根据题目查询
-                if (title != null) {
+                if (title != null && !Objects.equals("", title)) {
                     predicates.add(cb.like(root.get("title").as(String.class), "%" + title + "%"));
                 }
                 //获取当年的报题
                 predicates.add(cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear()));
                 //根据评阅人获取
-                if (reviewerName != null) {
+                if (reviewerName != null && !Objects.equals("", reviewerName)) {
                     predicates.add(cb.like(root.get("reviewer").get("name").as(String.class), "%" + reviewerName + "%"));
                 } else {
                     if (hasReviewerName != null) {

@@ -1,6 +1,5 @@
 package com.newview.bysj.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -60,7 +59,6 @@ public class GraduateProject implements Serializable {
     /*
      * 推荐
      */
-    @JsonIgnore
     private Boolean recommended;
 
     /*
