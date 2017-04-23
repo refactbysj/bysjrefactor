@@ -215,7 +215,7 @@
         //点击批量指定评阅人按钮
         function batchSetReviewer() {
             $("#reviewerTable").datagrid('showColumn', 'selectProject');
-            $.messager.alert('提示', '选择评阅人和课题-->点击确定批量指定评阅人', 'info');
+            $.messager.alert('操作提示', '选择评阅人和课题-->点击确定批量指定评阅人', 'info');
             $("#batchSetSelect").show(200);
             $("#batchSetOk").show(400);
             $("#batchSetCancel").show(600);
