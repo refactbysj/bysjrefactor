@@ -37,7 +37,7 @@ public class TutorProjectToEvaluateController extends BaseController {
      * 跳转到指导教师评审表页面
      */
     @RequestMapping(value = "/projectsToEvaluate.html", method = RequestMethod.GET)
-    public String chiefTutorEvaluateGet(HttpSession httpSession, ModelMap modelMap, Integer pageNo, Integer pageSize, HttpServletRequest httpServletRequest, String title) {
+    public String chiefTutorEvaluateGet(ModelMap modelMap) {
         /*
         设置显示模式
         多个角色的评审共用一个jsp页面，下面的作用是用来获取是哪一个角色的评审
@@ -199,31 +199,15 @@ public class TutorProjectToEvaluateController extends BaseController {
      * 查看指导老师评审表的方法
      *
      * @param projectId 需要查看的评审表对应课题的id
-     * @param modelMap  用于存储需要在jsp中进行渲染的数据
+     * @param model  用于存储需要在jsp中进行渲染的数据
      * @return jsp
      */
     @RequestMapping(value = "/viewTutorEvaluate.html", method = RequestMethod.GET)
-    public String viewTutorEvaluate(Integer projectId, ModelMap modelMap) {
-//        获取对应的课题
+    public String viewTutorEvaluate(Integer projectId, Model model) {
+        //获取对应的课题
         GraduateProject graduateProject = graduateProjectService.findById(projectId);
-        modelMap.put("tutorProjectEvaluate", graduateProject);
-        return "viewEvaluate/viewTutorEvaluate";
-    }
-
-    /**
-     * 待定
-     * <p>
-     * 用于临时解决模态框多次点开后的闪退问题
-     *
-     * @param projectId 查看的课题的id
-     * @param modelMap  map集合，用于存放需要在jsp中获取的数据
-     * @return jsp
-     */
-    @RequestMapping(value = "/tutorViewEvaluate.html", method = RequestMethod.GET)
-    public String viewTutorEvaluateAnother(Integer projectId, ModelMap modelMap) {
-        GraduateProject graduateProject = graduateProjectService.findById(projectId);
-        modelMap.put("tutorProjectEvaluate", graduateProject);
-        return "evaluate/chiefTutor/viewEvaluate/tutorViewEvaluate";
+        model.addAttribute("graduateProject", graduateProject);
+        return "evaluate/viewEvaluate/viewTutorEvaluate";
     }
 
     /**

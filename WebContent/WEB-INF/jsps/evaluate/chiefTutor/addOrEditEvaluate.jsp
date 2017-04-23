@@ -19,10 +19,6 @@
     });
 
 
-    $("#submitButton").click(function () {
-
-    });
-
     $(function () {
         $("#editEvaluate").form({
             url: '${actionURL}',
