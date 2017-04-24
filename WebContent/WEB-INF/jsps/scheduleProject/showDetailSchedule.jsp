@@ -6,11 +6,12 @@
         var showDetailScheduleGrid,url;
         function getTimeByMillions(millions) {
             var date = new Date(millions);
-            var year = date.getFullYear()+'年';
-            var month = date.getMonth()+'月';
-            var day = date.getDay()+'日';
-            return year+month+day;
+            var year = date.getFullYear() + '年';
+            var month = date.getMonth() + '月';
+            var day = date.getDay() + '日';
+            return year + month + day;
         }
+
         $(function () {
             showDetailScheduleGrid = $("#showDetailSchedule").datagrid({
                 url: '${basePath}process/DetailSchedulesList.html',
