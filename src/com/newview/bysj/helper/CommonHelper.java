@@ -359,6 +359,14 @@ public class CommonHelper {
 
 
     /**
+     * 根据毫秒值获取字符串日期
+     */
+    public static String getStringDateByMillionsAndPattern(Long millions, String pattern) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(millions);
+    }
+
+    /**
      * 根据字符串时间来获取Calendar对象
      *
      * @param strTime 需要获取时间对象的字符串
