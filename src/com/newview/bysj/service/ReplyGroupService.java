@@ -74,7 +74,7 @@ public class ReplyGroupService extends BasicService<ReplyGroup, Integer> {
                 List<Predicate> predicates = new ArrayList<Predicate>();
                 predicates.add(cb.equal(root.get("department").as(Department.class), department));
                 if (name != null) {
-                    predicates.add(cb.equal(root.get("description"), "%" + name + "%"));
+                    predicates.add(cb.like(root.get("description"), "%" + name + "%"));
                 }
                 Predicate[] p = new Predicate[predicates.size()];
                 query.where(cb.and(predicates.toArray(p)));

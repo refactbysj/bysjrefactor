@@ -1,7 +1,6 @@
 package com.newview.bysj.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -14,10 +13,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "replyGroup")
-@DynamicInsert(true)
-@DynamicUpdate(true)
-public class
-ReplyGroup implements Serializable {
+@DynamicInsert
+@DynamicUpdate
+public class ReplyGroup implements Serializable {
 
     /**
      *
@@ -62,7 +60,6 @@ ReplyGroup implements Serializable {
      */
     @ManyToOne
     @JoinColumn(name = "department_id")
-    @JsonIgnore
     private Department department;
     /**
      * 答辩小组成员
@@ -73,7 +70,6 @@ ReplyGroup implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "tutorAsMemberToReplyGroup", joinColumns = {@JoinColumn(name = "replyGroup_id")},
             inverseJoinColumns = {@JoinColumn(name = "member_id")})
-    @JsonIgnore
     private List<Tutor> members;
 
     /**
@@ -89,7 +85,6 @@ ReplyGroup implements Serializable {
      * 一对多
      */
     @OneToMany(mappedBy = "replyGroup")
-    @JsonIgnore
     private List<Student> student;
     /**
      * 答辩地点
@@ -147,17 +142,14 @@ ReplyGroup implements Serializable {
         this.graduateProject = graduateProject;
     }
 
-    @JsonBackReference
     public Department getDepartment() {
         return department;
     }
 
-    @JsonBackReference
     public void setDepartment(Department department) {
         this.department = department;
     }
 
-    @JsonBackReference
     public List<Tutor> getMembers() {
         return members;
     }
