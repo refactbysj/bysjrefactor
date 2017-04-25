@@ -279,7 +279,7 @@
         //打印
         function printFun(id) {
             <c:if test="${EVALUATE_DISP=='REPLY_ADMIN'}">
-            window.open('${basePath}evaluate/chiefTutor/printReport.html?reportId=' + id, '_blank');
+            window.open('${basePath}evaluate/replyGroup/printReport.html?reportId=' + id, '_blank');
             </c:if>
             <c:if test="${EVALUATE_DISP=='REPLY_REVIEWER'}">
             window.open('${basePath}evaluate/reviewer/printReport.html?reportId=' + id, '_blank');

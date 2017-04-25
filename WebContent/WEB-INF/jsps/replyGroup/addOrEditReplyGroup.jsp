@@ -26,15 +26,6 @@
         });
     }
 
-    function submitStudent() {
-
-        window.wxc.xcConfirm("确认提交？", "confirm", {
-            onOk: function () {
-                $("#formid").submit();
-            }
-        })
-    }
-
     $(document).ready(function () {
         getStudents();
 

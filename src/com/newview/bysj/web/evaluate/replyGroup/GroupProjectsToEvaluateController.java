@@ -186,7 +186,7 @@ public class GroupProjectsToEvaluateController extends BaseController {
      * 生成报表的方法
      *
      * @param httpServletRequest 对浏览器的响应
-     * @param projectId          课题的id
+     * @param reportId          课题的id
      * @param model              map集合，存储需要在jsp中获取的数据
      * @return 报表
      * @throws NoSuchMethodException
@@ -197,13 +197,13 @@ public class GroupProjectsToEvaluateController extends BaseController {
     此方法抛出了三个未处理的异常，建议对这些异常进行处理！！！
 
      */
-    @RequestMapping("/getReport.html")
-    public String getEvaluateReport(HttpServletRequest httpServletRequest, Integer projectId, Model model) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    @RequestMapping("/printReport.html")
+    public String getEvaluateReport(HttpServletRequest httpServletRequest, Integer reportId, Model model) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //创建用于存放报表数据的集合
         List<ReplyGroupCommitments> replyGroupCommitmentsList = new ArrayList<>();
         ReplyGroupCommitments replyGroupCommitments = new ReplyGroupCommitments();
         //获取课题
-        GraduateProject graduateProject = graduateProjectService.findById(projectId);
+        GraduateProject graduateProject = graduateProjectService.findById(reportId);
         //设置相关的分数
         replyGroupCommitments.setCorrectnessScore(graduateProject.getCommentByGroup().getCorrectnessSocre());
         replyGroupCommitments.setCompletenessScore(graduateProject.getCommentByGroup().getCompletenessScore());

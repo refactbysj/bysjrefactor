@@ -205,7 +205,6 @@ public abstract class Tutor extends Actor {
         this.coTutorage = coTutorage;
     }
 
-    @JsonIgnore
     public List<Student> getStudent() {
         return student;
     }

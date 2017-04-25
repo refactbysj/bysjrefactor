@@ -36,20 +36,7 @@ public class BysjWebServiceImpl {
     @Autowired
     private ReplyGroupService replyGroupService;
 
-    //登录测试
-    /*@RequestMapping(value = "/logintest.json", method = RequestMethod.POST)
-    @ResponseBody
-	public Tutor loginTest() {
-		String username = "020081";
-		String password = "020081";
-		User user = userService.uniqueResult("username", username);
-		if (user.getPassword().equals(CommonHelper.makeMD5(password))) {
-			Tutor tutor = tutorService.findById(user.getActor().getId());
-			return tutor;
-		} else {
-			throw new MessageException("获取用户失败");
-		}
-	}*/
+
 
     /**
      * 给android端提供的登录功能
@@ -150,7 +137,6 @@ public class BysjWebServiceImpl {
         List<Student> studentList;
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
 
-        //以下两个if语句可以进行优化！！！！！！！！！！！！！
 
         //如果当前tutor为空，则返回一个空的学生集合，这样做是为了方便android端的解析工作
         if (tutor == null) {
@@ -167,6 +153,33 @@ public class BysjWebServiceImpl {
         }
         //返回当前老师对应的学生
         return studentList;
+    }
+
+    /**
+     * 根据tutorId获取课题和答辩小组
+     */
+    @RequestMapping(value = "/getProjectAndReplyByTutor.json", method = RequestMethod.POST)
+    @ResponseBody
+    public TutorVo getProjectAndReplyByTutor(@RequestHeader String id) {
+        TutorVo tutorVo = new TutorVo();
+        Tutor tutor = tutorService.findById(Integer.parseInt(id));
+        if (tutor != null) {
+            tutorVo.setProposerGraduateProject(tutor.getProposedGraduateProject());
+            tutorVo.setReplyGroups(tutor.getReplyGroup());
+        }
+        return tutorVo;
+    }
+
+    @RequestMapping(value = "/getProjectAndReplyByTutorTest.json", method = RequestMethod.GET)
+    @ResponseBody
+    public TutorVo getProjectAndReplyByTutorTest(String id) {
+        TutorVo tutorVo = new TutorVo();
+        Tutor tutor = tutorService.findById(Integer.parseInt(id));
+        if (tutor != null) {
+            tutorVo.setProposerGraduateProject(tutor.getProposedGraduateProject());
+            tutorVo.setReplyGroups(tutor.getReplyGroup());
+        }
+        return tutorVo;
     }
 
     /**
@@ -198,24 +211,6 @@ public class BysjWebServiceImpl {
         return replyGroupList;
     }
 
-	/*@RequestMapping(value = "/getReplyGroupByTutorTest.json", method = RequestMethod.POST)
-    @ResponseBody
-	public List<ReplyGroup> getReplyGroupByTutortest(String id) {
-		List<ReplyGroup> replyGroupList;
-		Tutor tutor = tutorService.findById(Integer.parseInt(id));
-		if (tutor == null) {
-			replyGroupList = new ArrayList<>();
-			replyGroupList.add(new ReplyGroup());
-			return replyGroupList;
-		}
-		replyGroupList = tutor.getReplyGroup();
-		if (replyGroupList == null) {
-			replyGroupList = new ArrayList<>();
-			replyGroupList.add(new ReplyGroup());
-			return replyGroupList;
-		}
-		return replyGroupList;
-	}*/
 
     /**
      * 用于给发送邮件做准备，获取所有的学院和我的学生
@@ -243,23 +238,6 @@ public class BysjWebServiceImpl {
         map.put("myStudent", studentList);
         return map;
     }
-
-    // 获取所有学院和学生的测试方法
-    /*@RequestMapping(value = "/getAllSchoolAndMyStudentTest.json", method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, List<?>> getAllStudentTest(String id) {
-        // 用于存放学院和我的学生
-        Map<String, List<?>> map = new HashMap<>();
-        Tutor tutor = tutorService.findById(Integer.parseInt(id));
-        List<School> tutorList = schoolService.findAll();
-        List<Student> studentList = tutor.getStudent();
-        // 添加学院到集合中
-        map.put("allTutorInDepartment", tutorList);
-        // 添加我的学生到集合中
-        map.put("myStudent", studentList);
-        // logger.error(map.toString());
-        return map;
-    }*/
 
 
     /**
