@@ -50,6 +50,7 @@ public class AuditScheduleController extends BaseController {
         this.graduateProjectId = graduateProjectId;
         return "scheduleProject/showDetailSchedule";
     }
+
     //显示需要审核的工作进程表细节页面记录
     @RequestMapping("/process/DetailSchedulesList.html")
     @ResponseBody

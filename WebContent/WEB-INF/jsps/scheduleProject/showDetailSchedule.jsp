@@ -11,7 +11,6 @@
             var day = date.getDay() + '日';
             return year + month + day;
         }
-
         $(function () {
             showDetailScheduleGrid = $("#showDetailSchedule").datagrid({
                 url: '${basePath}process/DetailSchedulesList.html',

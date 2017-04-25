@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+
     <%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
     <script type="text/javascript">
         var scheduleGrid;
