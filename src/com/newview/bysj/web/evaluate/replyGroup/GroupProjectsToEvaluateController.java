@@ -5,9 +5,11 @@ import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.reports.ReplyGroupCommitments;
 import com.newview.bysj.util.Constants;
 import com.newview.bysj.util.PageInfo;
+import com.newview.bysj.util.Result;
 import com.newview.bysj.web.baseController.BaseController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,7 @@ import java.util.*;
 @RequestMapping("evaluate/replyGroup")
 public class GroupProjectsToEvaluateController extends BaseController {
 
+    private static final Logger LOGGER = Logger.getLogger(GroupProjectsToEvaluateController.class);
 
     /**
      * 答辩小组意见表的get方法
@@ -121,22 +124,32 @@ public class GroupProjectsToEvaluateController extends BaseController {
      * @return jsp
      */
     @RequestMapping(value = "/evaluateProject.html", method = RequestMethod.POST)
-    public String evaluateProjectPost(HttpSession httpSession, Boolean qualified, String remark, GraduateProject graduateProject, HttpServletResponse httpServletResponse) {
-        //获取当前tutor
-        Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
-        //获取指定的课题
-        GraduateProject graduateProjectToEvaluate = graduateProjectService.findById(graduateProject.getId());
-        //判断当前课题是否已被答辩小组评审
-        if (graduateProjectToEvaluate.getCommentByGroup() == null) {
-            CommentByGroup commentByGroup = new CommentByGroup();
-            this.saveEvaluateByGroup(qualified, graduateProject, graduateProjectToEvaluate, commentByGroup, tutor, remark);
-        } else {
-            CommentByGroup commentByGroup = graduateProjectToEvaluate.getCommentByGroup();
-            this.saveEvaluateByGroup(qualified, graduateProject, graduateProjectToEvaluate, commentByGroup, tutor, remark);
+    @ResponseBody
+    public Result evaluateProjectPost(HttpSession httpSession, Boolean qualified, String remark, GraduateProject graduateProject, HttpServletResponse httpServletResponse) {
+        Result result = new Result();
+        try {
+            //获取当前tutor
+            Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
+            //获取指定的课题
+            GraduateProject graduateProjectToEvaluate = graduateProjectService.findById(graduateProject.getId());
+            //判断当前课题是否已被答辩小组评审
+            if (graduateProjectToEvaluate.getCommentByGroup() == null) {
+                CommentByGroup commentByGroup = new CommentByGroup();
+                this.saveEvaluateByGroup(qualified, graduateProject, graduateProjectToEvaluate, commentByGroup, tutor, remark);
+            } else {
+                CommentByGroup commentByGroup = graduateProjectToEvaluate.getCommentByGroup();
+                this.saveEvaluateByGroup(qualified, graduateProject, graduateProjectToEvaluate, commentByGroup, tutor, remark);
+            }
+            result.setSuccess(true);
+            result.setMsg("评审成功");
+        } catch (Exception e) {
+            LOGGER.error("评审失败" + e);
+            e.printStackTrace();
+            result.setMsg("评审失败");
         }
 
         //重定向到一个方法
-        return "redirect:projectsToEvaluate.html";
+        return result;
     }
 
 
