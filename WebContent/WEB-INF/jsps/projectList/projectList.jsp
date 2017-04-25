@@ -304,20 +304,20 @@
 
             </c:when>
         </c:choose>
-    </div>
+</div>
 <div style="margin-right: 5%;float: right;margin-top: 10px">
-        <form id="titleForm">
-                题目：
-            <input type="text" class="easyui-textbox" id="projectTitle" name="title"/>
-            <input type="radio" name="category" value="论文题目"/>论文
-            <input type="radio" name="category" value="设计题目"/>设计
-            <input type="radio" name="category" value="${null}"/>全部
-            <a class="easyui-linkbutton" onclick="searchFun()" data-options="iconCls:'icon-search'">查询</a>
-            <a class="easyui-linkbutton" onclick="clearFun()" data-options="iconCls:'icon-clear'">清空</a>
+    <form id="titleForm">
+        题目：
+        <input type="text" class="easyui-textbox" id="projectTitle" name="title"/>
+        <input type="radio" name="category" value="论文题目"/>论文
+        <input type="radio" name="category" value="设计题目"/>设计
+        <input type="radio" name="category" value="${null}"/>全部
+        <a class="easyui-linkbutton" onclick="searchFun()" data-options="iconCls:'icon-search'">查询</a>
+        <a class="easyui-linkbutton" onclick="clearFun()" data-options="iconCls:'icon-clear'">清空</a>
 
-        </form>
-    </div>
-    <table id="projectTable" style="height: 100%"></table>
+    </form>
+</div>
+<table id="projectTable" style="height: 100%"></table>
 
 </body>
 </html>
