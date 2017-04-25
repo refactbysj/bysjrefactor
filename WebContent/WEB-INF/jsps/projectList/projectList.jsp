@@ -210,6 +210,7 @@
                             return true;
                         },
                         error: function () {
+                            progressClose();
                             $.messager.alert("错误", '删除失败，请联系管理员', 'error');
                             return false;
                         }

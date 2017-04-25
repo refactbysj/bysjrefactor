@@ -104,12 +104,14 @@
                 getStudentId = getStudentId.substring(1, getStudentId.length + 1);
                 $.messager.confirm('询问', '确认匹配选中的学生和题目？', function (t) {
                     if (t) {
+                        progressLoad();
                         $.ajax({
                             url: '${basePath}process/allocateProjectsToStudents.html',
                             type: 'POST',
                             dataType: 'json',
                             data: {"studentId": getStudentId, "graduateProjectId": graduateProjectId},
                             success: function (result) {
+                                progressClose();
                                 if (result.success) {
                                     $("#allocatedStudent").datagrid('reload');
                                     $("#allocateProject").datagrid('reload');
@@ -120,6 +122,7 @@
                                 return true;
                             },
                             error: function () {
+                                progressClose();
                                 $.messager.alert('错误', '网络错误，请联系管理员', 'error');
                                 return false;
                             }

@@ -38,8 +38,12 @@ public abstract class BasicService<T extends Serializable, PK extends Serializab
      */
     @MethodDescription("保存po")
     public void save(T entity) {
-        basicDao.save(entity);
+        basicDao.saveAndFlush(entity);
 
+    }
+
+    public T persist(T entity) {
+        return basicDao.save(entity);
     }
 
 
@@ -95,6 +99,11 @@ public abstract class BasicService<T extends Serializable, PK extends Serializab
     @MethodDescription("保存或更新")
     public void saveOrUpdate(T entity) {
         basicDao.saveAndFlush(entity);
+    }
+
+    @MethodDescription("保存或更新并返回修改后的对象")
+    public T saveAndFlush(T entity) {
+        return basicDao.saveAndFlush(entity);
     }
 
 

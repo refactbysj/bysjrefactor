@@ -187,7 +187,6 @@ public abstract class Tutor extends Actor {
         this.degree = degree;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public List<MainTutorage> getMainTutorage() {
         return mainTutorage;
@@ -197,7 +196,6 @@ public abstract class Tutor extends Actor {
         this.mainTutorage = mainTutorage;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public List<CoTutorage> getCoTutorage() {
         return coTutorage;
@@ -207,7 +205,6 @@ public abstract class Tutor extends Actor {
         this.coTutorage = coTutorage;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public List<Student> getStudent() {
         return student;
@@ -217,7 +214,6 @@ public abstract class Tutor extends Actor {
         this.student = student;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public List<GraduateProject> getGraduateProjectToReview() {
         return graduateProjectToReview;
@@ -228,7 +224,6 @@ public abstract class Tutor extends Actor {
         this.graduateProjectToReview = graduateProjectToReview;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public List<ReplyGroup> getReplyGroup() {
         return replyGroup;
@@ -238,7 +233,6 @@ public abstract class Tutor extends Actor {
         this.replyGroup = replyGroup;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public List<RemarkTemplate> getRemarkTemplates() {
         return remarkTemplates;

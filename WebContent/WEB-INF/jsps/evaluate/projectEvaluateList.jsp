@@ -19,8 +19,12 @@
 
         $(function () {
             var url = '';
-            <c:if test="${EVALUATE_DISP=='REPLY_ADMIN'}"></c:if>
-            <c:if test="${EVALUATE_DISP=='REPLY_REVIEWER'}"></c:if>
+            <c:if test="${EVALUATE_DISP=='REPLY_ADMIN'}">
+            url = '${basePath}evaluate/replyGroup/getProjectsToEvaluateData.html';
+            </c:if>
+            <c:if test="${EVALUATE_DISP=='REPLY_REVIEWER'}">
+            url = '${basePath}evaluate/reviewer/getProjectsToEvaluateData.html';
+            </c:if>
             <c:if test="${EVALUATE_DISP=='REPLY_TUTOR'}">
             url = '${basePath}evaluate/chiefTutor/getTutorProjectsToEvaluateData.html';
             </c:if>
@@ -98,7 +102,7 @@
                                         row.commentByGroup.completenessScore +
                                         row.commentByGroup.replyScore +
                                         row.commentByGroup.correctnessSocre;
-                                    str += '<span class="label label-primary">总分：' + adminTotalScroe + '</span>';
+                                    str += '<span>总分：' + adminTotalScroe + '</span>';
                                     if (row.commentByGroup.qualifiedByGroup) {
                                         str += '<span style="color: green;">通过答辩</span>';
                                     } else {
@@ -122,7 +126,7 @@
                             var str = '';
                             //如果已经评审
                             if (row.commentByTutor != null) {
-                                str += $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewEvaluate(\'{0}\')"></a>', row.id);
+                                str += $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewTutorEvaluate(\'{0}\')"></a>', row.id);
                             } else {
                                 str += '<span> 暂无评审</span>';
                             }
@@ -134,7 +138,7 @@
                         formatter: function (value, row) {
                             var str = '';
                             if (row.commentByReviewer != null) {
-                                str += $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewEvaluate(\'{0}\')"></a>', row.id);
+                                str += $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewReviewerEvaluate(\'{0}\')"></a>', row.id);
                             } else {
                                 str += '<span>暂无评审</span>';
                             }
@@ -144,7 +148,7 @@
                         title: '小组答辩老师评审表',
                         field: 'groupTutorEvaluate',
                         formatter: function (value, row) {
-                            return $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewEvaluate(\'{0}\')"></a>', row.id);
+                            return $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewGroupTutorEvaluate(\'{0}\')"></a>', row.id);
                         }
                     }
                     </c:if>
@@ -153,16 +157,17 @@
                     {
                         title: '评阅人评审',
                         field: 'tutorEvaluate',
+                        width: '20%',
                         formatter: function (value, row) {
                             var str = '';
                             //如果已经提交了终稿
-                            if (row.finalDraftAvailable != null) {
+                            if (row.finalDraft != null) {
                                 //如果已经进行了评审，则显示成绩
                                 if (row.commentByReviewer != null && row.commentByReviewer.submittedByReviewer) {
                                     str += $.formatString('<a href="javascript:void(0)" class="editBtn" onclick="evalute(\'{0}\')"></a>', row.id);
                                     str += $.formatString('<a href="javascript:void(0)" class="printBtn" onclick="printFun(\'{0}\')"></a>', row.id);
                                     var totalScore = row.commentByReviewer.achievementScore + row.commentByReviewer.qualityScore;
-                                    str += '<span class="label label-info">总分：' + totalScore + '</span>';
+                                    str += '<span>总分：' + totalScore + ' </span>';
                                     if (row.commentByReviewer.qualifiedByReviewer) {
                                         str += '<span style="color: green">允许答辩</span>';
                                     } else {
@@ -186,7 +191,7 @@
                             var str = '';
                             //如果指导老师已经评审
                             if (row.commentByTutor != null) {
-                                str += $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewEvaluate(\'{0}\')"></a>', row.id);
+                                str += $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewTutorEvaluate(\'{0}\')"></a>', row.id);
                             } else {
                                 str += '<span>暂无评审</span>';
                             }
@@ -199,7 +204,7 @@
                     {
                         title: '指导教师评审',
                         field: 'tutorEvaluate',
-                        width: '19%',
+                        width: '20%',
                         formatter: function (value, row) {
                             var str = '';
                             //如果已经提交了终稿
@@ -248,7 +253,15 @@
 
         //打印
         function printFun(id) {
+            <c:if test="${EVALUATE_DISP=='REPLY_ADMIN'}">
             window.open('${basePath}evaluate/chiefTutor/printReport.html?reportId=' + id, '_blank');
+            </c:if>
+            <c:if test="${EVALUATE_DISP=='REPLY_REVIEWER'}">
+            window.open('${basePath}evaluate/reviewer/printReport.html?reportId=' + id, '_blank');
+            </c:if>
+            <c:if test="${EVALUATE_DISP=='REPLY_TUTOR'}">
+            window.open('${basePath}evaluate/chiefTutor/printReport.html?reportId=' + id, '_blank');
+            </c:if>
         }
 
         //评审或修改
@@ -287,10 +300,44 @@
             })
         }
 
-        //查看
-        function viewEvaluate(id) {
-
+        //查看指导老师评审
+        function viewTutorEvaluate(id) {
+            var url = '${basePath}evaluate/chiefTutor/viewTutorEvaluate.html?projectId=' + id;
+            viewEvaluate(url, '查看指导老师评审表');
         }
+
+        //查看评阅人评审
+        function viewReviewerEvaluate(id) {
+            var url = '${basePath}evaluate/reviewer/reviewerViewTutorEvaluate.html?projectId=' + id;
+            viewEvaluate(url, '查看评阅评审表');
+        }
+
+        //查看答辩小组老师的评审
+        function viewGroupTutorEvaluate(id) {
+            var url = '${basePath}evaluate/replyGroupTutor/viewReplyGroupTutorEvaluate.html?projectId=' + id;
+            window.location.href = url;
+        }
+
+        function viewEvaluate(url, title) {
+            parent.$.modalDialog({
+                href: url,
+                title: title,
+                modal: true,
+                width: '60%',
+                height: '80%',
+                buttons: [{
+                    text: '关闭',
+                    iconCls: 'icon-cancel',
+                    handler: function () {
+                        parent.$.modalDialog.handler.dialog('close');
+                    }
+                }]
+            })
+        }
+
+
+
+
 
         //搜索
         function searchFun() {
@@ -309,7 +356,7 @@
 <div style="position: absolute;top:10px;right:5% ;">
     <c:if test="${EVALUATE_DISP=='REPLY_ADMIN'}">
         <form id="searchForm">
-            <label for="name">题目名称：</label> <input type="text" value="${title}" name="title" required
+            <label for="name">题目名称：</label> <input type="text" value="${title}" name="title"
                                                    class="easyui-textbox " placeholder="请输入题目名称">
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
                onclick="searchFun()">搜索</a>
@@ -319,7 +366,7 @@
     </c:if>
     <c:if test="${EVALUATE_DISP=='REPLY_REVIEWER'}">
         <form id="searchForm">
-            <label for="name">题目名称：</label> <input type="text" value="${title}" name="title" required
+            <label for="name">题目名称：</label> <input type="text" value="${title}" name="title"
                                                    class="easyui-textbox " placeholder="请输入题目名称">
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
                onclick="searchFun()">搜索</a>
