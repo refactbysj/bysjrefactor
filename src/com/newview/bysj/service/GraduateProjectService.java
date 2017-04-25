@@ -714,7 +714,6 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
         Page<GraduateProject> result = graduateProjectDao.findAll(new Specification<GraduateProject>() {
             @Override
             public Predicate toPredicate(Root<GraduateProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 List<Predicate> predicates = new ArrayList<Predicate>();
                 predicates.add(cb.equal(root.get("replyGroup").get("leader").as(Tutor.class), leader));
                 for (String key : conditionMap.keySet()) {

@@ -91,12 +91,14 @@
 
             $.messager.confirm('询问', '确认通过？', function (t) {
                 if (t) {
+                    progressLoad();
                     $.ajax({
                         url: url,
                         type: 'GET',
                         dateType: 'json',
                         data: {"openningReportId": id},
                         success: function (result) {
+                            progressClose();
                             result = $.parseJSON(result);
                             if (result.success) {
                                 $.messager.alert('提示', result.msg, 'info');
@@ -107,6 +109,7 @@
                             return true;
                         },
                         error: function () {
+                            progressClose();
                             $.messager.alert('错误', '网络错误，请联系管理员', 'error');
                             return false;
                         }

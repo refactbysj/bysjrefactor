@@ -41,12 +41,14 @@
             var tutorName = $("#selectReviewTutor" + graduateProjectId).find("option:selected").text();
             $.messager.confirm('询问', '确认指定' + tutorName + '为评阅人？', function (t) {
                 if (t) {
+                    progressLoad();
                     $.ajax({
                         url: '${basePath}process/addOrEditReviewer.html',
                         data: {"reviewerId": reviewerId, "graduateProjectId": graduateProjectId},
                         dataType: 'json',
                         type: 'POST',
                         success: function (result) {
+                            progressClose();
                             if (result.success) {
                                 $("#reviewerTable").datagrid('reload');
                                 $.messager.alert('提示', result.msg, 'info');
@@ -56,6 +58,7 @@
                             return true;
                         },
                         error: function () {
+                            progressClose();
                             $.messager.alert('错误', '发生网络错误，请联系管理员', 'error');
                             return false;
                         }
@@ -69,12 +72,14 @@
         function delReview(graduateProjectId) {
             $.messager.confirm('询问', '确认删除指定的评阅人？', function (t) {
                 if (t) {
+                    progressLoad();
                     $.ajax({
                         url: '${basePath}process/delReviewerByProjectId.html',
                         data: {"graduateProjectId": graduateProjectId},
                         dataType: 'json',
                         type: 'post',
                         success: function (result) {
+                            progressClose();
                             if (result.success) {
                                 $("#reviewerTable").datagrid('reload');
                                 $.messager.alert('提示', result.msg, 'info');
@@ -84,6 +89,7 @@
                             return true;
                         },
                         error: function () {
+                            progressClose();
                             $.messager.alert('错误', '发生网络错误，请联系管理员', 'error');
                             return false;
                         }

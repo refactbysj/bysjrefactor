@@ -133,6 +133,19 @@ public class ReviewerProjectToEvaluateController extends BaseController {
         return result;
     }
 
+
+    /**
+     * 查看评阅人评审表
+     */
+    @RequestMapping(value = "/reviewerViewTutorEvaluate.html", method = RequestMethod.GET)
+    public String viewTutorEvaluate(Integer projectId, ModelMap modelMap) {
+        GraduateProject graduateProject = graduateProjectService.findById(projectId);
+        modelMap.put("graduateProject", graduateProject);
+        return "evaluate/viewEvaluate/viewReviewerEvaluate";
+    }
+
+
+
     private void saveEvaluateProject(GraduateProject graduateProject, GraduateProject graduateProjectEvaluate, Boolean qualified, String remark, CommentByReviewer commentByReviewer) {
         //评分阶段：成果的技术水平（实用性和创新性）（0—10分）
         commentByReviewer.setAchievementScore(graduateProject.getCommentByReviewer().getAchievementScore());
