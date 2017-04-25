@@ -36,7 +36,14 @@ public class StudentAchievementController extends BaseController {
 
     //上传阶段成果的方法
     @RequestMapping(value = "student/stageAchievements.html", method = RequestMethod.GET)
-    public String uploadTaskDoc() {
+    public String uploadTaskDoc(HttpSession httpSession, ModelMap modelMap) {
+        //当前学生
+        Student student = studentService.findById(CommonHelper.getCurrentActor(httpSession).getId());
+        //获取学生课题
+        GraduateProject graduateProject = student.getGraduateProject();
+        if (graduateProject == null) {
+            modelMap.put("message", "未选择课题，请联系指导老师");
+        }
         return "student/stageAchievement/stageAchievements";
     }
 
@@ -49,11 +56,6 @@ public class StudentAchievementController extends BaseController {
         Student student = studentService.findById(CommonHelper.getCurrentActor(httpSession).getId());
         //获取学生课题
         GraduateProject graduateProject = student.getGraduateProject();
-        if (graduateProject == null) {
-            modelMap.put("message", "未选择课题，请联系指导老师");
-            //return "student/stageAchievement/stageAchievements";
-        }
-
         //筛选阶段成果
         Page<StageAchievement> stageAchievements = stageAchievementService.getPageByGraduateProjects(graduateProject, page, rows);
         if (stageAchievements != null && stageAchievements.getSize() > 0) {

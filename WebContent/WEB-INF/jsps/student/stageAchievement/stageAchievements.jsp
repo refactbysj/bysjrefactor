@@ -90,12 +90,14 @@
         function deleteStageAchievement(id) {
             $.messager.confirm("询问", "确认删除？", function (t) {
                 if (t) {
+                    progressLoad();
                     $.ajax({
                         url: '${basePath}student/deleteStageAchievement.html',
                         type: 'GET',
                         dateType: 'json',
                         data: {"stageAchievementId": id},
                         success: function (result) {
+                            progressClose();
                             result = $.parseJSON(result);
                             if (result.success) {
                                 $.messager.alert('提示', result.msg, 'info');
@@ -106,6 +108,7 @@
                             return true;
                         },
                         error: function () {
+                            progressClose();
                             $.messager.alert('错误', '发生网络错误，请联系管理员', 'error');
                             return false;
                         }
@@ -116,12 +119,23 @@
     </script>
 </head>
 <body>
+<c:choose>
+<c:when test="${message!=null}">
+    <span style="color:red;font-size: xx-large;margin-left: 2%">目前没有选择课题，请尽快联系指导老师</span>
+</c:when>
+<c:otherwise>
 <div id="uploadDiv">
-    <a href="javascript:void(0)"  style="position: absolute;top: 10px;left: 2%;"  onclick="upLoadStageAchievement()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">上传</a>
+    <a href="javascript:void(0)" style="position: absolute;top: 10px;left: 2%;" onclick="upLoadStageAchievement()"
+       class="easyui-linkbutton" data-options="iconCls:'icon-add'">上传</a>
 </div>
 
 <div style="height: 100%;">
+
     <table id="stageAchievement" style="width: 100%;height: 100%;"></table>
+
 </div>
 </body>
+</c:otherwise>
+</c:choose>
+
 </html>

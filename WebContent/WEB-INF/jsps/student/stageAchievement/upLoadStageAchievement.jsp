@@ -38,10 +38,11 @@
         })
     })
 </script>
-<form method="post"
+<form method="post" style="padding: 10px;"
       id="updateStageAchievementForm"
       enctype="multipart/form-data">
-    <input type="file" class="form-control" name="stageAchievementFile" required/>
+    <input class="easyui-filebox" style="width: 70%;" data-options="buttonText:'选择文件',required:true"
+           name="stageAchievementFile"/>
 
 </form>
 
