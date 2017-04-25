@@ -60,6 +60,9 @@
                 else if ($("input[name='tutorIds']:checked").length == 0) {
                     $.messager.alert('提示', '请选择老师', 'warning');
                     return false;
+                } else if ($("input[name='tutorIds']:checked").length > 6) {
+                    $.messager.alert('提示', '选择的老师不能多于6人', 'warning');
+                    return false;
                 }
                 /*else if ($("input[name='studentIds']:checked").length == 0 && $("input[name='cancelStuIds']:checked").length == 0) {
                     $.messager.alert('提示', '请选择学生', 'wanring');
@@ -105,7 +108,7 @@
                     </c:forEach>
                 </select>
             </dd>
-            <dt>答辩老师：</dt>
+            <dt>答辩老师：<span style="color: grey;">（答辩老师最多可选6人）</span></dt>
             <dd>
                 <span style="color: grey;">本教研室老师</span><br/>
                 <c:forEach items="${tutors}" var="tutor">
@@ -131,7 +134,11 @@
                 <span style="color:grey">其它教研室老师</span><br/>
                 <c:forEach items="${otherTutors}" var="otherTutor">
                     <label style="width: auto;">
-                        <input type="checkbox" id="tutorInput${otherTutor.id}" value="${otherTutor.id}"
+                        <input type="checkbox"
+                                <c:forEach items="${replyGroup.members}" var="members">
+                                    <c:if test="${members.id==otherTutor.id}">checked </c:if>
+                                </c:forEach>
+                               id="tutorInput${otherTutor.id}" value="${otherTutor.id}"
                                name="tutorIds"/>${otherTutor.name}
 
                     </label>
