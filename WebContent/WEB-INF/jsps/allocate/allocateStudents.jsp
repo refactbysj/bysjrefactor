@@ -139,17 +139,20 @@
                 studentIds = studentIds.substring(1, studentIds.length + 1);
                 $.messager.confirm("询问", "确认匹配选中的老师和学生?", function (r) {
                     if (r) {
+                        progressLoad();
                         $.ajax({
                             url: '${basePath}process/allocateStudents.html',
                             type: 'POST',
                             dataType: 'json',
                             data: {"stuIds": studentIds, "tutorId": tutorId},
                             success: function (data) {
+                                progressClose();
                                 $("#studentTable").datagrid("reload");
                                 $.messager.alert("提示", "匹配成功", "info");
                                 return true;
                             },
                             error: function () {
+                                progressClose();
                                 $.messager.alert("警告", "匹配失败,请稍后再试", "warning");
                                 return false;
                             }

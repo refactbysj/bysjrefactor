@@ -69,10 +69,11 @@
                 else if ($("input[name='tutorIds']:checked").length == 0) {
                     $.messager.alert('提示', '请选择老师', 'warning');
                     return false;
-                } else if ($("input[name='studentIds']:checked").length == 0 && $("input[name='cancelStuIds']:checked").length == 0) {
+                }
+                /*else if ($("input[name='studentIds']:checked").length == 0 && $("input[name='cancelStuIds']:checked").length == 0) {
                     $.messager.alert('提示', '请选择学生', 'wanring');
                     return false;
-                }
+                 }*/
             },
             success: function (result) {
                 result = $.parseJSON(result);

@@ -20,7 +20,7 @@
         $(function () {
             var url = '';
             <c:if test="${EVALUATE_DISP=='REPLY_ADMIN'}">
-            url = '${basePath}';
+            url = '${basePath}evaluate/replyGroup/getProjectsToEvaluateData.html';
             </c:if>
             <c:if test="${EVALUATE_DISP=='REPLY_REVIEWER'}">
             url = '${basePath}evaluate/reviewer/getProjectsToEvaluateData.html';
@@ -308,12 +308,14 @@
 
         //查看评阅人评审
         function viewReviewerEvaluate(id) {
-            var url = '';
+            var url = '${basePath}evaluate/reviewer/reviewerViewTutorEvaluate.html?projectId=' + id;
+            viewEvaluate(url, '查看评阅评审表');
         }
 
         //查看答辩小组老师的评审
         function viewGroupTutorEvaluate(id) {
-
+            var url = '${basePath}evaluate/replyGroupTutor/viewReplyGroupTutorEvaluate.html?projectId=' + id;
+            window.location.href = url;
         }
 
         function viewEvaluate(url, title) {

@@ -79,12 +79,14 @@
         function delTemplate(id) {
             $.messager.confirm('询问', '确认删除？', function (t) {
                 if (t) {
+                    progressLoad();
                     $.ajax({
                         url: '${basePath}evaluate/delRemarkTemplate.html',
                         type: 'POST',
                         data: {"delId": id},
                         dataType: 'json',
                         success: function (result) {
+                            progressClose();
                             if (result.success) {
                                 $("#templateGrid").datagrid('load');
                                 $.messager.alert('提示', result.msg, 'info');
@@ -94,6 +96,7 @@
                             return true;
                         },
                         error: function () {
+                            progressClose();
                             $.messager.alert('错误', '网络错误，请联系管理员', 'error');
                             return false;
                         }

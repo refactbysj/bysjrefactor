@@ -13,12 +13,14 @@
     function cancelAllocate(graduateProjectId, trId) {
         $.messager.confirm('询问', '确认取消？', function (t) {
             if (t) {
+                progressLoad();
                 $.ajax({
                     url: '/bysj3/process/cancelGraduateProject.html',
                     data: {"graduateProjectId": graduateProjectId},
                     dataType: 'json',
                     type: 'POST',
                     success: function (result) {
+                        progressClose();
                         if (result.success) {
                             $("#" + trId).remove();
                             $.messager.alert('提示', result.msg, 'info');
@@ -28,6 +30,7 @@
                         return true;
                     },
                     error: function () {
+                        progressClose();
                         $.messager.alert('错误', '网络错误，请联系管理员', 'error');
                         return false;
                     }
