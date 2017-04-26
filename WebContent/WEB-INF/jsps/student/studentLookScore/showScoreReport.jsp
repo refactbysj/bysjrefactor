@@ -70,7 +70,7 @@
             </tr>
             <tr>
                 <td colspan="2">总分(满分：100)</td>
-                <td colspan="2">${empty (graduateProject.getTotalScores)?"未评分":graduateProject.getTotalScores()}</td>
+                <td colspan="2">${empty (graduateProject.getTotalScores())?"未评分":graduateProject.getTotalScores()}</td>
             </tr>
             <tr>
 
