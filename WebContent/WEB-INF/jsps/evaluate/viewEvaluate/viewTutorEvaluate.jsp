@@ -25,10 +25,10 @@
             <td>
                 <c:choose>
                     <c:when test="${graduateProject.commentByTutor.tutorEvaluteHasCompleteProject}">
-                        <span class="label label-success">已完成</span>
+                        <span style="font-size: medium;" class="label label-success">已完成</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-warning">未完成</span>
+                        <span style="font-size: medium;" class="label label-warning">未完成</span>
                     </c:otherwise>
                 </c:choose>
 
@@ -49,10 +49,10 @@
             <td>
                 <c:choose>
                     <c:when test="${graduateProject.commentByTutor.tutorEvaluteHasMiddleExam}">
-                        <span class="label label-success">有</span>
+                        <span style="font-size: medium;" class="label label-success">有</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-warning">无</span>
+                        <span style="font-size: medium;" class="label label-warning">无</span>
                     </c:otherwise>
                 </c:choose>
 
@@ -63,10 +63,10 @@
             <td>
                 <c:choose>
                     <c:when test="${graduateProject.commentByTutor.tutorEvaluteHasTranslationMaterail}">
-                        <span class="label label-success">有</span>
+                        <span style="font-size: medium;" class="label label-success">有</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-warning">无</span>
+                        <span style="font-size: medium;" class="label label-warning">无</span>
                     </c:otherwise>
                 </c:choose>
 
@@ -86,10 +86,10 @@
             <td>
                 <c:choose>
                     <c:when test="${graduateProject.commentByTutor.tutorEvaluteHasTwoAbstract}">
-                        <span class="label label-success">有</span>
+                        <span style="font-size: medium;" class="label label-success">有</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-warning">无</span>
+                        <span style="font-size: medium;" class="label label-warning">无</span>
                     </c:otherwise>
                 </c:choose>
 
