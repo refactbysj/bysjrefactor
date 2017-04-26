@@ -114,6 +114,17 @@ public class GroupProjectsToEvaluateController extends BaseController {
     }
 
     /**
+     * 查看答辩小组评审
+     */
+    @RequestMapping("/viewReplyGroupEvaluate")
+    public String viewReplyGroupEvaluate(Integer projectId, Model model) {
+        //获取对应的课题
+        GraduateProject graduateProject = graduateProjectService.findById(projectId);
+        model.addAttribute("graduateProject", graduateProject);
+        return "evaluate/viewEvaluate/viewReplyGroupEvaluate";
+    }
+
+    /**
      * 评审操作的提交方法
      *
      * @param httpSession         当前会话

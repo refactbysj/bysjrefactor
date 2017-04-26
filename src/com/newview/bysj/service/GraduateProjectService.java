@@ -604,7 +604,7 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
                 //教研室审核通过
                 predicates.add(cb.equal(root.get("auditByDirector").get("approve").as(Boolean.class), true));
                 predicates.add(cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear()));
-                if (graduateProjectCategory != null) {
+                if (graduateProjectCategory != null && !Objects.equals("", graduateProjectCategory)) {
                     predicates.add(cb.equal(root.get("category").as(String.class), graduateProjectCategory));
                 }
                 Predicate[] p = new Predicate[predicates.size()];

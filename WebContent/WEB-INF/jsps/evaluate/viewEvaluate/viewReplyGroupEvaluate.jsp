@@ -6,12 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="/WEB-INF/jsps/includeURL.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal"
-            aria-hidden="true">×
-    </button>
     <h4 class="modal-title" id="myModalLabel">
         附表9：
         山东建筑大学毕业设计（论文）答辩小组意见表
@@ -29,7 +27,7 @@
     </h4>
 </div>
 <div class="modal-body">
-    <table class="table" border="1" width="500px">
+    <table class="table" border="1">
         <c:set var="graduateProject" value="${graduateProject}"/>
         <tr>
             <td>
@@ -39,13 +37,13 @@
                 <c:set value="${graduateProject.commentByGroup.completenessScore}" var="completenessScore"/>
                 <c:choose>
                     <c:when test="${completenessScore<'6'}">
-                        <span class="label label-danger">${completenessScore}</span>
+                        <span style="font-size: medium;" class="label label-danger">${completenessScore}</span>
                     </c:when>
                     <c:when test="${completenessScore>='6'&&completenessScore<='8'}">
-                        <span class="label label-warning">${completenessScore}</span>
+                        <span style="font-size: medium;" class="label label-warning">${completenessScore}</span>
                     </c:when>
                     <c:when test="${completenessScore>'8'}">
-                        <span class="label label-success">${completenessScore}</span>
+                        <span style="font-size: medium;" class="label label-success">${completenessScore}</span>
                     </c:when>
                 </c:choose>
             </td>
@@ -57,13 +55,13 @@
 
                 <c:choose>
                     <c:when test="${qualityScore<'6'}">
-                        <span class="label label-danger">${qualityScore}</span>
+                        <span style="font-size: medium;" class="label label-danger">${qualityScore}</span>
                     </c:when>
                     <c:when test="${qualityScore>='6'&&qualityScore<'8'}">
-                        <span class="label label-warning">${qualityScore}</span>
+                        <span style="font-size: medium;" class="label label-warning">${qualityScore}</span>
                     </c:when>
                     <c:when test="${qualityScore>='8'}">
-                        <span class="label label-success">${qualityScore}</span>
+                        <span style="font-size: medium;" class="label label-success">${qualityScore}</span>
                     </c:when>
                 </c:choose>
             </td>
@@ -77,13 +75,13 @@
 
                 <c:choose>
                     <c:when test="${replyScore<'6'}">
-                        <span class="label label-danger">${replyScore}</span>
+                        <span style="font-size: medium;" class="label label-danger">${replyScore}</span>
                     </c:when>
                     <c:when test="${replyScore>='6'&&replyScore<'8'}">
-                        <span class="label label-warning">${replyScore}</span>
+                        <span style="font-size: medium;" class="label label-warning">${replyScore}</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-success">${replyScore}</span>
+                        <span style="font-size: medium;" class="label label-success">${replyScore}</span>
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -95,13 +93,13 @@
 
                 <c:choose>
                     <c:when test="${correctnessSocre<'6'}">
-                        <span class="label label-danger">${correctnessSocre}</span>
+                        <span style="font-size: medium;" class="label label-danger">${correctnessSocre}</span>
                     </c:when>
                     <c:when test="${correctnessSocre>='6'&&correctnessSocre<'8'}">
-                        <span class="label label-warning">${correctnessSocre}</span>
+                        <span style="font-size: medium;" class="label label-warning">${correctnessSocre}</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-success">${correctnessSocre}</span>
+                        <span style="font-size: medium;" class="label label-success">${correctnessSocre}</span>
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -117,20 +115,16 @@
             <td colspan="3">
                 <c:choose>
                     <c:when test="${graduateProject.commentByGroup.qualifiedByGroup}">
-                        <span class="label label-success">已通过答辩</span>
+                        <span style="font-size: medium;" class="label label-success">已通过答辩</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-danger">未通过答辩</span>
+                        <span style="font-size: medium;" class="label label-danger">未通过答辩</span>
                     </c:otherwise>
                 </c:choose>
             </td>
         </tr>
     </table>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-default"
-            data-dismiss="modal">关闭
-    </button>
-</div>
+
 
 

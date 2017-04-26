@@ -26,14 +26,25 @@ import java.util.List;
 public class ScoreReportController extends BaseController {
 
     /**
-     * 查看成绩
+     * 学生查看成绩
      */
     @RequestMapping("student/viewScores.html")
     public String viewScore(HttpSession httpsession, ModelMap modelMap) {
         Student student = (Student) CommonHelper.getCurrentActor(httpsession);
         GraduateProject graduateProject = graduateProjectService.uniqueResult("student", Student.class, student);
         modelMap.put("graduateProject", graduateProject);
+        modelMap.put("isStudent", true);
         return "student/studentLookScore/showScoreReport";
+    }
+
+    /**
+     * 老师查看成绩
+     */
+    @RequestMapping("tutor/viewScores.html")
+    public String tutorViewScore(Integer projectId, ModelMap modelMap) {
+        GraduateProject graduateProject = graduateProjectService.findById(projectId);
+        modelMap.put("graduateProject", graduateProject);
+        return "print/viewStudentScore";
     }
 
 
