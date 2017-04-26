@@ -29,7 +29,7 @@
                         <th width="30%">题目名称</th>
                         <th width="10%">副标题</th>
                         <th>年份</th>
-                        <th>类别</th>
+                        <th>课题类型</th>
                         <th>学生姓名</th>
                         <th>班级</th>
                         <th>学号</th>
