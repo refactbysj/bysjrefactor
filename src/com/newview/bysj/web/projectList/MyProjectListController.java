@@ -75,49 +75,6 @@ public class MyProjectListController extends BaseController {
     }
 
 
-    /**
-     * 列出此用户的设计题目
-     *
-     * @param modelMap    用于存储需要被列出的设计题目
-     * @param httpSession 当前会话,用于获取tutor
-     * @param page      当前页
-     * @param rows    每页的条数
-     * @return jsp页面
-     */
-    /*@RequestMapping("/listMyDesignProjects.html")
-    public String listMyDesignProjectsGet(ModelMap modelMap, HttpSession httpSession, Integer page, Integer rows) {
-        Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
-        Page<DesignProject> designProjectPage = designProjectService.getDesignProjectByProposer(tutor, page, rows);
-        CommonHelper.paging(modelMap, designProjectPage, "listProjects");
-        //用于在jsp中根据不同的条件来设置不同的路径
-        GraduateProjectHelper.display(modelMap, 0);
-        //用于设置当前时间是否在允许的修改时间之间
-        GraduateProjectHelper.setMyProjectDisplay(tutor, modelMap, constraintOfProposeProjectService);
-        GraduateProjectHelper.viewDesignOrPaper(modelMap, GraduateProjectHelper.VIEW_DESIGN);
-        return "projectTitle/listAllProjects";
-    }*/
-
-    /**
-     * 列出此用户的论文题目
-     *
-     * @param modelMap    用于存储被列出的论文题目
-     * @param httpSession 当前会话
-     * @param page      当前页
-     * @param rows    每页的条数
-     * @return jsp页面
-     */
-    /*@RequestMapping("/listMyPaperProjects.html")
-    public String listMyPaperProjectsGet(ModelMap modelMap, HttpSession httpSession, Integer page, Integer rows) {
-        Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
-        Page<PaperProject> paperProjectPage = paperProjectService.getPaperProjectByProposer(tutor, page, rows);
-        CommonHelper.paging(modelMap, paperProjectPage, "listProjects");//用于在jsp中根据不同的条件来设置不同的路径
-        GraduateProjectHelper.display(modelMap, 0);
-        //用于设置当前时间是否在允许的修改时间之间
-        GraduateProjectHelper.setMyProjectDisplay(tutor, modelMap, constraintOfProposeProjectService);
-        GraduateProjectHelper.viewDesignOrPaper(modelMap, GraduateProjectHelper.VIEW_PAPAER);
-        return "projectTitle/listAllProjects";
-    }
-*/
 
     /**
      * 查看论文的详细情况
@@ -202,8 +159,7 @@ public class MyProjectListController extends BaseController {
     public Result cloneProjectById(Integer cloneId, HttpSession httpSession) {
         Result result = new Result();
         try {
-            GraduateProject graduateProject = new GraduateProject();
-            graduateProjectService.cloneProject(httpSession, cloneId, graduateProject);
+            graduateProjectService.cloneProject(httpSession, cloneId);
             result.setMsg("克隆成功");
             result.setSuccess(true);
             return result;

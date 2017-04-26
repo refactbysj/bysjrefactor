@@ -820,10 +820,15 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
     }
 
     @MethodDescription("克隆一个课题")
-    public void cloneProject(HttpSession httpSession, Integer projectIdToClone, GraduateProject newProject) {
-        // TODO Auto-generated method stub
+    public void cloneProject(HttpSession httpSession, Integer projectIdToClone) {
+        GraduateProject newProject;
         //获得原Project
         GraduateProject originalProject = graduateProjectDao.findOne(projectIdToClone);
+        if (originalProject instanceof PaperProject) {
+            newProject = new PaperProject();
+        } else {
+            newProject = new DesignProject();
+        }
         //为新Project赋值
         //报题目人
         newProject.setProposer(originalProject.getProposer());
