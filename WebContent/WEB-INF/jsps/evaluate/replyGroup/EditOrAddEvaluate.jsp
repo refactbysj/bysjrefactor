@@ -72,7 +72,7 @@
         <h4>
             题目名称：${graduateProject.title}
             <br>
-            班级：${graduateProject.student.studentClass.description}&nbsp;&nbsp;学生姓名：${graduateProject.student.name}&nbsp;&nbsp;学号:${projectToEvaluate.student.no}
+            班级：${graduateProject.student.studentClass.description}&nbsp;&nbsp;学生姓名：${graduateProject.student.name}&nbsp;&nbsp;学号:${graduateProject.student.no}
         </h4>
     </div>
     <div class="modal-body">
@@ -87,13 +87,10 @@
                             完成任务书规定的要求与水平评分
                         </td>
                         <td> <%--path 对应 commandName所代表的对象的一个属性 --%>
-                            <form:select
-                                    name="commentByGroupCompletenessScore"
-                                    path="commentByGroup.completenessScore"
-                                    id="commentByGroupCompletenessScore" class="combox">
-
-                                <form:options items="${defaultGrades}"/>
-                            </form:select>
+                            <form:input cssClass="easyui-numberbox"
+                                        data-options="min:0,precision:1,max:10"
+                                        id="commentByGroupCompletenessScore"
+                                        path="commentByGroup.completenessScore"/>
                         </td>
                     </tr>
                     <tr>
@@ -101,12 +98,10 @@
                             论文与实物的质量评分
                         </td>
                         <td> <%--path 对应 commandName所代表的对象的一个属性 --%>
-                            <form:select
-                                    name="commentByGroupQualityScore"
-                                    path="commentByGroup.qualityScore"
-                                    id="commentByGroupQualityScore" class="combox">
-                                <form:options items="${defaultGrades}"/>
-                            </form:select>
+                            <form:input cssClass="easyui-numberbox"
+                                        data-options="min:0,precision:1,max:10"
+                                        path="commentByGroup.qualityScore"
+                                        id="commentByGroupQualityScore"/>
                         </td>
                     </tr>
 
@@ -115,12 +110,10 @@
                             论文内容的答辩陈述评分
                         </td>
                         <td> <%--path 对应 commandName所代表的对象的一个属性 --%>
-                            <form:select
-                                    name="commentByGroupeReplyScore"
-                                    path="commentByGroup.replyScore"
-                                    id="commentByGroupeReplyScore" class="combox">
-                                <form:options items="${defaultGrades}"/>
-                            </form:select>
+                            <form:input path="commentByGroup.replyScore"
+                                        id="commentByGroupeReplyScore"
+                                        cssClass="easyui-numberbox"
+                                        data-options="min:0,precision:1,max:10"/>
                         </td>
                     </tr>
 
@@ -129,12 +122,11 @@
                             回答问题的正确性评分
                         </td>
                         <td> <%--path 对应 commandName所代表的对象的一个属性 --%>
-                            <form:select
-                                    name="commentByGroupCorrectnessSocre"
-                                    path="commentByGroup.correctnessSocre"
-                                    id="commentByGroupCorrectnessScore" class="combox">
-                                <form:options items="${defaultGrades}"/>
-                            </form:select>
+                            <form:input path="commentByGroup.correctnessSocre"
+                                        id="commentByGroupCorrectnessScore"
+                                        cssClass="easyui-numberbox"
+                                        data-options="min:0,precision:1,max:10"/>
+
                         </td>
                     </tr>
                 </table>
@@ -151,11 +143,10 @@
                     </dt>
                     <dd>
                         <!-- 用于表单提交的textarea -->
-                        <textarea id="remarkByGroup" rows="10" cols="60" name="remark" style="display:none;">
-					</textarea>
+                        <textarea id="remarkByGroup" rows="10" cols="60" name="remark" style="display:none;"></textarea>
                         <!-- 用于显示的textarea -->
                         <div id="remarkByTutorTextareaToShow" contenteditable="true" class="form-control"
-                             style="width:100%;height:156px;border:1px solid black;font-size:18px;overflow-y:scroll;overflow-x:hidden;">
+                             style="width:100%;height:156px;border:1px solid black;font-size:18px;">
                                 ${graduateProject.commentByGroup.remarkByGroup}
                         </div>
                         <c:forEach items="${remarkTemplates }" var="remarkTemplate">
