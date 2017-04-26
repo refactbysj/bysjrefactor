@@ -26,6 +26,11 @@
 
     //上传终稿
     function uploadFinalDraft() {
+        var isValid = $("#updateFinal").form('validate');
+        if (!isValid) {
+            $.messager.alert('提示', '请选择文件', 'warning');
+            return false;
+        }
         $.messager.confirm('询问', '确认提交？', function (t) {
             if (t) {
                 $("#updateFinal").submit();
@@ -46,24 +51,18 @@
             <h3 style="color: red">${message}</h3>
         </c:when>
         <c:otherwise>
-            <div id="uploadFileTest" name="test" class="row-fluid">
+            <div id="uploadFileTest" name="test" class="row-fluid" style="margin-bottom: 10px">
                 <c:url value="/student/uploadFinalDraft.html" var="actionUrl"/>
                 <c:if test="${graduateProject.finalDraft == null}">
                     <div class="col-md-1">
                         <label>上传终稿:</label>
                     </div>
                     <form action="${actionUrl}" method="post" id="updateFinal" enctype="multipart/form-data">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <input type="hidden" name="graduateProjectId"
-                                       value="${graduateProject.id}">
-                                <input type="file" class="form-control"
-                                       name="finalDraftFile" id="final" required>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <input type="button" onclick="uploadFinalDraft()" class="btn btn-default" value="提交"/>
-                        </div>
+                        <input type="hidden" name="graduateProjectId"
+                               value="${graduateProject.id}">
+                        <input class="easyui-filebox" style="width: 20%;" data-options="buttonText:'选择文件',required:true"
+                               name="finalDraftFile" id="final" required>
+                        <a href="javascript:void(0)" onclick="uploadFinalDraft()" class="easyui-linkbutton">上传</a>
                     </form>
                 </c:if>
             </div>
@@ -102,7 +101,7 @@
                                 <div>
                                     <a class="easyui-linkbutton"
                                        href="<%=basePath%>student/download/finalDraft.html?graduateProjectId=${graduateProject.id}">下载</a>
-                                    <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'"
+                                    <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel',disabled:true"
                                        onclick="deleteFinalDraft(${graduateProject.id})"><span>删除</span></a>
                                 </div>
                             </c:if>

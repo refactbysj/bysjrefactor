@@ -39,13 +39,12 @@
     })
 </script>
 
-<form method="post"
+<form method="post" style="padding: 10px;"
       id="updateTaskDocForm"
       enctype="multipart/form-data">
     <input type="hidden" name="graduateProjectId" value="${projectId}"/>
 
-    <input type="file" class="form-control"
-           id="taskDoc${projectId}" name="taskDocAttachment"
-           required/>
+    <input class="easyui-filebox" data-options="required:true,buttonText:'选择文件'" style="width: 90%;"
+           id="taskDoc${projectId}" name="taskDocAttachment"/>
 
 </form>
