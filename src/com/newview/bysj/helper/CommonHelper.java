@@ -7,6 +7,9 @@ import com.newview.bysj.exception.MessageException;
 import com.newview.bysj.util.Common;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.junit.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,10 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.file.AccessDeniedException;
@@ -372,7 +372,7 @@ public class CommonHelper {
      * @param strTime 需要获取时间对象的字符串
      * @return 当前字符串对应的Calendar对象
      */
-    public static Calendar getCalendarByString(String strTime,String pattern) {
+    public static Calendar getCalendarByString(String strTime, String pattern) {
         //创建一个calendar对象
         Calendar calendar = Calendar.getInstance();
         //创建一个格式化日期类
@@ -674,6 +674,30 @@ public class CommonHelper {
         //getServletContent获取servlet容器对象，getRealPath获取实际路径，“/"代表项目根目录
         return httpSession.getServletContext().getRealPath("/");
     }
+
+
+    /**
+     * 根据文档的路径，读取文档的字符数
+     * <p>
+     * 文档类型docx或dox
+     */
+    public static Integer getCharCountByFilePath(String filePath, HttpSession httpSession) throws Exception {
+        String uploadUrl = CommonHelper.getUploadPath(httpSession);
+        XWPFDocument document = new XWPFDocument(new FileInputStream(uploadUrl + filePath));
+
+        XWPFWordExtractor wordExtractor = new XWPFWordExtractor(document);
+        return wordExtractor.getText().length();
+
+    }
+
+    @Test
+    public void test() throws IOException {
+        XWPFDocument document = new XWPFDocument(new FileInputStream("E:\\googledownload\\123.docx"));
+        System.out.println(document.getProperties().getExtendedProperties().getUnderlyingProperties().getWords());
+
+    }
+
+
 
 
     /**

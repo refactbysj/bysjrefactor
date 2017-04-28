@@ -8,7 +8,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+            + path + "/";
+%>
 <script type="text/javascript">
     $("#remarkTemplateSelect").change(function () {
         //清空
@@ -67,7 +71,21 @@
                     $.messager.alert('警告', result.msg, 'warning');
                 }
             }
-        })
+        });
+
+        $.ajax({
+            url: '<%=basePath%>evaluate/chiefTutor/getFinalDraftCharCount.html',
+            data: {'projectId': '${graduateProject.id}'},
+            dataType: 'json',
+            type: 'post',
+            success: function (result) {
+                $("#paperCount").val(result.object);
+                $.messager.show({title: '提示', msg: result.msg, showType: 'slide'});
+            },
+            error: function () {
+                $.messager.show({title: '提示', msg: '获取论文字数失败', showType: 'slide'});
+            }
+        });
     })
 </script>
 <form:form commandName="graduateProject" method="post" id="editEvaluate"

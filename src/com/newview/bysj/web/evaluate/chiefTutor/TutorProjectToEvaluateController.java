@@ -105,6 +105,7 @@ public class TutorProjectToEvaluateController extends BaseController {
             model.addAttribute("isQualified", graduateProject.getCommentByTutor().getQualifiedByTutor());
         } else {
             model.addAttribute("isQualified", false);
+            // TODO: 2017/4/27 0027 获取终稿的字数
         }
 
         model.addAttribute("graduateProject", graduateProject);
@@ -113,6 +114,31 @@ public class TutorProjectToEvaluateController extends BaseController {
         model.addAttribute("defaultGrades", CommonHelper.getDefaultGrades());
         return "evaluate/chiefTutor/addOrEditEvaluate";
     }
+
+
+    /**
+     * 获取终稿字数
+     */
+    @RequestMapping(value = "/getFinalDraftCharCount", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getFinalDraftCharCount(Integer projectId, HttpSession httpSession) {
+        Result result = new Result();
+        try {
+            GraduateProject graduateProject = graduateProjectService.findById(projectId);
+            String finalPath = graduateProject.getFinalDraft();
+            logger.info("获取的" + graduateProject.getStudent().getName() + "终稿文件路径" + finalPath);
+            result.setObject(CommonHelper.getCharCountByFilePath(finalPath, httpSession));
+            result.setSuccess(true);
+            result.setMsg("获取论文字数成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("获取论文字数失败");
+            e.printStackTrace();
+            result.setMsg("获取论文字数失败");
+        }
+        return result;
+    }
+
 
     /**
      * 添加或修改指导老师评审表的提交方法
