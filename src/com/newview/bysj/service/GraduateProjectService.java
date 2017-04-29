@@ -604,7 +604,7 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
                 //教研室审核通过
                 predicates.add(cb.equal(root.get("auditByDirector").get("approve").as(Boolean.class), true));
                 predicates.add(cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear()));
-                if (graduateProjectCategory != null) {
+                if (graduateProjectCategory != null && !Objects.equals("", graduateProjectCategory)) {
                     predicates.add(cb.equal(root.get("category").as(String.class), graduateProjectCategory));
                 }
                 Predicate[] p = new Predicate[predicates.size()];
@@ -820,10 +820,15 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
     }
 
     @MethodDescription("克隆一个课题")
-    public void cloneProject(HttpSession httpSession, Integer projectIdToClone, GraduateProject newProject) {
-        // TODO Auto-generated method stub
+    public void cloneProject(HttpSession httpSession, Integer projectIdToClone) {
+        GraduateProject newProject;
         //获得原Project
         GraduateProject originalProject = graduateProjectDao.findOne(projectIdToClone);
+        if (originalProject instanceof PaperProject) {
+            newProject = new PaperProject();
+        } else {
+            newProject = new DesignProject();
+        }
         //为新Project赋值
         //报题目人
         newProject.setProposer(originalProject.getProposer());

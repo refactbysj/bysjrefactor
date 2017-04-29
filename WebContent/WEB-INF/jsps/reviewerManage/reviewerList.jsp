@@ -250,12 +250,14 @@
             projectIds = projectIds.substring(0, projectIds.length - 1);
             $.messager.confirm('询问', '确认指定' + reviewerName + '为评阅人？', function (t) {
                 if (t) {
+                    progressLoad();
                     $.ajax({
                         url: '${basePath}process/batchAddOrEditReviewer.html',
                         method: 'post',
                         data: {'projectIds': projectIds, 'reviewerId': reviewerId},
                         dataType: 'json',
                         success: function (result) {
+                            progressClose();
                             if (result.success) {
                                 $("#reviewerTable").datagrid('reload');
                                 $.messager.alert('提示', result.msg, 'info');

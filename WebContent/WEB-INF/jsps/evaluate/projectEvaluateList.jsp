@@ -49,7 +49,16 @@
                     }
                 }, {
                     title: '标题（副标题）',
+                    <c:if test="${EVALUATE_DISP=='REPLY_TUTOR'}">
                     width: '40%',
+                    </c:if>
+                    <c:if test="${EVALUATE_DISP=='REPLY_REVIEWER'}">
+                    width: '30%',
+                    </c:if>
+                    <c:if test="${EVALUATE_DISP=='REPLY_ADMIN'}">
+                    width: '22%',
+                    </c:if>
+
                     field: 'title',
                     formatter: function (value, row) {
                         if (row.subTitle != null && row.subTitle != '') {
@@ -89,6 +98,7 @@
                     {
                         title: '答辩小组评审',
                         field: 'replyAction',
+                        width: '20%',
                         formatter: function (value, row) {
                             var str = '';
                             //如果已经提交了终稿
@@ -150,7 +160,7 @@
                         formatter: function (value, row) {
                             return $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewGroupTutorEvaluate(\'{0}\')"></a>', row.id);
                         }
-                    }
+                    },
                     </c:if>
                     //评阅人角色
                     <c:if test="${EVALUATE_DISP=='REPLY_REVIEWER'}">
@@ -197,7 +207,7 @@
                             }
                             return str;
                         }
-                    }
+                    },
                     </c:if>
                     //指导老师角色
                     <c:if test="${EVALUATE_DISP=='REPLY_TUTOR'}">
@@ -232,8 +242,16 @@
                             }
                             return str;
                         }
-                    }
+                    },
                     </c:if>
+                    {
+                        title: '详情',
+                        width: '10%',
+                        field: 'detail',
+                        formatter: function (value, row) {
+                            return $.formatString('<a href="javascript:void(0)" class="detailBtn" onclick="showDetail(\'{0}\')"></a>', row.id);
+                        }
+                    }
                 ]],
                 onLoadSuccess: function () {
                     $(".editBtn").linkbutton({text: '修改', iconCls: 'icon-edit', plain: true});
@@ -241,6 +259,7 @@
                     $(".evaluateBtn").linkbutton({text: '评审', iconCls: 'icon-pencil', plain: true});
                     $(".viewBtn").linkbutton({text: '查看', iconCls: 'icon-more', plain: true});
                     $(".downBtn").linkbutton({text: '下载', plain: true});
+                    $(".detailBtn").linkbutton({text: '显示详情', plain: true, iconCls: 'icon-more'});
                 }
             })
         });
@@ -250,11 +269,17 @@
             window.location.href = '${basePath}student/download/finalDraft.html?graduateProjectId=' + id;
         }
 
+        //查看课题详情
+        function showDetail(id) {
+            var url = '${basePath}process/showDetail.html?graduateProjectId=' + id;
+            showProjectDetail(url);
+        }
+
 
         //打印
         function printFun(id) {
             <c:if test="${EVALUATE_DISP=='REPLY_ADMIN'}">
-            window.open('${basePath}evaluate/chiefTutor/printReport.html?reportId=' + id, '_blank');
+            window.open('${basePath}evaluate/replyGroup/printReport.html?reportId=' + id, '_blank');
             </c:if>
             <c:if test="${EVALUATE_DISP=='REPLY_REVIEWER'}">
             window.open('${basePath}evaluate/reviewer/printReport.html?reportId=' + id, '_blank');
@@ -290,7 +315,7 @@
                     }
                 }, {
                     text: '提交',
-                    iconCls: 'icon-add',
+                    iconCls: 'icon-ok',
                     handler: function () {
                         parent.$.modalDialog.evaluateGrid = evaluateGrid;
                         var f = parent.$.modalDialog.handler.find("#editEvaluate");

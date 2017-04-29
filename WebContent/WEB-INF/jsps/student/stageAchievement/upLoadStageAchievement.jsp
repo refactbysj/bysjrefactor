@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
-  User: zhan
-  Date: 2017/4/18 0018
-  Time: 10:26
+  User: 慧
+  Date: 2017/4/23
+  Time: 12:38
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -13,8 +13,8 @@
 %>
 <script type="text/javascript">
     $(function () {
-        $("#updateTaskDocForm").form({
-            url: '<%=basePath%>tutor/taskDocUpLoad.html',
+        $("#updateStageAchievementForm").form({
+            url: '<%=basePath%>student/uploadStageAchievement.html',
             onSubmit: function () {
                 progressLoad();
                 var isValid = $(this).form('validate');
@@ -28,7 +28,7 @@
                 result = $.parseJSON(result);
                 if (result.success) {
                     $.messager.alert('提示', result.msg, 'info');
-                    parent.$.modalDialog.projectGrid.datagrid('reload');
+                    parent.$.modalDialog.stageAchGird.datagrid('reload');
                     parent.$.modalDialog.handler.dialog('close');
                 } else {
                     $.messager.alert('提示', result.msg, 'warning');
@@ -38,13 +38,11 @@
         })
     })
 </script>
-
 <form method="post" style="padding: 10px;"
-      id="updateTaskDocForm"
+      id="updateStageAchievementForm"
       enctype="multipart/form-data">
-    <input type="hidden" name="graduateProjectId" value="${projectId}"/>
-
-    <input class="easyui-filebox" data-options="required:true,buttonText:'选择文件'" style="width: 90%;"
-           id="taskDoc${projectId}" name="taskDocAttachment"/>
+    <input class="easyui-filebox" style="width: 70%;" data-options="buttonText:'选择文件',required:true"
+           name="stageAchievementFile"/>
 
 </form>
+

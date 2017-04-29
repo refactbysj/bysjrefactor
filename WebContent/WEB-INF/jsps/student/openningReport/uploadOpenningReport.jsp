@@ -21,8 +21,12 @@
     }
 
     function confirmFile() {
-        //var updateFile = $("#openningReportFile").val();
-        //var excuName = updateFile.substring(updateFile.indexOf(".") + 1, updateFile.length);
+
+        var isValid = $("#checkvalue").form('validate');
+        if (!isValid) {
+            $.messager.alert('提示', '请选择文件', 'warning');
+            return false;
+        }
         $.messager.confirm('询问', '确认提交？', function (t) {
             if (t) {
                 $("#checkvalue").submit();
@@ -48,13 +52,12 @@
             <c:url value="/openningReport/openningReportuploaded.html" var="uploadOpenningReport"/>
             <form action="${uploadOpenningReport}" class="form-inline" id="checkvalue"
                   enctype="multipart/form-data" method="post">
-                <div class="form-group">
                     <input type="hidden" name="paperProjectId" value="${paperProject.id}">
-                    <input class="form-control" type="file" id="openningReportFile" name="openningReportFile" required>
-                    <button type="button" onclick="confirmFile()" class="btn btn-default btn-sm">上传</button>
-                </div>
+                <input class="easyui-filebox" style="width: 20%;" id="openningReportFile" name="openningReportFile"
+                       data-options="buttonText:'选择文件',required:true"/>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="confirmFile()">上传</a>
             </form>
-            <h4><font color="red"><span>上传既送审，驳回前不能修改</span></font></h4>
+            <span style="color: red;font-size: large">上传既送审，驳回前不能修改</span>
         </c:if>
     </div>
     <div class="row">

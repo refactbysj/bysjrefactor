@@ -5,9 +5,11 @@ import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.reports.ReplyGroupCommitments;
 import com.newview.bysj.util.Constants;
 import com.newview.bysj.util.PageInfo;
+import com.newview.bysj.util.Result;
 import com.newview.bysj.web.baseController.BaseController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,7 @@ import java.util.*;
 @RequestMapping("evaluate/replyGroup")
 public class GroupProjectsToEvaluateController extends BaseController {
 
+    private static final Logger LOGGER = Logger.getLogger(GroupProjectsToEvaluateController.class);
 
     /**
      * 答辩小组意见表的get方法
@@ -111,6 +114,17 @@ public class GroupProjectsToEvaluateController extends BaseController {
     }
 
     /**
+     * 查看答辩小组评审
+     */
+    @RequestMapping("/viewReplyGroupEvaluate")
+    public String viewReplyGroupEvaluate(Integer projectId, Model model) {
+        //获取对应的课题
+        GraduateProject graduateProject = graduateProjectService.findById(projectId);
+        model.addAttribute("graduateProject", graduateProject);
+        return "evaluate/viewEvaluate/viewReplyGroupEvaluate";
+    }
+
+    /**
      * 评审操作的提交方法
      *
      * @param httpSession         当前会话
@@ -121,22 +135,32 @@ public class GroupProjectsToEvaluateController extends BaseController {
      * @return jsp
      */
     @RequestMapping(value = "/evaluateProject.html", method = RequestMethod.POST)
-    public String evaluateProjectPost(HttpSession httpSession, Boolean qualified, String remark, GraduateProject graduateProject, HttpServletResponse httpServletResponse) {
-        //获取当前tutor
-        Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
-        //获取指定的课题
-        GraduateProject graduateProjectToEvaluate = graduateProjectService.findById(graduateProject.getId());
-        //判断当前课题是否已被答辩小组评审
-        if (graduateProjectToEvaluate.getCommentByGroup() == null) {
-            CommentByGroup commentByGroup = new CommentByGroup();
-            this.saveEvaluateByGroup(qualified, graduateProject, graduateProjectToEvaluate, commentByGroup, tutor, remark);
-        } else {
-            CommentByGroup commentByGroup = graduateProjectToEvaluate.getCommentByGroup();
-            this.saveEvaluateByGroup(qualified, graduateProject, graduateProjectToEvaluate, commentByGroup, tutor, remark);
+    @ResponseBody
+    public Result evaluateProjectPost(HttpSession httpSession, Boolean qualified, String remark, GraduateProject graduateProject, HttpServletResponse httpServletResponse) {
+        Result result = new Result();
+        try {
+            //获取当前tutor
+            Tutor tutor = CommonHelper.getCurrentTutor(httpSession);
+            //获取指定的课题
+            GraduateProject graduateProjectToEvaluate = graduateProjectService.findById(graduateProject.getId());
+            //判断当前课题是否已被答辩小组评审
+            if (graduateProjectToEvaluate.getCommentByGroup() == null) {
+                CommentByGroup commentByGroup = new CommentByGroup();
+                this.saveEvaluateByGroup(qualified, graduateProject, graduateProjectToEvaluate, commentByGroup, tutor, remark);
+            } else {
+                CommentByGroup commentByGroup = graduateProjectToEvaluate.getCommentByGroup();
+                this.saveEvaluateByGroup(qualified, graduateProject, graduateProjectToEvaluate, commentByGroup, tutor, remark);
+            }
+            result.setSuccess(true);
+            result.setMsg("评审成功");
+        } catch (Exception e) {
+            LOGGER.error("评审失败" + e);
+            e.printStackTrace();
+            result.setMsg("评审失败");
         }
 
         //重定向到一个方法
-        return "redirect:projectsToEvaluate.html";
+        return result;
     }
 
 
@@ -173,7 +197,7 @@ public class GroupProjectsToEvaluateController extends BaseController {
      * 生成报表的方法
      *
      * @param httpServletRequest 对浏览器的响应
-     * @param projectId          课题的id
+     * @param reportId          课题的id
      * @param model              map集合，存储需要在jsp中获取的数据
      * @return 报表
      * @throws NoSuchMethodException
@@ -184,13 +208,13 @@ public class GroupProjectsToEvaluateController extends BaseController {
     此方法抛出了三个未处理的异常，建议对这些异常进行处理！！！
 
      */
-    @RequestMapping("/getReport.html")
-    public String getEvaluateReport(HttpServletRequest httpServletRequest, Integer projectId, Model model) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    @RequestMapping("/printReport.html")
+    public String getEvaluateReport(HttpServletRequest httpServletRequest, Integer reportId, Model model) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //创建用于存放报表数据的集合
         List<ReplyGroupCommitments> replyGroupCommitmentsList = new ArrayList<>();
         ReplyGroupCommitments replyGroupCommitments = new ReplyGroupCommitments();
         //获取课题
-        GraduateProject graduateProject = graduateProjectService.findById(projectId);
+        GraduateProject graduateProject = graduateProjectService.findById(reportId);
         //设置相关的分数
         replyGroupCommitments.setCorrectnessScore(graduateProject.getCommentByGroup().getCorrectnessSocre());
         replyGroupCommitments.setCompletenessScore(graduateProject.getCommentByGroup().getCompletenessScore());

@@ -10,19 +10,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <script type="text/javascript">
-    function c() {
-        //return window.confirm("确认提交？");
-        window.wxc.xcConfirm("确认提交？", "confirm", {
-            onOk: function () {
-                $("#reviewerPost").submit();
-            }
-            /*onClose:function(){
-             return false;
-             }*/
-        });
-    }
-</script>
-<script type="text/javascript">
     $("#remarkTemplateSelect").change(function () {
         //清空
         $("#remarkByTutorTextareaToShow").html(" ");

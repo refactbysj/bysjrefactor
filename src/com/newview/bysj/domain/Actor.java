@@ -49,7 +49,6 @@ public abstract class Actor implements Serializable {
      *
      * @generated
      */
-    @JsonIgnore
     @Embedded
     private Contact contact;
     /**
@@ -66,7 +65,6 @@ public abstract class Actor implements Serializable {
      *
      * @generated
      */
-    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

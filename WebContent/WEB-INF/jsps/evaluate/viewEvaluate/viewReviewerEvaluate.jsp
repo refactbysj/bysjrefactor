@@ -29,16 +29,16 @@
             <td>
                 <c:choose>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationDifficulty=='2'}">
-                        <span class="label label-success">适中</span>
+                        <span style="font-size: medium;" class="label label-success">适中</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationDifficulty=='1'}">
-                        <span class="label label-warning">偏难</span>
+                        <span style="font-size: medium;" class="label label-warning">偏难</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationDifficulty=='3'}">
-                        <span class="label label-warning">偏易</span>
+                        <span style="font-size: medium;" class="label label-warning">偏易</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-danger">过易</span>
+                        <span style="font-size: medium;" class="label label-danger">过易</span>
                     </c:otherwise>
                 </c:choose>
 
@@ -49,16 +49,16 @@
             <td>
                 <c:choose>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationWordload=='2'}">
-                        <span class="label label-success">适中</span>
+                        <span style="font-size: medium;" class="label label-success">适中</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationWordload=='1'}">
-                        <span class="label label-warning">偏大</span>
+                        <span style="font-size: medium;" class="label label-warning">偏大</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationWordload=='3'}">
-                        <span class="label label-warning">偏小</span>
+                        <span style="font-size: medium;" class="label label-warning">偏小</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-danger">过少</span>
+                        <span style="font-size: medium;" class="label label-danger">过少</span>
                     </c:otherwise>
                 </c:choose>
 
@@ -71,16 +71,16 @@
             <td>
                 <c:choose>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationPrintingQuality=='2'}">
-                        <span class="label label-success">良</span>
+                        <span style="font-size: medium;" class="label label-success">良</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationPrintingQuality=='1'}">
-                        <span class="label label-success">优</span>
+                        <span style="font-size: medium;" class="label label-success">优</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationPrintingQuality=='3'}">
-                        <span class="label label-success">中</span>
+                        <span style="font-size: medium;" class="label label-success">中</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-warning">差</span>
+                        <span style="font-size: medium;" class="label label-warning">差</span>
                     </c:otherwise>
                 </c:choose>
 
@@ -91,16 +91,16 @@
             <td>
                 <c:choose>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationDiagramQuality=='2'}">
-                        <span class="label label-success">良</span>
+                        <span style="font-size: medium;" class="label label-success">良</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationDiagramQuality=='1'}">
-                        <span class="label label-success">优</span>
+                        <span style="font-size: medium;" class="label label-success">优</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationDiagramQuality=='3'}">
-                        <span class="label label-success">中</span>
+                        <span style="font-size: medium;" class="label label-success">中</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="label label-warning">差</span>
+                        <span style="font-size: medium;" class="label label-warning">差</span>
                     </c:otherwise>
                 </c:choose>
 
@@ -113,13 +113,13 @@
             <td colspan="2">
                 <c:choose>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationProductQuality=='1'}">
-                        <span class="label label-success">符合指标要求</span>
+                        <span style="font-size: medium;" class="label label-success">符合指标要求</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationProductQuality=='2'}">
-                        <span class="label label-success">基本符合指标要求</span>
+                        <span style="font-size: medium;" class="label label-success">基本符合指标要求</span>
                     </c:when>
                     <c:when test="${graduateProject.commentByReviewer.reviewerEvaluationProductQuality=='3'}">
-                        <span class="label label-warning">较差</span>
+                        <span style="font-size: medium;" class="label label-warning">较差</span>
                     </c:when>
                 </c:choose>
 
@@ -153,10 +153,10 @@
             <td colspan="3">
                 <c:choose>
                     <c:when test="${graduateProject.commentByReviewer.qualifiedByReviewer}">
-                        <label class="label label-success">通过评审</label>
+                        <label style="font-size: medium;" class="label label-success">通过评审</label>
                     </c:when>
                     <c:otherwise>
-                        <label class="label label-warning">未通过</label>
+                        <label style="font-size: medium;" class="label label-warning">未通过</label>
                     </c:otherwise>
                 </c:choose>
             </td>
