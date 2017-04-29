@@ -51,7 +51,7 @@ public class StudentScheduleController extends BaseController {
         modelMap.addAttribute("hasTimeSpan", hasTimeSpan);
 
 
-        return "student/schedule/writeSchedule";
+        return  "student/schedule/writeSchedule";
     }
 
     //手动生成工作进程表

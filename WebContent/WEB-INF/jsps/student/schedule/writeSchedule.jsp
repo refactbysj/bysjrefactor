@@ -52,7 +52,6 @@
             ]],
             onLoadSuccess:function () {
                 $(".addOrEditBtn").linkbutton({text: '填写工作内容', plain: true, iconCls: 'icon-edit'});
-
             }
         })
 

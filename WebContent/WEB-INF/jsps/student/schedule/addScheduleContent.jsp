@@ -31,7 +31,6 @@
                     $.messager.alert("警告", result.msg, 'warning');
                 }
             }
-
         });
 
         $("#scheduleContent").click(function () {
