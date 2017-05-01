@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created 2016/3/1,14:06.
@@ -75,12 +76,25 @@ public class ReviewerManageController extends BaseController {
             graduateProject.setReviewer(tutor);
             graduateProjectService.update(graduateProject);
             User user = tutor.getUser();
-            Role role = roleService.uniqueResult("description", "评阅人");
-            UserRole userRole = new UserRole();
-            //设置当前用户的角色
-            userRole.setRole(role);
-            userRole.setUser(user);
-            userRoleService.saveOrUpdate(userRole);
+            boolean flag = false;
+            List<UserRole> userRoles = user.getUserRole();
+            //判断当前用户是否已是评阅人角色
+            if (userRoles != null) {
+                for (UserRole userRole : userRoles) {
+                    if (Objects.equals("评阅人", userRole.getRole().getDescription())) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            if (!flag) {
+                Role role = roleService.uniqueResult("description", "评阅人");
+                UserRole userRole = new UserRole();
+                //设置当前用户的角色
+                userRole.setRole(role);
+                userRole.setUser(user);
+                userRoleService.saveOrUpdate(userRole);
+            }
             result.setSuccess(true);
             result.setMsg("指定成功");
         } catch (Exception e) {

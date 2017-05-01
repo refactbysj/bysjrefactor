@@ -1,18 +1,11 @@
 package com.newview.bysj.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 角色资源
@@ -69,6 +62,7 @@ public class RoleResource implements Serializable {
         this.id = id;
     }
 
+    @JsonIgnore
     public Role getRole() {
         return role;
     }
@@ -77,6 +71,7 @@ public class RoleResource implements Serializable {
         this.role = role;
     }
 
+    @JsonIgnore
     public Resource getResource() {
         return resource;
     }

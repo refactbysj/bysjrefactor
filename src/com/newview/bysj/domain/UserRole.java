@@ -1,17 +1,11 @@
 package com.newview.bysj.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 用户角色。user类和role类的中间表
@@ -64,6 +58,7 @@ public class UserRole implements Serializable {
         this.id = id;
     }
 
+    @JsonIgnore
     public User getUser() {
         return user;
     }
