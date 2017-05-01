@@ -67,7 +67,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    @JsonIgnore
     public Integer getId() {
         return id;
     }
@@ -76,7 +75,6 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    @JsonIgnore
     public String getUsername() {
         return username;
     }
@@ -85,7 +83,6 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -94,7 +91,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    @JsonIgnore
     public Integer getLoginTime() {
         return loginTime;
     }
@@ -103,7 +99,6 @@ public class User implements Serializable {
         this.loginTime = loginTime;
     }
 
-    @JsonIgnore
     public String getLastLoginIp() {
         return lastLoginIp;
     }
@@ -112,7 +107,6 @@ public class User implements Serializable {
         this.lastLoginIp = lastLoginIp;
     }
 
-    @JsonIgnore
     public Calendar getLastLoginTime() {
         return lastLoginTime;
     }
@@ -121,7 +115,6 @@ public class User implements Serializable {
         this.lastLoginTime = lastLoginTime;
     }
 
-    @JsonIgnore
     public Boolean getConstraintOfLogin() {
         return constraintOfLogin;
     }
@@ -139,7 +132,6 @@ public class User implements Serializable {
         this.actor = actor;
     }
 
-    @JsonIgnore
     public List<UserRole> getUserRole() {
         return userRole;
     }
