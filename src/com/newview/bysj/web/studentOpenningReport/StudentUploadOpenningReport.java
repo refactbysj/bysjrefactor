@@ -2,13 +2,16 @@ package com.newview.bysj.web.studentOpenningReport;
 
 import com.newview.bysj.domain.*;
 import com.newview.bysj.helper.CommonHelper;
+import com.newview.bysj.util.Result;
 import com.newview.bysj.web.baseController.BaseController;
+import org.apache.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +21,9 @@ import java.io.IOException;
 
 @Controller
 public class StudentUploadOpenningReport extends BaseController {
+
+    private static final Logger LOGGER = Logger.getLogger(StudentUploadOpenningReport.class);
+
     @RequestMapping("student/uploadOpenningReport")
     public String uploadOpenningReport(HttpSession httpSession, ModelMap modelMap) {
         Student student = studentService.findById(((Student) CommonHelper.getCurrentActor(httpSession)).getId());
@@ -52,65 +58,74 @@ public class StudentUploadOpenningReport extends BaseController {
 
     //上传开题报告
     @RequestMapping(value = "openningReport/openningReportuploaded.html", method = RequestMethod.POST)
-    public String upload(@RequestParam("openningReportFile") MultipartFile openningReportFile, HttpSession httpSession, HttpServletResponse httpServletResponse, Integer paperProjectId) {
+    @ResponseBody
+    public Result upload(@RequestParam("openningReportFile") MultipartFile openningReportFile, HttpSession httpSession, HttpServletResponse httpServletResponse, Integer paperProjectId) {
+        Result result = new Result();
         PaperProject paperProject = paperProjectService.findById(paperProjectId);
-        OpenningReport openningReport = null;
-        Audit auditByDepartmentDirector = null;
-        Audit auditByTutor = null;
-        if (paperProject.getOpenningReport() == null) {
-            //新建开题报告
-            openningReport = new OpenningReport();
-            openningReport.setPaperProject(paperProject);
-            openningReportService.save(openningReport);
-            //保存后需要重新获取openingReport，否则paperProject更新会出错
-            openningReport = openningReportService.uniqueResult("paperProject", PaperProject.class, paperProject);
-            paperProject.setOpenningReport(openningReport);
-            //更新paperProject
-            paperProjectService.update(paperProject);
-            //将更新状态进行保存
-            paperProjectService.save(paperProject);
-        } else {
-            openningReport = paperProject.getOpenningReport();
-        }
-        //教研室主任审核
-        if (paperProject.getOpenningReport().getAuditByDepartmentDirector() == null) {
-            auditByDepartmentDirector = new Audit();
-            auditByDepartmentDirector.setApprove(true);
-            auditByDepartmentDirector.setAuditDate(CommonHelper.getNow());
-            auditService.save(auditByDepartmentDirector);
-            openningReport.setAuditByDepartmentDirector(auditByDepartmentDirector);
-            openningReportService.update(openningReport);
-            //对更新状态进行保存
-            openningReportService.save(openningReport);
-        }
-        //指导教师审核
-        if (paperProject.getOpenningReport().getAuditByTutor() == null) {
-            auditByTutor = new Audit();
-            auditByTutor.setApprove(true);
-            auditByTutor.setAuditDate(CommonHelper.getNow());
-            auditService.save(auditByTutor);
-            openningReport.setAuditByTutor(auditByTutor);
-            openningReportService.update(openningReport);
-            //对更新状态进行保存
-            openningReportService.save(openningReport);
-        }
 
-        String folderName = "openningReport";
-        //String extendName = openningReportFile.getOriginalFilename().substring(openningReportFile.getOriginalFilename().lastIndexOf("."));
-        //Student student = paperProject.getStudent();
-        //String fileName = student.getName() + student.getNo() + extendName;
-        String url = CommonHelper.fileUpload(openningReportFile, httpSession, folderName, openningReportFile.getOriginalFilename());
-        openningReport.setSubmittedByStudent(true);
-        openningReport.setUrl(url);
-        openningReportService.update(openningReport);
-        //对更新状态进行保存
-        openningReportService.save(openningReport);
-        paperProject.setOpenningReport(openningReport);
-        paperProjectService.update(paperProject);
-        //对更新状态进行保存
-        paperProjectService.save(paperProject);
-        //CommonHelper.buildSimpleJson(httpServletResponse);
-        return "redirect:/student/uploadOpenningReport.html";
+        try {
+            OpenningReport openningReport;
+            Audit auditByDepartmentDirector;
+            Audit auditByTutor ;
+            if (paperProject.getOpenningReport() == null) {
+                //新建开题报告
+                openningReport = new OpenningReport();
+                openningReport.setPaperProject(paperProject);
+                openningReportService.save(openningReport);
+                //保存后需要重新获取openingReport，否则paperProject更新会出错
+                openningReport = openningReportService.uniqueResult("paperProject", PaperProject.class, paperProject);
+                paperProject.setOpenningReport(openningReport);
+                //更新paperProject
+                paperProjectService.update(paperProject);
+                //将更新状态进行保存
+                paperProjectService.save(paperProject);
+            } else {
+                openningReport = paperProject.getOpenningReport();
+            }
+            //教研室主任审核
+            if (paperProject.getOpenningReport().getAuditByDepartmentDirector() == null) {
+                auditByDepartmentDirector = new Audit();
+                auditByDepartmentDirector.setApprove(true);
+                auditByDepartmentDirector.setAuditDate(CommonHelper.getNow());
+                auditService.save(auditByDepartmentDirector);
+                openningReport.setAuditByDepartmentDirector(auditByDepartmentDirector);
+                openningReportService.update(openningReport);
+                //对更新状态进行保存
+                openningReportService.save(openningReport);
+            }
+            //指导教师审核
+            if (paperProject.getOpenningReport().getAuditByTutor() == null) {
+                auditByTutor = new Audit();
+                auditByTutor.setApprove(true);
+                auditByTutor.setAuditDate(CommonHelper.getNow());
+                auditService.save(auditByTutor);
+                openningReport.setAuditByTutor(auditByTutor);
+                openningReportService.update(openningReport);
+                //对更新状态进行保存
+                openningReportService.save(openningReport);
+            }
+
+            String folderName = "openningReport";
+            //String extendName = openningReportFile.getOriginalFilename().substring(openningReportFile.getOriginalFilename().lastIndexOf("."));
+            //Student student = paperProject.getStudent();
+            //String fileName = student.getName() + student.getNo() + extendName;
+            String url = CommonHelper.fileUpload(openningReportFile, httpSession, folderName, openningReportFile.getOriginalFilename());
+            openningReport.setSubmittedByStudent(true);
+            openningReport.setUrl(url);
+            openningReportService.update(openningReport);
+            //对更新状态进行保存
+            openningReportService.save(openningReport);
+            paperProject.setOpenningReport(openningReport);
+            paperProjectService.update(paperProject);
+            //对更新状态进行保存
+            paperProjectService.save(paperProject);
+            result.setSuccess(true);
+            result.setMsg("上传成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error(paperProject.getStudent().getName()+"上传开题报告失败" + e);
+        }
+        return result;
     }
 
     //下载开题报告

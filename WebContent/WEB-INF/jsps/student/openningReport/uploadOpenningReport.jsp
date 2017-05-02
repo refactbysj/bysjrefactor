@@ -2,6 +2,34 @@
          pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
 <script type="text/javascript">
+
+    $(function () {
+        $("#checkvalue").form({
+            url:'${basePath}openningReport/openningReportuploaded.html',
+            onSubmit:function () {
+                progressLoad();
+                var valide = $(this).form('validate');
+                if(!valide) {
+                    progressClose();
+                }
+                return valide;
+            },
+            success:function (result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if(result.success) {
+                    $.messager.alert('提示', result.msg, 'info');
+                    window.location.href='${basePath}student/uploadOpenningReport.html';
+                }else{
+                    $.messager.alert('提示', result.warning);
+                }
+            },
+            error:function () {
+                progressClose();
+                $.messager.alert('警告', '网络错误，请联系管理员', 'error');
+            }
+        })
+    });
     function deleteOpenningReport() {
         $.messager.confirm('询问', '确认删除？', function (t) {
             if (t) {
@@ -50,7 +78,7 @@
                 <label>上传开题报告:</label>
             </div>
             <c:url value="/openningReport/openningReportuploaded.html" var="uploadOpenningReport"/>
-            <form action="${uploadOpenningReport}" class="form-inline" id="checkvalue"
+            <form class="form-inline" id="checkvalue"
                   enctype="multipart/form-data" method="post">
                     <input type="hidden" name="paperProjectId" value="${paperProject.id}">
                 <input class="easyui-filebox" style="width: 20%;" id="openningReportFile" name="openningReportFile"

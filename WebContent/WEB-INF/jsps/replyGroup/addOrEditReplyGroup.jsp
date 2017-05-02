@@ -49,10 +49,10 @@
         $("#editReplyGroupForm").form({
             url: '${actionURL}',
             onSubmit: function () {
-                if ($("#description").prop("value") == null) {
+                if ($("#description").val()==null||$("#description").val()=='') {
                     $.messager.alert('提示', '请输入小组名称', 'warning');
                     return false;
-                } else if ($("select[name='leadIds'] option select").attr("value") == 0) {
+                } else if ($("select[name='leaderId'] option:selected").attr("value") == 0) {
                     $.messager.alert('提示', '请选择小组组长', 'warning');
                     return false;
                 }

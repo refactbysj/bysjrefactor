@@ -2,6 +2,35 @@
          pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
 <script type="text/javascript">
+
+    $(function () {
+        $("#updateFinal").form({
+            url:'${basePath}student/uploadFinalDraft.html',
+            onSubmit:function () {
+                progressLoad();
+                var isValid = $(this).form('validate');
+                if(!isValid) {
+                    progressClose();
+                }
+                return isValid;
+            },
+            success:function (result) {
+                progressClose();
+                result = $.parseJSON(result);
+                if(result.success) {
+                    $.messager.alert('提示', result.msg, 'info');
+                    window.location.href='${basePath}student/finalDraft.html';
+                }else{
+                    $.messager.alert('提示', result.msg, 'warning');
+                }
+            },
+            error:function () {
+                progressClose();
+                $.messager.alert('错误', '网络错误，请联系管理员', 'error');
+            }
+        })
+    })
+
     function deleteFinalDraft(graduateProjectId) {
         $.messager.confirm('询问', '确认删除？', function (t) {
             if (t) {
@@ -51,13 +80,13 @@
             <h3 style="color: red">${message}</h3>
         </c:when>
         <c:otherwise>
-            <div id="uploadFileTest" name="test" class="row-fluid" style="margin-bottom: 10px">
+            <div name="test" class="row-fluid" style="margin-bottom: 10px">
                 <c:url value="/student/uploadFinalDraft.html" var="actionUrl"/>
                 <c:if test="${graduateProject.finalDraft == null}">
                     <div class="col-md-1">
                         <label>上传终稿:</label>
                     </div>
-                    <form action="${actionUrl}" method="post" id="updateFinal" enctype="multipart/form-data">
+                    <form method="post" id="updateFinal" enctype="multipart/form-data">
                         <input type="hidden" name="graduateProjectId"
                                value="${graduateProject.id}">
                         <input class="easyui-filebox" style="width: 20%;" data-options="buttonText:'选择文件',required:true"

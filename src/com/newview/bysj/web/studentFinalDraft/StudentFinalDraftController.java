@@ -3,11 +3,14 @@ package com.newview.bysj.web.studentFinalDraft;
 import com.newview.bysj.domain.GraduateProject;
 import com.newview.bysj.domain.Student;
 import com.newview.bysj.helper.CommonHelper;
+import com.newview.bysj.util.Result;
 import com.newview.bysj.web.baseController.BaseController;
+import org.apache.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +21,9 @@ import java.util.Objects;
 
 @Controller
 public class StudentFinalDraftController extends BaseController {
+
+    private static final Logger LOGGER = Logger.getLogger(StudentFinalDraftController.class);
+
     @RequestMapping("student/finalDraft")
     public String toUploadfinalDraft(ModelMap modelMap, HttpSession httpSession, Integer pageNo, Integer pageSize) {
         //获取当前学生
@@ -33,21 +39,32 @@ public class StudentFinalDraftController extends BaseController {
 
     //上传
     @RequestMapping("student/uploadFinalDraft")
-    public String uploadFinalDraft(HttpServletResponse httpServletResponse, MultipartFile finalDraftFile, HttpSession httpSession, Integer graduateProjectId) {
+    @ResponseBody
+    public Result uploadFinalDraft(HttpServletResponse httpServletResponse, MultipartFile finalDraftFile, HttpSession httpSession, Integer graduateProjectId) {
+        Result result = new Result();
         //获取课题
         GraduateProject graduateProject = graduateProjectService.findById(graduateProjectId);
-        if (finalDraftFile != null && finalDraftFile.getSize() > 0) {
-            String folderName = "finalDraft";
-            String extendName = finalDraftFile.getOriginalFilename().substring(finalDraftFile.getOriginalFilename().lastIndexOf("."));
-            Student student = graduateProject.getStudent();
-            String fileName = student.getName() + student.getNo() + extendName;
-            String url = CommonHelper.fileUpload(finalDraftFile, httpSession, folderName, fileName);
-            graduateProject.setFinalDraft(url);
+        try {
+            if (finalDraftFile != null && finalDraftFile.getSize() > 0) {
+                String folderName = "finalDraft";
+                String extendName = finalDraftFile.getOriginalFilename().substring(finalDraftFile.getOriginalFilename().lastIndexOf("."));
+                Student student = graduateProject.getStudent();
+                String fileName = student.getName() + student.getNo() + extendName;
+                String url = CommonHelper.fileUpload(finalDraftFile, httpSession, folderName, fileName);
+                graduateProject.setFinalDraft(url);
+            }
+            graduateProjectService.update(graduateProject);
+            //对更新状态进行保存
+            graduateProjectService.save(graduateProject);
+            result.setSuccess(true);
+            result.setMsg("上传终稿成功");
+        } catch (Exception e) {
+            result.setMsg("上传终稿失败");
+            e.printStackTrace();
+            LOGGER.error(graduateProject.getStudent().getName() + "上传终稿失败" + e);
         }
-        graduateProjectService.update(graduateProject);
-        //对更新状态进行保存
-        graduateProjectService.save(graduateProject);
-        return "redirect:/student/finalDraft.html";
+
+        return result;
     }
 
     //下载
