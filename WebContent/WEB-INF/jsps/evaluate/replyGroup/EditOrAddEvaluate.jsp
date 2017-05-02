@@ -16,8 +16,8 @@
 //            将显示区域的文字清空
             $("#remarkByTutorTextareaToShow").html(" ");
 //            获取选择的模版
-            var remarkString = $("#remarkTemplateItem" + this.val());
-            $("#remarkByTutorTextareaToShow").html(remarkString);
+            var remarkString = $("#remarkTemplateItem" + $(this).val());
+            $("#remarkByTutorTextareaToShow").html(remarkString.html());
         });
 
 
@@ -39,12 +39,12 @@
                     return false;
                 }
                 var remarkByTutorTextarea = $("#remarkByTutorTextareaToShow");
-                /*remarkByTutorTextarea.find("select").each(function () {
+                remarkByTutorTextarea.find("select").each(function () {
                  $(this).replaceWith($(this).val());
                  });
                  remarkByTutorTextarea.find("span").each(function () {
                  $(this).replaceWith($(this).html());
-                 });*/
+                 });
                 $("#remarkByGroup").val(remarkByTutorTextarea.text());
             },
             success: function (result) {
