@@ -160,7 +160,6 @@ public abstract class Tutor extends Actor {
         this.signPictureURL = signPictureURL;
     }
 
-    @JsonIgnore
     public Department getDepartment() {
         return department;
     }
@@ -169,7 +168,6 @@ public abstract class Tutor extends Actor {
         this.department = department;
     }
 
-    @JsonIgnore
     public ProTitle getProTitle() {
         return proTitle;
     }
@@ -178,7 +176,6 @@ public abstract class Tutor extends Actor {
         this.proTitle = proTitle;
     }
 
-    @JsonIgnore
     public Degree getDegree() {
         return degree;
     }

@@ -102,6 +102,7 @@ public class RemarkTemplate implements Serializable {
         this.defaultRemarkTemplate = defaultRemarkTemplate;
     }
 
+    @JsonIgnore
     public Tutor getBuilder() {
         return builder;
     }

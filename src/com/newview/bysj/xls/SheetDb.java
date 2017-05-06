@@ -1,36 +1,24 @@
 package com.newview.bysj.xls;
 
+import com.newview.bysj.exception.DatabaseException;
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.RichTextString;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-
-import com.newview.bysj.exception.DatabaseException;
 
 public class SheetDb implements SheetDbInterface {
     private HSSFSheet sheet;//工作表
     private Integer currentRow = 0;//当前行
     private HSSFWorkbook workbook;//工作薄
     private FileInputStream fileInputStream;//文件输入流
+
+    private static final Logger LOGGER = Logger.getLogger(SheetDb.class);
 
     public SheetDb(File file) throws Exception {
         fileInputStream = new FileInputStream(file);//新建文件输入流
@@ -42,9 +30,6 @@ public class SheetDb implements SheetDbInterface {
     /**
      * 是否有下一行
      *
-     * @return
-     * @throws FileNotFoundException
-     * @throws IOException
      */
     public boolean next() throws FileNotFoundException, IOException {
         if (this.currentRow + 1 <= this.getRows()) {
@@ -57,7 +42,6 @@ public class SheetDb implements SheetDbInterface {
     /**
      * 是否有上一行
      *
-     * @return
      */
     public boolean previous() {
         if (this.currentRow > 1) {
@@ -75,7 +59,6 @@ public class SheetDb implements SheetDbInterface {
      */
     @Override
     public String[] getHeader() throws FileNotFoundException, IOException {
-        // TODO Auto-generated method stub
         //获得表头值与其序号的对应Map
         Map<String, Integer> headerMap = this.getHeaderMap(this.sheet);
         //由Map得到对应的“键-值”对的set，使用的是entrySet
@@ -89,7 +72,6 @@ public class SheetDb implements SheetDbInterface {
                 new Comparator<Map.Entry<String, Integer>>() {
                     @Override
                     public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
-                        // TODO Auto-generated method stub
                         // 以值排序，即序号
                         return (o1.getValue() - o2.getValue());
                     }
@@ -107,14 +89,12 @@ public class SheetDb implements SheetDbInterface {
     @Override
     public List<Map<String, String>> getRow() throws FileNotFoundException,
             IOException {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<Map<String, String>> getRow(Integer row)
             throws FileNotFoundException, IOException {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -123,7 +103,6 @@ public class SheetDb implements SheetDbInterface {
      */
     @Override
     public Integer getRows() throws FileNotFoundException, IOException {
-        // TODO Auto-generated method stub
         return this.sheet.getLastRowNum();//获取最后一行的行标，比行数小1
     }
 
@@ -133,16 +112,12 @@ public class SheetDb implements SheetDbInterface {
      */
     @Override
     public Integer getColumn() throws FileNotFoundException, IOException {
-        // TODO Auto-generated method stub
         return this.getHeader().length;
     }
 
     /**
      * 以String的方式返回单元格的值
      *
-     * @param header
-     * @return
-     * @throws DatabaseException
      */
     public String getCell(String header) throws DatabaseException {
         return getCell(this.currentRow, header);
@@ -186,7 +161,6 @@ public class SheetDb implements SheetDbInterface {
      */
     @Override
     public Object getCellWithType(int rowNum, String header) throws FileNotFoundException, IOException {
-        // TODO Auto-generated method stub
         Map<String, Integer> headerMap = getHeaderMap(this.sheet);
         int cellNum = headerMap.get(header);
 		/*获取指定的行
@@ -221,8 +195,6 @@ public class SheetDb implements SheetDbInterface {
     /**
      * 得到Map<单元格值，单元格序号>
      *
-     * @param sheet
-     * @return
      */
     private Map<String, Integer> getHeaderMap(HSSFSheet sheet) {
         //获得首行，即标题行
@@ -245,9 +217,8 @@ public class SheetDb implements SheetDbInterface {
     }
 
     public void print() throws FileNotFoundException, IOException {
-        // TODO Auto-generated method stub
-        System.out.println("cols**********" + this.getColumn());
-        System.out.println("������============" + this.getRows());
+        LOGGER.info("cols**********" + this.getColumn());
+        LOGGER.info("rows============" + this.getRows());
         String[] arr = this.getHeader();
         for (int i = 0; i < this.getHeader().length; i++) {
             System.out.println(arr[i]);

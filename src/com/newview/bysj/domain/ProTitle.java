@@ -1,19 +1,12 @@
 package com.newview.bysj.domain;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 职称
@@ -46,7 +39,6 @@ public class ProTitle implements Serializable {
      *
      * @generated
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "proTitle")
     private List<Tutor> tutor;
 
@@ -82,6 +74,7 @@ public class ProTitle implements Serializable {
         this.no = no;
     }
 
+    @JsonIgnore
     public List<Tutor> getTutor() {
         return tutor;
     }
