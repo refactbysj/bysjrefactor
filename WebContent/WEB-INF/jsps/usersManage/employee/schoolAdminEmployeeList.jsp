@@ -267,6 +267,17 @@
 
         }
 
+        function searchFun() {
+            $("#employeeGrid").datagrid('load', $.serializeObject($("#searchForm")));
+        }
+
+        function clearFun() {
+            $("#searchForm input").val('');
+            $("#schoolSelect").val(0);
+            $("#departmentSelect").empty();
+            $("#employeeGrid").datagrid('load', {});
+        }
+
     </script>
 
 </head>
@@ -302,68 +313,14 @@
                 </c:forEach>
             </select>
         </sec:authorize>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-clear'">清空</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchFun()">查询</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-clear'" onclick="clearFun()">清空</a>
 
     </form>
 
 </div>
 <div style="height: 100%;">
     <table id="employeeGrid" style="height: 100%;"></table>
-    <%--<table
-            class="table table-striped table-bordered table-hover datatable">
-        <thead>
-        <tr>
-            <th>职工</th>
-            <th>姓名</th>
-            <th>性別</th>
-            <th>职称</th>
-            <th>所属教研室</th>
-            <th>联系电话</th>
-            <th>学位</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:choose>
-            <c:when test="${not empty employeeList}">
-                <c:forEach items="${employeeList}" var="employee">
-                    <tr id="employeeRow${employee.id}">
-                        <td class="employeeNo${employee.id }">${employee.no }</td>
-                        <td class="employeeName${employee.id}">${employee.name }</td>
-                        <td class="employeeSex${employee.id}">${employee.sex }</td>
-                        <td class="employeeProTitle${employee.id }">${employee.proTitle.description }</td>
-                        <td class="employeeDepartment${employee.id}">${employee.department.description}</td>
-                        <td class="employeeMoblie${employee.id }">${employee.contact.moblie }</td>
-                        <td class="employeeDegree${employee.id}">${employee.degree.description}</td>
-                        <td>
-                                &lt;%&ndash;教研室主任没有修改和删除的权限&ndash;%&gt;
-                            <sec:authorize ifAnyGranted="ROLE_SCHOOL_ADMIN,ROLE_COLLEGE_ADMIN">
-                                <a class="btn btn-danger btn-xs"
-                                   onclick="deleteEmployee(${employee.id})">删除</a> <a
-                                    href="/bysj3/usersManage/${edit}/employeeEdit.html?employeeId=${employee.id}"
-                                    class="btn btn-warning btn-xs" type="button"
-                                    data-toggle="modal" data-target="#modifyTeacher"> <i
-                                    class="icon-edit"></i> 修改
-                            </a>
-                            </sec:authorize>
-                            <a class="btn btn-success btn-xs"
-                               onclick="resetPassword(${employee.id})"> <i
-                                    class="icon-lock"></i> 重置密码
-                            </a></td>
-                    </tr>
-                </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <div class="alert alert-warning alert-dismissable" role="alert">
-                    <button class="close" type="button" data-dismiss="alert">&times;</button>
-                    没有数据
-                </div>
-            </c:otherwise>
-        </c:choose>
-
-        </tbody>
-    </table>--%>
 </div>
 
 </body>
