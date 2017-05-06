@@ -1,18 +1,12 @@
 package com.newview.bysj.domain;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 学位
@@ -40,7 +34,6 @@ public class Degree implements Serializable {
      *
      * @generated
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "degree")
     private List<Tutor> tutor;
 
@@ -68,6 +61,7 @@ public class Degree implements Serializable {
         this.description = description;
     }
 
+    @JsonIgnore
     public List<Tutor> getTutor() {
         return tutor;
     }
