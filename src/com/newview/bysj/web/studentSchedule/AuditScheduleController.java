@@ -37,7 +37,7 @@ public class AuditScheduleController extends BaseController {
         Page<GraduateProject> graduateProject = graduateProjectService.getPageByMainTutorage(tutor, page, rows);
         pageInfo.setRows(graduateProject.getContent());
         pageInfo.setTotal((int)graduateProject.getTotalElements());
-        modelMap.put("actionUrl", httpServletRequest.getRequestURI());
+        //modelMap.put("actionUrl", httpServletRequest.getRequestURI());
         //CommonHelper.pagingHelp(modelMap, graduateProject, "graduateProjects", CommonHelper.getRequestUrl(httpServletRequest), graduateProject.getTotalElements());
         return pageInfo;
     }
