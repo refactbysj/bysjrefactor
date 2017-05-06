@@ -15,10 +15,8 @@ import java.time.Clock;
 @Aspect
 public class PerformanceMonitoring {
 
-    /**
-     * 用来在控制台打印消息
-     */
-    private final static Logger logger = Logger.getLogger(PerformanceMonitoring.class);
+
+    private static final Logger LOGGER = Logger.getLogger(PerformanceMonitoring.class);
 
     /**
      * 环绕通知，用来获取方法的执行时间
@@ -49,9 +47,7 @@ public class PerformanceMonitoring {
         if (method.getAnnotation(MethodDescription.class) != null) {
             methodDescription = "action： " + method.getAnnotation(MethodDescription.class).value() + "  ";
         }
-        if (logger.isDebugEnabled()) {
-            logger.error("Service performance--> use time：" + executeTime + "ms   method description:" + methodDescription + " method name:" + methodName);
-        }
+        System.out.println("Service performance--> use time：" + executeTime + "ms   method description:" + methodDescription + " method name:" + methodName);
         return obj;
     }
 }
