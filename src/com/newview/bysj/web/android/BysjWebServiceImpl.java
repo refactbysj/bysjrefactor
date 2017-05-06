@@ -62,6 +62,46 @@ public class BysjWebServiceImpl {
         //如果存在，并且密码输入正确，则返回对应的tutor
         if (user.getPassword().equals(CommonHelper.makeMD5(password))) {
             tutor = tutorService.findById(user.getActor().getId());
+            tutor.setUser(null);
+            if (tutor.getStudent() != null) {
+                for (Student student : tutor.getStudent()) {
+                    student.setUser(null);
+                }
+            }
+            return tutor;
+        }
+        //密码输入不正确，返回空的tutor
+        return tutor;
+    }
+
+    @MethodDescription("登录方法测试")
+    @RequestMapping(value = "/logintest.json")
+    @ResponseBody
+    public Tutor loginTest() {
+        User currentUser = new User();
+        currentUser.setUsername("020081");
+        currentUser.setPassword("020081");
+
+        //获取输入的用户名
+        String username = currentUser.getUsername();
+        //获取输入的密码
+        String password = currentUser.getPassword();
+        //创建一个空的tutor
+        Tutor tutor = new Employee();
+        //根据当前用户名获取对应的user
+        User user = userService.uniqueResult("username", username);
+        //如果不存在对应的user，则返回一个空的tutor
+        if (user == null)
+            return tutor;
+        //如果存在，并且密码输入正确，则返回对应的tutor
+        if (user.getPassword().equals(CommonHelper.makeMD5(password))) {
+            tutor = tutorService.findById(user.getActor().getId());
+            tutor.setUser(null);
+            if (tutor.getStudent() != null) {
+                for (Student student : tutor.getStudent()) {
+                    student.setUser(null);
+                }
+            }
             return tutor;
         }
         //密码输入不正确，返回空的tutor
@@ -77,7 +117,7 @@ public class BysjWebServiceImpl {
     @RequestMapping(value = "/getGraduateProjectByTutorId.json", method = RequestMethod.POST)
     @ResponseBody
     public List<GraduateProject> getGraduateProjectByTutorId(
-            @RequestHeader String id) {
+            @RequestBody String id) {
         //获取对应的tutor
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
         //根据当前tutor获取申报的课题
@@ -97,7 +137,7 @@ public class BysjWebServiceImpl {
      */
     @RequestMapping(value = "/mail.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<Mail> mailList(@RequestHeader String id) {
+    public List<Mail> mailList(@RequestBody String id) {
         //创建一个mail集合，用来存放已收到的邮件和已发送的邮件
         List<Mail> allMail = new ArrayList<>();
         List<Mail> receiveMail = new ArrayList<>();
@@ -133,7 +173,7 @@ public class BysjWebServiceImpl {
      */
     @RequestMapping(value = "/myStudent.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<Student> getStudentByTutor(@RequestHeader String id) {
+    public List<Student> getStudentByTutor(@RequestBody String id) {
         List<Student> studentList;
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
 
@@ -151,6 +191,9 @@ public class BysjWebServiceImpl {
             studentList.add(new Student());
             return studentList;
         }
+        for (Student stu : studentList) {
+            stu.setUser(null);
+        }
         //返回当前老师对应的学生
         return studentList;
     }
@@ -160,7 +203,7 @@ public class BysjWebServiceImpl {
      */
     @RequestMapping(value = "/getProjectAndReplyByTutor.json", method = RequestMethod.POST)
     @ResponseBody
-    public TutorVo getProjectAndReplyByTutor(@RequestHeader String id) {
+    public TutorVo getProjectAndReplyByTutor(@RequestBody String id) {
         TutorVo tutorVo = new TutorVo();
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
         if (tutor != null) {
@@ -190,7 +233,7 @@ public class BysjWebServiceImpl {
      */
     @RequestMapping(value = "/getReplyGroupByTutor.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<ReplyGroup> getReplyGroupByTutor(@RequestHeader String id) {
+    public List<ReplyGroup> getReplyGroupByTutor(@RequestBody String id) {
         //声明一个集合，用来存放答辩小组
         List<ReplyGroup> replyGroupList;
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
@@ -220,7 +263,7 @@ public class BysjWebServiceImpl {
      */
     @RequestMapping(value = "/getAllSchoolAndMyStudent.json", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, List<?>> getAllStudent(@RequestHeader String id) {
+    public Map<String, List<?>> getAllStudent(@RequestBody String id) {
         // 用于存放学院和我的学生
         Map<String, List<?>> map = new HashMap<>();
         Tutor tutor = tutorService.findById(Integer.parseInt(id));

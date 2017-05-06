@@ -1,7 +1,6 @@
 package com.newview.bysj.domain;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -74,7 +73,6 @@ public abstract class Actor implements Serializable {
      *
      * @generated
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "addressor", cascade = CascadeType.ALL)
     private List<Mail> mail;
     /**
@@ -83,7 +81,6 @@ public abstract class Actor implements Serializable {
      *
      * @generated
      */
-    @JsonIgnore
     @ManyToMany(mappedBy = "addresses", cascade = CascadeType.ALL)
     private List<Mail> receiveMail;
 
@@ -151,18 +148,15 @@ public abstract class Actor implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
-    @JsonBackReference
+    @JsonIgnore
     public List<Mail> getMail() {
         return mail;
     }
 
-    @JsonBackReference
     public void setMail(List<Mail> mail) {
         this.mail = mail;
     }
-
-    @JsonBackReference
+    @JsonIgnore
     public List<Mail> getReceiveMail() {
         return receiveMail;
     }
