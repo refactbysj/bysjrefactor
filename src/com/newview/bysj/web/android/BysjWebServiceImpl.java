@@ -121,7 +121,17 @@ public class BysjWebServiceImpl {
         //获取对应的tutor
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
         //根据当前tutor获取申报的课题
-        return graduateProjectService.getGraduateProjectByTutor(tutor);
+        List<GraduateProject> graduateProjects = graduateProjectService.getGraduateProjectByTutor(tutor);
+        if (graduateProjects != null && graduateProjects.size() > 0) {
+            for (GraduateProject graduateProject : graduateProjects) {
+                graduateProject.getProposer().setUser(null);
+                if (graduateProject.getReviewer() != null) {
+                    graduateProject.getReviewer().setUser(null);
+                }
+            }
+
+        }
+        return graduateProjects;
     }
 
 
@@ -209,6 +219,29 @@ public class BysjWebServiceImpl {
         if (tutor != null) {
             tutorVo.setProposerGraduateProject(tutor.getProposedGraduateProject());
             tutorVo.setReplyGroups(tutor.getReplyGroup());
+
+            //将user属性置为空
+            if (tutorVo.getReplyGroups()!=null&&tutorVo.getReplyGroups().size() > 0) {
+                for (ReplyGroup replyGroup : tutorVo.getReplyGroups()) {
+                    replyGroup.getLeader().setUser(null);
+                    replyGroup.getDepartment().setRemarkTemplate(null);
+                    if (replyGroup.getMembers() != null && replyGroup.getMembers().size() > 0) {
+                        for (Tutor tutor1 : replyGroup.getMembers()) {
+                            tutor1.setUser(null);
+                        }
+                    }
+
+                }
+            }
+            if (tutorVo.getProposerGraduateProject() != null && tutorVo.getProposerGraduateProject().size() > 0) {
+                for (GraduateProject graduateProject : tutorVo.getProposerGraduateProject()) {
+                    graduateProject.getProposer().setUser(null);
+                    if (graduateProject.getReviewer() != null) {
+                        graduateProject.getReviewer().setUser(null);
+                    }
+                }
+            }
+
         }
         return tutorVo;
     }
@@ -249,6 +282,17 @@ public class BysjWebServiceImpl {
             replyGroupList = new ArrayList<>();
             replyGroupList.add(new ReplyGroup());
             return replyGroupList;
+        }
+        //user属性置为空
+        for (ReplyGroup replyGroup : replyGroupList) {
+            replyGroup.getDepartment().setRemarkTemplate(null);
+            replyGroup.getLeader().setUser(null);
+            if (replyGroup.getMembers() != null && replyGroup.getMembers().size() > 0) {
+                for (Tutor tutor1 : replyGroup.getMembers()) {
+                    tutor1.setUser(null);
+                }
+            }
+
         }
         //返回该老师所在的答辩小组
         return replyGroupList;
