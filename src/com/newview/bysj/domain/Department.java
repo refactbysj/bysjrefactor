@@ -116,19 +116,15 @@ public class Department implements Serializable {
         this.description = description;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public School getSchool() {
         return school;
     }
 
-    @JsonBackReference
     public void setSchool(School school) {
         this.school = school;
     }
 
-    @JsonBackReference
-    @JsonIgnore
     public List<Major> getMajor() {
         return major;
     }

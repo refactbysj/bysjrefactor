@@ -18,7 +18,6 @@
                 }
                 var fileName = $("#updateFile").textbox('getText');
 				var extendName = fileName.substring(fileName.lastIndexOf('.')+1,fileName.length);
-                console.log(extendName);
 				if(extendName!='xls'&&extendName!='xlsx') {
 				    progressClose();
                     $.messager.alert('提示', '请选择Excel文件', 'warning');

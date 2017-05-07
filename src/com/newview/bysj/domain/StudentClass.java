@@ -1,7 +1,6 @@
 package com.newview.bysj.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -40,7 +39,6 @@ public class StudentClass implements Serializable {
      *
      * @generated
      */
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "major_id")
     private Major major;
@@ -81,17 +79,14 @@ public class StudentClass implements Serializable {
         this.description = description;
     }
 
-    @JsonBackReference
     public Major getMajor() {
         return major;
     }
 
-    @JsonBackReference
     public void setMajor(Major major) {
         this.major = major;
     }
 
-    @JsonBackReference
     @JsonIgnore
     public List<Student> getStudent() {
         return student;

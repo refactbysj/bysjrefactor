@@ -410,7 +410,7 @@ public class StudentService extends BasicService<Student, Integer> {
         }
         User user = student.getUser();
         for (UserRole userRole : user.getUserRole()) {
-            userRole.getRole().getUserRole().remove(userRole);
+            //userRole.getRole().getUserRole().remove(userRole);
             userRole.setRole(null);
             userRole.setUser(null);
             userRoleService.saveOrUpdate(userRole);
