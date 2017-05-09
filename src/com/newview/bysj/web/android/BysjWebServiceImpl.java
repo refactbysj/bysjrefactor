@@ -3,10 +3,12 @@ package com.newview.bysj.web.android;
 import com.newview.bysj.domain.*;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.myAnnotation.MethodDescription;
-import com.newview.bysj.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.newview.bysj.web.android.model.ProjectAndReplyGroup;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
 
@@ -17,24 +19,11 @@ import java.util.*;
  * @author zhan
  */
 @Controller
-public class BysjWebServiceImpl {
+public class BysjWebServiceImpl extends AndroidBase{
 
     //private static final Logger logger = Logger.getLogger(BysjWebServiceImpl.class);
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private TutorService tutorService;
-    @Autowired
-    private GraduateProjectService graduateProjectService;
-    @Autowired
-    private ActorService actorService;
-    @Autowired
-    private MailService mailService;
-    @Autowired
-    private ReplyGroupMemberScoreService replyGroupMemberScoreService;
-    @Autowired
-    private ReplyGroupService replyGroupService;
+
 
 
 
@@ -47,7 +36,8 @@ public class BysjWebServiceImpl {
     @MethodDescription("角色为tutor的用户登录")
     @RequestMapping(value = "/login.json", method = RequestMethod.POST)
     @ResponseBody
-    public Tutor login(@RequestBody User currentUser) {
+    public com.newview.bysj.web.android.model.Tutor login(@RequestBody User currentUser) {
+        com.newview.bysj.web.android.model.Tutor androidTutor = new com.newview.bysj.web.android.model.Tutor();
         //获取输入的用户名
         String username = currentUser.getUsername();
         //获取输入的密码
@@ -58,55 +48,17 @@ public class BysjWebServiceImpl {
         User user = userService.uniqueResult("username", username);
         //如果不存在对应的user，则返回一个空的tutor
         if (user == null)
-            return tutor;
+            return androidTutor;
         //如果存在，并且密码输入正确，则返回对应的tutor
         if (user.getPassword().equals(CommonHelper.makeMD5(password))) {
             tutor = tutorService.findById(user.getActor().getId());
-            tutor.setUser(null);
-            if (tutor.getStudent() != null) {
-                for (Student student : tutor.getStudent()) {
-                    student.setUser(null);
-                }
-            }
-            return tutor;
+
+            return this.getAndroidTutorByTutor(tutor);
         }
         //密码输入不正确，返回空的tutor
-        return tutor;
+        return androidTutor;
     }
 
-    @MethodDescription("登录方法测试")
-    @RequestMapping(value = "/logintest.json")
-    @ResponseBody
-    public Tutor loginTest() {
-        User currentUser = new User();
-        currentUser.setUsername("020081");
-        currentUser.setPassword("020081");
-
-        //获取输入的用户名
-        String username = currentUser.getUsername();
-        //获取输入的密码
-        String password = currentUser.getPassword();
-        //创建一个空的tutor
-        Tutor tutor = new Employee();
-        //根据当前用户名获取对应的user
-        User user = userService.uniqueResult("username", username);
-        //如果不存在对应的user，则返回一个空的tutor
-        if (user == null)
-            return tutor;
-        //如果存在，并且密码输入正确，则返回对应的tutor
-        if (user.getPassword().equals(CommonHelper.makeMD5(password))) {
-            tutor = tutorService.findById(user.getActor().getId());
-            tutor.setUser(null);
-            if (tutor.getStudent() != null) {
-                for (Student student : tutor.getStudent()) {
-                    student.setUser(null);
-                }
-            }
-            return tutor;
-        }
-        //密码输入不正确，返回空的tutor
-        return tutor;
-    }
 
     /**
      * 获取当前我申报的课题
@@ -116,22 +68,19 @@ public class BysjWebServiceImpl {
      */
     @RequestMapping(value = "/getGraduateProjectByTutorId.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<GraduateProject> getGraduateProjectByTutorId(
+    public List<com.newview.bysj.web.android.model.GraduateProject> getGraduateProjectByTutorId(
             @RequestBody String id) {
+        List<com.newview.bysj.web.android.model.GraduateProject> graduateProjectList = new ArrayList<>();
         //获取对应的tutor
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
         //根据当前tutor获取申报的课题
         List<GraduateProject> graduateProjects = graduateProjectService.getGraduateProjectByTutor(tutor);
-        if (graduateProjects != null && graduateProjects.size() > 0) {
+        if (graduateProjects != null) {
             for (GraduateProject graduateProject : graduateProjects) {
-                graduateProject.getProposer().setUser(null);
-                if (graduateProject.getReviewer() != null) {
-                    graduateProject.getReviewer().setUser(null);
-                }
+                graduateProjectList.add(this.getAndroidGraduateProjectByGraduateProject(graduateProject));
             }
-
         }
-        return graduateProjects;
+        return graduateProjectList;
     }
 
 
@@ -183,29 +132,20 @@ public class BysjWebServiceImpl {
      */
     @RequestMapping(value = "/myStudent.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<Student> getStudentByTutor(@RequestBody String id) {
-        List<Student> studentList;
+    public List<com.newview.bysj.web.android.model.Student> getStudentByTutor(@RequestBody String id) {
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
-
-
-        //如果当前tutor为空，则返回一个空的学生集合，这样做是为了方便android端的解析工作
-        if (tutor == null) {
-            studentList = new ArrayList<>();
-            studentList.add(new Student());
-            return studentList;
-        }
+        List<com.newview.bysj.web.android.model.Student> students = new ArrayList<>();
         //获取当前老师的学生，如果没有给老师分配学生，则返回空的学生集合
-        studentList = tutor.getStudent();
-        if (studentList == null) {
-            studentList = new ArrayList<>();
-            studentList.add(new Student());
-            return studentList;
+        //如果当前tutor为空，则返回一个空的学生集合，这样做是为了方便android端的解析工作
+        if (tutor == null||tutor.getStudent() == null) {
+            students.add(new com.newview.bysj.web.android.model.Student());
+            return students;
         }
-        for (Student stu : studentList) {
-            stu.setUser(null);
+        for (Student student : tutor.getStudent()) {
+            students.add(this.getAndroidStudentByStudent(student));
         }
         //返回当前老师对应的学生
-        return studentList;
+        return students;
     }
 
     /**
@@ -213,50 +153,30 @@ public class BysjWebServiceImpl {
      */
     @RequestMapping(value = "/getProjectAndReplyByTutor.json", method = RequestMethod.POST)
     @ResponseBody
-    public TutorVo getProjectAndReplyByTutor(@RequestBody String id) {
-        TutorVo tutorVo = new TutorVo();
+    public ProjectAndReplyGroup getProjectAndReplyByTutor(@RequestBody String id) {
+        ProjectAndReplyGroup projectAndReplyGroup = new ProjectAndReplyGroup();
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
         if (tutor != null) {
-            tutorVo.setProposerGraduateProject(tutor.getProposedGraduateProject());
-            tutorVo.setReplyGroups(tutor.getReplyGroup());
-
-            //将user属性置为空
-            if (tutorVo.getReplyGroups()!=null&&tutorVo.getReplyGroups().size() > 0) {
-                for (ReplyGroup replyGroup : tutorVo.getReplyGroups()) {
-                    replyGroup.getLeader().setUser(null);
-                    replyGroup.getDepartment().setRemarkTemplate(null);
-                    if (replyGroup.getMembers() != null && replyGroup.getMembers().size() > 0) {
-                        for (Tutor tutor1 : replyGroup.getMembers()) {
-                            tutor1.setUser(null);
-                        }
-                    }
-
+            List<GraduateProject> graduateProjects = tutor.getProposedGraduateProject();
+            List<ReplyGroup> replyGroups = tutor.getReplyGroup();
+            List<com.newview.bysj.web.android.model.GraduateProject> graduateProjects1 = new ArrayList<>();
+            List<com.newview.bysj.web.android.model.ReplyGroup> replyGroups1 = new ArrayList<>();
+            if (graduateProjects != null) {
+                for (GraduateProject graduateProject : graduateProjects) {
+                    graduateProjects1.add(this.getAndroidGraduateProjectByGraduateProject(graduateProject));
                 }
             }
-            if (tutorVo.getProposerGraduateProject() != null && tutorVo.getProposerGraduateProject().size() > 0) {
-                for (GraduateProject graduateProject : tutorVo.getProposerGraduateProject()) {
-                    graduateProject.getProposer().setUser(null);
-                    if (graduateProject.getReviewer() != null) {
-                        graduateProject.getReviewer().setUser(null);
-                    }
+            if (replyGroups != null) {
+                for (ReplyGroup replyGroup : replyGroups) {
+                    replyGroups1.add(this.getAndroidReplyGroupByReplyGroup(replyGroup));
                 }
             }
-
+            projectAndReplyGroup.setGraduateProjectList(graduateProjects1);
+            projectAndReplyGroup.setReplyGroups(replyGroups1);
         }
-        return tutorVo;
+        return projectAndReplyGroup;
     }
 
-    @RequestMapping(value = "/getProjectAndReplyByTutorTest.json", method = RequestMethod.GET)
-    @ResponseBody
-    public TutorVo getProjectAndReplyByTutorTest(String id) {
-        TutorVo tutorVo = new TutorVo();
-        Tutor tutor = tutorService.findById(Integer.parseInt(id));
-        if (tutor != null) {
-            tutorVo.setProposerGraduateProject(tutor.getProposedGraduateProject());
-            tutorVo.setReplyGroups(tutor.getReplyGroup());
-        }
-        return tutorVo;
-    }
 
     /**
      * 获取当前tutor所在的答辩小组
@@ -266,37 +186,22 @@ public class BysjWebServiceImpl {
      */
     @RequestMapping(value = "/getReplyGroupByTutor.json", method = RequestMethod.POST)
     @ResponseBody
-    public List<ReplyGroup> getReplyGroupByTutor(@RequestBody String id) {
-        //声明一个集合，用来存放答辩小组
-        List<ReplyGroup> replyGroupList;
+    public List<com.newview.bysj.web.android.model.ReplyGroup> getReplyGroupByTutor(@RequestBody String id) {
+        List<com.newview.bysj.web.android.model.ReplyGroup> replyGroups = new ArrayList<>();
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
-        //如果当前tutor为空，则返回一个空的答辩小组集合，方便android端的解析
-        if (tutor == null) {
-            replyGroupList = new ArrayList<>();
-            replyGroupList.add(new ReplyGroup());
-            return replyGroupList;
-        }
-        replyGroupList = tutor.getReplyGroup();
         //获取该老师所在的答辩小组，如果没有给老师分配答辩小组，则返回一个空的答辩小组集合，方便android端的解析
-        if (replyGroupList == null) {
-            replyGroupList = new ArrayList<>();
-            replyGroupList.add(new ReplyGroup());
-            return replyGroupList;
+        //如果当前tutor为空，则返回一个空的答辩小组集合，方便android端的解析
+        if (tutor == null||tutor.getReplyGroup()==null) {
+            replyGroups.add(new com.newview.bysj.web.android.model.ReplyGroup());
+            return replyGroups;
         }
-        //user属性置为空
-        for (ReplyGroup replyGroup : replyGroupList) {
-            replyGroup.getDepartment().setRemarkTemplate(null);
-            replyGroup.getLeader().setUser(null);
-            if (replyGroup.getMembers() != null && replyGroup.getMembers().size() > 0) {
-                for (Tutor tutor1 : replyGroup.getMembers()) {
-                    tutor1.setUser(null);
-                }
-            }
-
+        for (ReplyGroup replyGroup : tutor.getReplyGroup()) {
+            replyGroups.add(this.getAndroidReplyGroupByReplyGroup(replyGroup));
         }
         //返回该老师所在的答辩小组
-        return replyGroupList;
+        return replyGroups;
     }
+
 
 
     /**
@@ -319,10 +224,22 @@ public class BysjWebServiceImpl {
         List<Tutor> tutorList = tutor.getDepartment().getTutor();
         //获取当前老师的学生
         List<Student> studentList = tutor.getStudent();
+        List<com.newview.bysj.web.android.model.Student> students = new ArrayList<>();
+        List<com.newview.bysj.web.android.model.Tutor> tutors = new ArrayList<>();
+        if (tutorList != null) {
+            for (Tutor tutor1 : tutorList) {
+                tutors.add(this.getAndroidTutorByTutor(tutor1));
+            }
+        }
+        if (studentList != null) {
+            for (Student student : studentList) {
+                students.add(this.getAndroidStudentByStudent(student));
+            }
+        }
         // 将老师添加到map集合中
-        map.put("allTutorInDepartment", tutorList);
+        map.put("allTutorInDepartment", tutors);
         // 将我的学生添加到map集合中
-        map.put("myStudent", studentList);
+        map.put("myStudent", students);
         return map;
     }
 
