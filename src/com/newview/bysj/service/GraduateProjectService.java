@@ -768,7 +768,7 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
     }
 
     @MethodDescription("获取校优候选人")
-    public Page<GraduateProject> getPagesForSchoolExcellenceCandidate(School school, String title, String tutorName, Integer pageNo, Integer pageSize) {
+    public Page<GraduateProject> getPagesForSchoolExcellenceCandidate(School school,  Integer pageNo, Integer pageSize,String title,String tutorName) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
         pageSize = CommonHelper.getPageSize(pageSize);
         Page<GraduateProject> result = graduateProjectDao.findAll(new Specification<GraduateProject>() {
@@ -776,14 +776,14 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
             public Predicate toPredicate(Root<GraduateProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 // TODO Auto-generated method stub
                 List<Predicate> predicates = new ArrayList<Predicate>();
-                predicates.add(cb.equal(root.get("major").get("department").get("school").as(School.class), school));
-                predicates.add(cb.equal(root.get("recommended").as(Boolean.class), true));
                 if (title != null) {
                     predicates.add(cb.like(root.get("title").as(String.class), "%" + title + "%"));
                 }
                 if (tutorName != null) {
                     predicates.add(cb.like(root.get("proposer").get("name").as(String.class), "%" + tutorName + "%"));
                 }
+                predicates.add(cb.equal(root.get("major").get("department").get("school").as(School.class), school));
+                predicates.add(cb.equal(root.get("recommended").as(Boolean.class), true));
                 predicates.add(cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear()));
                 Predicate[] p = new Predicate[predicates.size()];
                 return cb.and(predicates.toArray(p));
@@ -791,6 +791,7 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
         }, new PageRequest(pageNo, pageSize, new Sort(Direction.DESC, "id")));
         return result;
     }
+
 
     @MethodDescription("获取省优候选人")
     public Page<GraduateProject> getPagesForProvinceExcellentCandidate(String title, String tutorName, Integer pageNo, Integer pageSize) {

@@ -3,7 +3,7 @@
 <head>
 
     <%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
-    <c:url value="/WEB-INF/jsps/projectDetails/detailForProject.jsp" var="toDetail"></c:url>
+    <%--<c:url value="/WEB-INF/jsps/projectDetails/detailForProject.jsp" var="toDetail"></c:url>--%>
     <script type="text/javascript">
         var scheduleGraduateProjectListGrid, sum=new Array();
         function openWindow(id) {
@@ -12,7 +12,6 @@
                 width : '70%',
                 height : '70%',
                 closed : false,
-                cache : false,
                 modal : true,
             });
 
@@ -260,7 +259,6 @@
                         width:'7%',
                         field: 'detail',
                         formatter: function (value, row, index) {
-                            //href=${basePath}process/showDetail.html?graduateProjectId="+row.id+ "
                             var url= "<a onclick='openWindow("+row.id+")'><button>显示详情</button></a>"
 
                             return url;
