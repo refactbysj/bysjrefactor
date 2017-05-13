@@ -76,6 +76,7 @@ public class AndroidBase {
         student1.setName(student.getName());
         student1.setNo(student.getNo());
         student1.setContact(student.getContact());
+        student1.setTutorId(student.getTutor().getId().longValue());
         student1.setMajor(this.getAndroidMajorByMajor(student.getStudentClass().getMajor()));
         student1.setStudentClass(this.getAndroidStudentClassByStudentClass(student.getStudentClass()));
         return student1;
@@ -98,10 +99,10 @@ public class AndroidBase {
         graduateProject1.setReference(graduateProject.getReference());
         graduateProject1.setMajor(graduateProject.getMajor()!=null?graduateProject.getMajor().getDescription():null);
         CommentByGroup commentByGroup = graduateProject.getCommentByGroup();
-        graduateProject1.setCompletenessScoreByGroup(commentByGroup != null ? commentByGroup.getCompletenessScore() : null);
-        graduateProject1.setCorrectnessScoreByGroup(commentByGroup != null ? commentByGroup.getCorrectnessSocre() : null);
-        graduateProject1.setQualityScoreBtGroup(commentByGroup != null ? commentByGroup.getQualityScore(): null);
-        graduateProject1.setReplyScoreByGroup(commentByGroup != null ? commentByGroup.getReplyScore() : null);
+        graduateProject1.setCompletenessScoreByGroup(commentByGroup != null ? commentByGroup.getCompletenessScore().intValue() : null);
+        graduateProject1.setCorrectnessScoreByGroup(commentByGroup != null ? commentByGroup.getCorrectnessSocre().intValue() : null);
+        graduateProject1.setQualityScoreBtGroup(commentByGroup != null ? commentByGroup.getQualityScore().intValue(): null);
+        graduateProject1.setReplyScoreByGroup(commentByGroup != null ? commentByGroup.getReplyScore().intValue() : null);
         graduateProject1.setStudent_name(graduateProject.getStudent() != null ? this.getAndroidStudentByStudent(graduateProject.getStudent()) : null);
         graduateProject1.setAuditByDirector(graduateProject.getAuditByDirector() != null ? graduateProject.getAuditByDirector().getApprove() : null);
         return graduateProject1;

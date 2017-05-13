@@ -74,7 +74,7 @@ public class BysjWebServiceImpl extends AndroidBase{
         //获取对应的tutor
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
         //根据当前tutor获取申报的课题
-        List<GraduateProject> graduateProjects = graduateProjectService.getGraduateProjectByTutor(tutor);
+        List<GraduateProject> graduateProjects = graduateProjectService.getCurrentYearGraduateProjectByTutor(tutor);
         if (graduateProjects != null) {
             for (GraduateProject graduateProject : graduateProjects) {
                 graduateProjectList.add(this.getAndroidGraduateProjectByGraduateProject(graduateProject));

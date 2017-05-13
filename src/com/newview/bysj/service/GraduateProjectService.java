@@ -349,6 +349,22 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
         return result;
     }
 
+    @MethodDescription("获取当前年份当前用户所申报的所有课题")
+    public List<GraduateProject> getCurrentYearGraduateProjectByTutor(Tutor tutor) {
+        List<GraduateProject> graduateProjectList = graduateProjectDao.findAll(new Specification<GraduateProject>() {
+            @Override
+            public Predicate toPredicate(Root<GraduateProject> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new ArrayList<>();
+                predicates.add(criteriaBuilder.equal(root.get("proposer").as(Tutor.class), tutor));
+                predicates.add(criteriaBuilder.equal(root.get("year").as(Integer.class), CommonHelper.getYear()));
+                Predicate[] p = new Predicate[predicates.size()];
+                criteriaQuery.where(criteriaBuilder.and(predicates.toArray(p)));
+                return criteriaQuery.getRestriction();
+            }
+        });
+        return graduateProjectList;
+    }
+
     @MethodDescription("获取当前用户所申报的所有课题")
     public List<GraduateProject> getGraduateProjectByTutor(Tutor tutor) {
         List<GraduateProject> graduateProjectList = graduateProjectDao.findAll(new Specification<GraduateProject>() {
