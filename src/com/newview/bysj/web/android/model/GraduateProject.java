@@ -18,10 +18,10 @@ public class GraduateProject {
     private String basicSkill;            //基本技能
     private String reference;            //参考文献
     private String major;                 //所在专业
-    private Double completenessScoreByGroup;      //完成任务规定的要求与水平评分
-    private Double correctnessScoreByGroup;       //回答问题的正确性评分
-    private Double qualityScoreBtGroup;           //论文与实务的质量评分
-    private Double replyScoreByGroup;             //论文内容的答辩陈述评分
+    private Integer completenessScoreByGroup;      //完成任务规定的要求与水平评分
+    private Integer correctnessScoreByGroup;       //回答问题的正确性评分
+    private Integer qualityScoreBtGroup;           //论文与实务的质量评分
+    private Integer replyScoreByGroup;             //论文内容的答辩陈述评分
     private Student student_name;      //选该题目学生
     private Boolean isAuditByDirector;
 
@@ -132,35 +132,35 @@ public class GraduateProject {
         this.major = major;
     }
 
-    public Double getCompletenessScoreByGroup() {
+    public Integer getCompletenessScoreByGroup() {
         return completenessScoreByGroup;
     }
 
-    public void setCompletenessScoreByGroup(Double completenessScoreByGroup) {
+    public void setCompletenessScoreByGroup(Integer completenessScoreByGroup) {
         this.completenessScoreByGroup = completenessScoreByGroup;
     }
 
-    public Double getCorrectnessScoreByGroup() {
+    public Integer getCorrectnessScoreByGroup() {
         return correctnessScoreByGroup;
     }
 
-    public void setCorrectnessScoreByGroup(Double correctnessScoreByGroup) {
+    public void setCorrectnessScoreByGroup(Integer correctnessScoreByGroup) {
         this.correctnessScoreByGroup = correctnessScoreByGroup;
     }
 
-    public Double getQualityScoreBtGroup() {
+    public Integer getQualityScoreBtGroup() {
         return qualityScoreBtGroup;
     }
 
-    public void setQualityScoreBtGroup(Double qualityScoreBtGroup) {
+    public void setQualityScoreBtGroup(Integer qualityScoreBtGroup) {
         this.qualityScoreBtGroup = qualityScoreBtGroup;
     }
 
-    public Double getReplyScoreByGroup() {
+    public Integer getReplyScoreByGroup() {
         return replyScoreByGroup;
     }
 
-    public void setReplyScoreByGroup(Double replyScoreByGroup) {
+    public void setReplyScoreByGroup(Integer replyScoreByGroup) {
         this.replyScoreByGroup = replyScoreByGroup;
     }
 

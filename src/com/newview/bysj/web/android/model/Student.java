@@ -13,7 +13,7 @@ public class Student {
     private Contact contact;
     private Major major;
     private StudentClass studentClass;
-
+    private Long tutorId;
     public Student() {
     }
 
@@ -72,5 +72,13 @@ public class Student {
 
     public void setStudentClass(StudentClass studentClass) {
         this.studentClass = studentClass;
+    }
+
+    public Long getTutorId() {
+        return tutorId;
+    }
+
+    public void setTutorId(Long tutorId) {
+        this.tutorId = tutorId;
     }
 }
