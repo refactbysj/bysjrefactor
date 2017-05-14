@@ -2,6 +2,8 @@ package com.newview.bysj.web.android;
 
 import com.newview.bysj.domain.*;
 import com.newview.bysj.service.*;
+import com.newview.bysj.web.android.model.Addressee;
+import com.newview.bysj.web.android.model.Notice;
 import com.sun.istack.internal.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,22 +25,22 @@ public class AndroidBase {
     @Autowired
     protected GraduateProjectService graduateProjectService;
     @Autowired
-    protected ActorService actorService;
+    ActorService actorService;
     @Autowired
-    protected MailService mailService;
+    MailService mailService;
     @Autowired
-    protected ReplyGroupMemberScoreService replyGroupMemberScoreService;
+    ReplyGroupMemberScoreService replyGroupMemberScoreService;
     @Autowired
-    protected ReplyGroupService replyGroupService;
+    ReplyGroupService replyGroupService;
 
-    protected com.newview.bysj.web.android.model.Department getAndroidDepartmentByDepartment(Department department) {
+    private com.newview.bysj.web.android.model.Department getAndroidDepartmentByDepartment(Department department) {
         com.newview.bysj.web.android.model.Department department1 = new com.newview.bysj.web.android.model.Department();
         department1.setDescription(department.getDescription());
         department1.setId(department.getId());
         return department1;
     }
 
-    protected com.newview.bysj.web.android.model.Tutor getAndroidTutorByTutor(Tutor tutor) {
+    com.newview.bysj.web.android.model.Tutor getAndroidTutorByTutor(Tutor tutor) {
         com.newview.bysj.web.android.model.Tutor tutor1 = new com.newview.bysj.web.android.model.Tutor();
         tutor1.setId(tutor.getId());
         tutor1.setName(tutor.getName());
@@ -56,21 +58,21 @@ public class AndroidBase {
         return tutor1;
     }
 
-    protected com.newview.bysj.web.android.model.Major getAndroidMajorByMajor(com.newview.bysj.domain.Major major) {
+    private com.newview.bysj.web.android.model.Major getAndroidMajorByMajor(com.newview.bysj.domain.Major major) {
         com.newview.bysj.web.android.model.Major major1 = new com.newview.bysj.web.android.model.Major();
         major1.setId(major.getId());
         major1.setDescription(major.getDescription());
         return major1;
     }
 
-    protected com.newview.bysj.web.android.model.StudentClass getAndroidStudentClassByStudentClass(com.newview.bysj.domain.StudentClass studentClass) {
+    private com.newview.bysj.web.android.model.StudentClass getAndroidStudentClassByStudentClass(com.newview.bysj.domain.StudentClass studentClass) {
         com.newview.bysj.web.android.model.StudentClass studentClass1 = new com.newview.bysj.web.android.model.StudentClass();
         studentClass1.setId(studentClass.getId());
         studentClass1.setDescription(studentClass.getDescription());
         return studentClass1;
     }
 
-    protected com.newview.bysj.web.android.model.Student getAndroidStudentByStudent(Student student) {
+    com.newview.bysj.web.android.model.Student getAndroidStudentByStudent(Student student) {
         com.newview.bysj.web.android.model.Student student1 = new com.newview.bysj.web.android.model.Student();
         student1.setId(student.getId());
         student1.setName(student.getName());
@@ -105,10 +107,11 @@ public class AndroidBase {
         graduateProject1.setReplyScoreByGroup(commentByGroup != null ? commentByGroup.getReplyScore().intValue() : null);
         graduateProject1.setStudent_name(graduateProject.getStudent() != null ? this.getAndroidStudentByStudent(graduateProject.getStudent()) : null);
         graduateProject1.setAuditByDirector(graduateProject.getAuditByDirector() != null ? graduateProject.getAuditByDirector().getApprove() : null);
+        graduateProject1.setTutorId(graduateProject.getProposer().getId().longValue());
         return graduateProject1;
     }
 
-    protected com.newview.bysj.web.android.model.ReplyGroup getAndroidReplyGroupByReplyGroup(ReplyGroup replyGroup) {
+    com.newview.bysj.web.android.model.ReplyGroup getAndroidReplyGroupByReplyGroup(ReplyGroup replyGroup) {
         com.newview.bysj.web.android.model.ReplyGroup replyGroup1 = new com.newview.bysj.web.android.model.ReplyGroup();
         replyGroup1.setId((long) replyGroup.getId());
         replyGroup1.setDescription(replyGroup.getDescription());
@@ -123,16 +126,58 @@ public class AndroidBase {
                 graduateProjects1.add(this.getAndroidGraduateProjectByGraduateProject(graduateProject));
             }
         }
+        List<com.newview.bysj.web.android.model.Tutor> tutors = new ArrayList<>();
+        if (replyGroup.getMembers() != null) {
+            for (Tutor tutor : replyGroup.getMembers()) {
+                tutors.add(this.getAndroidTutorByTutor(tutor));
+            }
+        }
+        replyGroup1.setTutorId(tutors);
         replyGroup1.setGraduateProjects(graduateProjects1);
         return replyGroup1;
     }
 
-    protected com.newview.bysj.web.android.model.ReplyTime getAndroidReplyTimeByReplyTime(com.newview.bysj.domain.ReplyTime replyTime) {
+    private com.newview.bysj.web.android.model.ReplyTime getAndroidReplyTimeByReplyTime(com.newview.bysj.domain.ReplyTime replyTime) {
         com.newview.bysj.web.android.model.ReplyTime replyTime1 = new com.newview.bysj.web.android.model.ReplyTime();
         replyTime1.setBeginTime(replyTime.getBeginTime().getTimeInMillis());
         replyTime1.setEndTime(replyTime.getEndTime().getTimeInMillis());
         return replyTime1;
     }
 
+
+    protected Notice getNoticeByMail(Mail mail) {
+        Notice notice = new Notice();
+        notice.setId(mail.getId().longValue());
+        notice.setTitle(mail.getTitle());
+        notice.setContent(mail.getContent());
+        notice.setAddressTime(mail.getAddressTime().getTimeInMillis());
+        notice.setAddressor_id(mail.getAddressor().getId());
+        notice.setAddressor_name(mail.getAddressor().getName());
+        List<Addressee> addressees = new ArrayList<>();
+        if (mail.getAddresses() != null) {
+            for (Actor actor : mail.getAddresses()) {
+                addressees.add(this.getAddresseeByAddressee(actor,mail.getId().longValue()));
+            }
+            notice.setAddressee_name(addressees);
+        }
+        return notice;
+    }
+
+    protected Addressee getAddresseeByAddressee(Actor actor,Long noticeId) {
+        Addressee addressee = new Addressee();
+        addressee.setId(actor.getId().longValue());
+        if (noticeId != null) {
+            addressee.setNoticeId(noticeId);
+        }
+        addressee.setAddressee_name(actor.getName());
+        return addressee;
+    }
+
+    protected Addressee getAddresseeByStudent(Student student) {
+        Addressee addressee = new Addressee();
+        addressee.setId(student.getId().longValue());
+        addressee.setAddressee_name(student.getName());
+        return addressee;
+    }
 
 }

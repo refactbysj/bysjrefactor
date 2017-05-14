@@ -24,6 +24,7 @@ public class GraduateProject {
     private Integer replyScoreByGroup;             //论文内容的答辩陈述评分
     private Student student_name;      //选该题目学生
     private Boolean isAuditByDirector;
+    private Long tutorId;
 
     public GraduateProject() {
     }
@@ -179,5 +180,13 @@ public class GraduateProject {
 
     public void setAuditByDirector(Boolean auditByDirector) {
         isAuditByDirector = auditByDirector;
+    }
+
+    public Long getTutorId() {
+        return tutorId;
+    }
+
+    public void setTutorId(Long tutorId) {
+        this.tutorId = tutorId;
     }
 }

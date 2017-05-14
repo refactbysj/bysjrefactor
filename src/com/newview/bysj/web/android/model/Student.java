@@ -13,7 +13,7 @@ public class Student {
     private Contact contact;
     private Major major;
     private StudentClass studentClass;
-    private Long tutorId;
+    private long tutorId;
     public Student() {
     }
 

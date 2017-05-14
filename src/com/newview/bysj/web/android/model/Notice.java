@@ -1,5 +1,7 @@
 package com.newview.bysj.web.android.model;
 
+import java.util.List;
+
 /**
  * @author zhan
  *         Created on 2017/05/08  23:18
@@ -8,10 +10,10 @@ public class Notice {
     private Long id;
     private String title;             //通知的题目
     private String content;        //通知的内容
-    private String noticeDate;        //通知的时
+    private long addressTime;        //通知的时
     private Integer addressor_id;   //发送通知者的id
     private String addressor_name; //发送通知者的姓名
-
+    private List<Addressee> addressee_name;
     public Notice() {
     }
 
@@ -39,13 +41,6 @@ public class Notice {
         this.content = content;
     }
 
-    public String getNoticeDate() {
-        return noticeDate;
-    }
-
-    public void setNoticeDate(String noticeDate) {
-        this.noticeDate = noticeDate;
-    }
 
     public Integer getAddressor_id() {
         return addressor_id;
@@ -61,5 +56,21 @@ public class Notice {
 
     public void setAddressor_name(String addressor_name) {
         this.addressor_name = addressor_name;
+    }
+
+    public long getAddressTime() {
+        return addressTime;
+    }
+
+    public void setAddressTime(long addressTime) {
+        this.addressTime = addressTime;
+    }
+
+    public List<Addressee> getAddressee_name() {
+        return addressee_name;
+    }
+
+    public void setAddressee_name(List<Addressee> addressee_name) {
+        this.addressee_name = addressee_name;
     }
 }

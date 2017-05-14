@@ -1,4 +1,4 @@
-package com.newview.bysj.web.android;
+package com.newview.bysj.web.android.model;
 
 /**
  * 每个答辩成员对课题的打分
