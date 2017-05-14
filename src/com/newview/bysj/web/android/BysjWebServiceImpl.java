@@ -341,9 +341,9 @@ public class BysjWebServiceImpl extends AndroidBase {
             Tutor tutor = tutorService.findById(notice.getAddressor_id());
             // 通过set集合来去重
             Set<Actor> actorSet = new HashSet<>();
-            String[] tutorStrs = new String[notice.getAddressee_name().size()];
-            for (int i = 0; i < notice.getAddressee_name().size(); i++) {
-                tutorStrs[i] = notice.getAddressee_name().get(i).getId().toString();
+            String[] tutorStrs = new String[notice.getAddressees().size()];
+            for (int i = 0; i < notice.getAddressees().size(); i++) {
+                tutorStrs[i] = notice.getAddressees().get(i).getId().toString();
             }
             for (String tutorStrId : tutorStrs) {
                 actorSet.add(actorService.findById(Integer.parseInt(tutorStrId)));

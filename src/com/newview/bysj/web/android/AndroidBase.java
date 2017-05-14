@@ -158,7 +158,7 @@ public class AndroidBase {
             for (Actor actor : mail.getAddresses()) {
                 addressees.add(this.getAddresseeByAddressee(actor,mail.getId().longValue()));
             }
-            notice.setAddressee_name(addressees);
+            notice.setAddressees(addressees);
         }
         return notice;
     }
@@ -169,14 +169,14 @@ public class AndroidBase {
         if (noticeId != null) {
             addressee.setNoticeId(noticeId);
         }
-        addressee.setAddressee_name(actor.getName());
+        addressee.setName(actor.getName());
         return addressee;
     }
 
     protected Addressee getAddresseeByStudent(Student student) {
         Addressee addressee = new Addressee();
         addressee.setId(student.getId().longValue());
-        addressee.setAddressee_name(student.getName());
+        addressee.setName(student.getName());
         return addressee;
     }
 

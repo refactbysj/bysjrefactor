@@ -7,7 +7,7 @@ package com.newview.bysj.web.android.model;
 public class Addressee {
     private Long id;
     private long noticeId;
-    private String addressee_name;
+    private String name;
 
     public Long getId() {
         return id;
@@ -24,11 +24,11 @@ public class Addressee {
         this.noticeId = noticeId;
     }
 
-    public String getAddressee_name() {
-        return addressee_name;
+    public String getName() {
+        return name;
     }
 
-    public void setAddressee_name(String addressee_name) {
-        this.addressee_name = addressee_name;
+    public void setName(String name) {
+        this.name = name;
     }
 }

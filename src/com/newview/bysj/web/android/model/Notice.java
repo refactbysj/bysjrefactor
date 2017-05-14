@@ -13,7 +13,7 @@ public class Notice {
     private long addressTime;        //通知的时
     private Integer addressor_id;   //发送通知者的id
     private String addressor_name; //发送通知者的姓名
-    private List<Addressee> addressee_name;
+    private List<Addressee> addressees;
     public Notice() {
     }
 
@@ -66,11 +66,11 @@ public class Notice {
         this.addressTime = addressTime;
     }
 
-    public List<Addressee> getAddressee_name() {
-        return addressee_name;
+    public List<Addressee> getAddressees() {
+        return addressees;
     }
 
-    public void setAddressee_name(List<Addressee> addressee_name) {
-        this.addressee_name = addressee_name;
+    public void setAddressees(List<Addressee> addressees) {
+        this.addressees = addressees;
     }
 }
