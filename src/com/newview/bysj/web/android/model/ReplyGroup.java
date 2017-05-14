@@ -15,6 +15,8 @@ public class ReplyGroup {
     private String leader_name;                                     //答辩小组组长的名称
     private ReplyTime replyTime;
     private List<GraduateProject> graduateProjects;
+    private List<Tutor> tutorId;
+
 
     public ReplyGroup() {
     }
@@ -73,5 +75,13 @@ public class ReplyGroup {
 
     public void setGraduateProjects(List<GraduateProject> graduateProjects) {
         this.graduateProjects = graduateProjects;
+    }
+
+    public List<Tutor> getTutorId() {
+        return tutorId;
+    }
+
+    public void setTutorId(List<Tutor> tutorId) {
+        this.tutorId = tutorId;
     }
 }

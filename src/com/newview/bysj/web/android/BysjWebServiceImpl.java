@@ -3,7 +3,10 @@ package com.newview.bysj.web.android;
 import com.newview.bysj.domain.*;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.myAnnotation.MethodDescription;
+import com.newview.bysj.web.android.model.Addressee;
+import com.newview.bysj.web.android.model.Notice;
 import com.newview.bysj.web.android.model.ProjectAndReplyGroup;
+import com.newview.bysj.web.android.model.Scores;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +22,9 @@ import java.util.*;
  * @author zhan
  */
 @Controller
-public class BysjWebServiceImpl extends AndroidBase{
+public class BysjWebServiceImpl extends AndroidBase {
 
     //private static final Logger logger = Logger.getLogger(BysjWebServiceImpl.class);
-
-
-
 
 
     /**
@@ -43,7 +43,7 @@ public class BysjWebServiceImpl extends AndroidBase{
         //获取输入的密码
         String password = currentUser.getPassword();
         //创建一个空的tutor
-        Tutor tutor = new Employee();
+        Tutor tutor;
         //根据当前用户名获取对应的user
         User user = userService.uniqueResult("username", username);
         //如果不存在对应的user，则返回一个空的tutor
@@ -124,6 +124,53 @@ public class BysjWebServiceImpl extends AndroidBase{
         return allMail;
     }
 
+
+    /**
+     * 获取我收到的通知
+     *
+     * @param id tutorId
+     */
+    @RequestMapping(value = "/getMyReceivedNotices.json", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Notice> getReceivedMail(@RequestBody String id) {
+        List<Notice> notices = new ArrayList<>();
+        Tutor tutor = tutorService.findById(Integer.parseInt(id));
+        //如果当前tutor为空，则返回一个空的mail对象
+        if (tutor == null) {
+            notices.add(new Notice());
+        } else {
+            if (tutor.getReceiveMail() != null) {
+                //获取收到的邮件，并添加集合中
+                for (Mail mail : tutor.getReceiveMail()) {
+                    notices.add(this.getNoticeByMail(mail));
+                }
+            }
+        }
+        return notices;
+    }
+
+    /**
+     * 获取我发布的通知
+     *
+     * @param id tutorId
+     */
+    @RequestMapping(value = "/getMyReleasedNotices.json", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Notice> getSendMail(@RequestBody String id) {
+        List<Notice> notices = new ArrayList<>();
+        Tutor tutor = tutorService.findById(Integer.parseInt(id));
+        if (tutor == null) {
+            notices.add(new Notice());
+        } else {
+            if (tutor.getMail() != null) {
+                for (Mail mail : tutor.getMail()) {
+                    notices.add(this.getNoticeByMail(mail));
+                }
+            }
+        }
+        return notices;
+    }
+
     /**
      * 获取我的学生
      *
@@ -137,7 +184,7 @@ public class BysjWebServiceImpl extends AndroidBase{
         List<com.newview.bysj.web.android.model.Student> students = new ArrayList<>();
         //获取当前老师的学生，如果没有给老师分配学生，则返回空的学生集合
         //如果当前tutor为空，则返回一个空的学生集合，这样做是为了方便android端的解析工作
-        if (tutor == null||tutor.getStudent() == null) {
+        if (tutor == null || tutor.getStudent() == null) {
             students.add(new com.newview.bysj.web.android.model.Student());
             return students;
         }
@@ -191,7 +238,7 @@ public class BysjWebServiceImpl extends AndroidBase{
         Tutor tutor = tutorService.findById(Integer.parseInt(id));
         //获取该老师所在的答辩小组，如果没有给老师分配答辩小组，则返回一个空的答辩小组集合，方便android端的解析
         //如果当前tutor为空，则返回一个空的答辩小组集合，方便android端的解析
-        if (tutor == null||tutor.getReplyGroup()==null) {
+        if (tutor == null || tutor.getReplyGroup() == null) {
             replyGroups.add(new com.newview.bysj.web.android.model.ReplyGroup());
             return replyGroups;
         }
@@ -203,6 +250,36 @@ public class BysjWebServiceImpl extends AndroidBase{
     }
 
 
+    /**
+     * 用来获取发送通知时用到的收件人，
+     * 只获取指导老师的学生和与指导老师在同一个教研室的老师
+     * @param id tutorId
+     */
+    @RequestMapping(value = "/getAddressee.json",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, List<Addressee>> getAddressee(@RequestBody String id) {
+
+        Map<String, List<Addressee>> map = new HashMap<>();
+        //获取指导老师所在教研室的老师
+        Tutor tutor = tutorService.findById(Integer.parseInt(id));
+        if (tutor != null) {
+            List<Addressee> addresseesTutor = new ArrayList<>();
+            for (Tutor tutor1 : tutor.getDepartment().getTutor()) {
+                addresseesTutor.add(this.getAddresseeByAddressee(tutor1, null));
+            }
+            map.put("tutors", addresseesTutor);
+            //获取该指导老师的学生
+            if (tutor.getStudent() != null) {
+                List<Addressee> addresseesStudent = new ArrayList<>();
+                for (Student student : tutor.getStudent()) {
+                    addresseesStudent.add(this.getAddresseeByStudent(student));
+                }
+                map.put("students", addresseesStudent);
+            }
+        }
+        return map;
+    }
+
 
     /**
      * 用于给发送邮件做准备，获取所有的学院和我的学生
@@ -212,6 +289,7 @@ public class BysjWebServiceImpl extends AndroidBase{
      */
     @RequestMapping(value = "/getAllSchoolAndMyStudent.json", method = RequestMethod.POST)
     @ResponseBody
+
     public Map<String, List<?>> getAllStudent(@RequestBody String id) {
         // 用于存放学院和我的学生
         Map<String, List<?>> map = new HashMap<>();
@@ -256,14 +334,17 @@ public class BysjWebServiceImpl extends AndroidBase{
      */
     @ResponseBody
     @RequestMapping(value = "/sendMail.json", method = RequestMethod.POST)
-    public Map<String, String> sendMail(@RequestBody Notice notice) {
+    public Map<String, String> sendMail(@RequestBody com.newview.bysj.web.android.model.Notice notice) {
         // 对发送的邮件进行异常处理，如果发送成功，则返回true,否则返回false
         try {
             // 获取邮件的发送者
             Tutor tutor = tutorService.findById(notice.getAddressor_id());
             // 通过set集合来去重
             Set<Actor> actorSet = new HashSet<>();
-            String[] tutorStrs = notice.getAddresseeStrId().split(",");
+            String[] tutorStrs = new String[notice.getAddressee_name().size()];
+            for (int i = 0; i < notice.getAddressee_name().size(); i++) {
+                tutorStrs[i] = notice.getAddressee_name().get(i).getId().toString();
+            }
             for (String tutorStrId : tutorStrs) {
                 actorSet.add(actorService.findById(Integer.parseInt(tutorStrId)));
             }

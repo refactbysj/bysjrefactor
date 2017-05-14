@@ -1,4 +1,4 @@
-package com.newview.bysj.web.android;
+package com.newview.bysj.web.android.model;
 
 import com.newview.bysj.domain.GraduateProject;
 import com.newview.bysj.domain.ReplyGroup;
