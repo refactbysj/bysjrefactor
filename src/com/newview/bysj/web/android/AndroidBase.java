@@ -151,7 +151,7 @@ public class AndroidBase {
         notice.setTitle(mail.getTitle());
         notice.setContent(mail.getContent());
         notice.setAddressTime(mail.getAddressTime().getTimeInMillis());
-        notice.setAddressor_id(mail.getAddressor().getId());
+        notice.setAddressor_id(mail.getAddressor().getId().longValue());
         notice.setAddressor_name(mail.getAddressor().getName());
         List<Addressee> addressees = new ArrayList<>();
         if (mail.getAddresses() != null) {

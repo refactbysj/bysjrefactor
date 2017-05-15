@@ -11,7 +11,7 @@ public class Notice {
     private String title;             //通知的题目
     private String content;        //通知的内容
     private long addressTime;        //通知的时
-    private Integer addressor_id;   //发送通知者的id
+    private Long addressor_id;   //发送通知者的id
     private String addressor_name; //发送通知者的姓名
     private List<Addressee> addressees;
     public Notice() {
@@ -41,12 +41,11 @@ public class Notice {
         this.content = content;
     }
 
-
-    public Integer getAddressor_id() {
+    public Long getAddressor_id() {
         return addressor_id;
     }
 
-    public void setAddressor_id(Integer addressor_id) {
+    public void setAddressor_id(Long addressor_id) {
         this.addressor_id = addressor_id;
     }
 

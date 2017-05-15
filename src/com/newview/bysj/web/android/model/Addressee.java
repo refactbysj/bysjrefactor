@@ -6,7 +6,10 @@ package com.newview.bysj.web.android.model;
  */
 public class Addressee {
     private Long id;
-    private long noticeId;
+    private Long addresseeId;
+    private Long noticeId;
+    private boolean isSelected;
+    private String addresseeType;
     private String name;
 
     public Long getId() {
@@ -30,5 +33,33 @@ public class Addressee {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getAddresseeId() {
+        return addresseeId;
+    }
+
+    public void setAddresseeId(Long addresseeId) {
+        this.addresseeId = addresseeId;
+    }
+
+    public void setNoticeId(Long noticeId) {
+        this.noticeId = noticeId;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public String getAddresseeType() {
+        return addresseeType;
+    }
+
+    public void setAddresseeType(String addresseeType) {
+        this.addresseeType = addresseeType;
     }
 }

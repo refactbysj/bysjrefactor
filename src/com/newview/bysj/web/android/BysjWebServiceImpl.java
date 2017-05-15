@@ -339,7 +339,7 @@ public class BysjWebServiceImpl extends AndroidBase {
         // 对发送的邮件进行异常处理，如果发送成功，则返回true,否则返回false
         try {
             // 获取邮件的发送者
-            Tutor tutor = tutorService.findById(notice.getAddressor_id());
+            Tutor tutor = tutorService.findById(notice.getAddressor_id().intValue());
             // 通过set集合来去重
             Set<Actor> actorSet = new HashSet<>();
             String[] tutorStrs = new String[notice.getAddressees().size()];
