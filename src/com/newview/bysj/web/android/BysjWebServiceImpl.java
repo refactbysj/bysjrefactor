@@ -334,7 +334,8 @@ public class BysjWebServiceImpl extends AndroidBase {
      */
     @ResponseBody
     @RequestMapping(value = "/sendMail.json", method = RequestMethod.POST)
-    public Map<String, String> sendMail(@RequestBody com.newview.bysj.web.android.model.Notice notice) {
+    public Map<String, Object> sendMail(@RequestBody com.newview.bysj.web.android.model.Notice notice) {
+        Map<String, Object> map = new HashMap<>();
         // 对发送的邮件进行异常处理，如果发送成功，则返回true,否则返回false
         try {
             // 获取邮件的发送者
@@ -367,11 +368,13 @@ public class BysjWebServiceImpl extends AndroidBase {
             sendMail.setAddressTime(CommonHelper.getNow());
             // 设置发送者
             sendMail.setAddressor(tutor);
-            mailService.saveOrUpdate(sendMail);
-            return isComplete("true");
+            Mail mail = mailService.saveAndFlush(sendMail);
+            map.put("status", true);
+            map.put("mailId", mail.getId());
         } catch (Exception e) {
-            return isComplete("false");
+            map.put("status", false);
         }
+        return map;
     }
 
     /**
