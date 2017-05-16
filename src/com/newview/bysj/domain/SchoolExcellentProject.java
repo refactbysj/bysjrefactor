@@ -1,6 +1,5 @@
 package com.newview.bysj.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -58,7 +57,6 @@ public class SchoolExcellentProject implements Serializable {
         this.recommended = recommended;
     }
 
-    @JsonIgnore
     public GraduateProject getGraduateProject() {
         return graduateProject;
     }
