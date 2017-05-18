@@ -18,7 +18,8 @@
             <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>
-                        <value>text/html;charset=UTF-8</value>  <!-- 避免IE执行AJAX时时，出现下载JSON文件的情况 -->
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
                     </list>
                 </property>
             </bean>

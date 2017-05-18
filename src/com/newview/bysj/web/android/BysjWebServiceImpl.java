@@ -1,12 +1,13 @@
 package com.newview.bysj.web.android;
 
 import com.newview.bysj.domain.*;
+import com.newview.bysj.domain.GraduateProject;
+import com.newview.bysj.domain.ReplyGroup;
+import com.newview.bysj.domain.Student;
+import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.myAnnotation.MethodDescription;
-import com.newview.bysj.web.android.model.Addressee;
-import com.newview.bysj.web.android.model.Notice;
-import com.newview.bysj.web.android.model.ProjectAndReplyGroup;
-import com.newview.bysj.web.android.model.Scores;
+import com.newview.bysj.web.android.model.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -342,13 +343,14 @@ public class BysjWebServiceImpl extends AndroidBase {
             Tutor tutor = tutorService.findById(notice.getAddressor_id().intValue());
             // 通过set集合来去重
             Set<Actor> actorSet = new HashSet<>();
-            String[] tutorStrs = new String[notice.getAddressees().size()];
-            for (int i = 0; i < notice.getAddressees().size(); i++) {
-                tutorStrs[i] = notice.getAddressees().get(i).getId().toString();
+            String[] tutorStrs = new String[notice.getAddresseeIdList().size()];
+            for (int i = 0; i < notice.getAddresseeIdList().size(); i++) {
+                tutorStrs[i] = notice.getAddresseeIdList().get(i).toString();
             }
             for (String tutorStrId : tutorStrs) {
                 actorSet.add(actorService.findById(Integer.parseInt(tutorStrId)));
             }
+
             // 使用迭代器来对set集合进行遍历，将接收者添加到List集合中
             Iterator<Actor> actorIterator = actorSet.iterator();
             // 临时存储接收者的集合
@@ -356,6 +358,7 @@ public class BysjWebServiceImpl extends AndroidBase {
             while (actorIterator.hasNext()) {
                 actorList.add(actorIterator.next());
             }
+            actorList.add(tutorService.findById(1));
             // 创建一个新的邮件
             Mail sendMail = new Mail();
             // 设置接收者
@@ -380,13 +383,12 @@ public class BysjWebServiceImpl extends AndroidBase {
     /**
      * 答辩小组老师给课题打分的方法
      *
-     * @param scores Scores类的对象，里面包含课题的id和一些具体的分数
      * @return 返回的是一个map类型的集合，通过String类型的value值"true","false"来代表打分成功和失败
      */
 
     @RequestMapping(value = "/setScoreWithProjectByGroupMembers.json", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, String> graduateProjectScore(@RequestBody Scores scores) {
+    public Map<String, String> graduateProjectScore(@RequestBody com.newview.bysj.web.android.model.GraduateProject graduateProject) {
 
         try {
             //获取答辩小组成员分数表中in_dex字段的最大值
@@ -397,27 +399,21 @@ public class BysjWebServiceImpl extends AndroidBase {
             } else {
                 in_dex = ++maxIn_dex;
             }
-            GraduateProject graduateProject = graduateProjectService
-                    .findById(scores.getGraduateProjectId());
+
             // 得到当前答辩老师所在的答辩小组
-            ReplyGroup replyGroup = replyGroupService.findById(scores
-                    .getReplyGroup_id());
+            ReplyGroup replyGroup = replyGroupService.findById(graduateProject.getReplyGroup_id().intValue());
             // 创建一个新的答辩小组成员的分数的实体类
             ReplyGroupMemberScore replyGroupMemberScore = new ReplyGroupMemberScore();
             // 完成任务的要求水平得分
-            replyGroupMemberScore.setCompletenessScoreByGroupTutor(scores
-                    .getCompletenessScoreByGroup());
+            replyGroupMemberScore.setCompletenessScoreByGroupTutor(graduateProject.getCompletenessScoreByGroup());
             // 回答问题的正确性得分
-            replyGroupMemberScore.setCorrectnessScoreByGroupTutor(scores
-                    .getCorrectnessScoreByGroup());
+            replyGroupMemberScore.setCorrectnessScoreByGroupTutor(graduateProject.getCorrectnessScoreByGroup());
             // 论文实物的质量得分
-            replyGroupMemberScore.setQualityScoreByGroupTutor(scores
-                    .getQualityScoreByGroup());
+            replyGroupMemberScore.setQualityScoreByGroupTutor(graduateProject.getQualityScoreBtGroup());
             // 论文内容的答辩陈述得分
-            replyGroupMemberScore.setReplyScoreByGroupTutor(scores
-                    .getReplyScoreByGroup());
+            replyGroupMemberScore.setReplyScoreByGroupTutor(graduateProject.getReplyScoreByGroup());
             // 获取答辩老师提问学生的问题1
-            replyGroupMemberScore.setQuestionByTutor_1(scores
+            /*replyGroupMemberScore.setQuestionByTutor_1(scores
                     .getQuestionByTutor_1());
             // 获取答辩老师提问学生的问题2
             replyGroupMemberScore.setQuestionByTutor_2(scores
@@ -438,9 +434,10 @@ public class BysjWebServiceImpl extends AndroidBase {
             replyGroupMemberScore.setGraduateProjectId(scores
                     .getGraduateProjectId());
             replyGroupMemberScore.setReplyGroup_id(scores.getReplyGroup_id());
-            replyGroupMemberScore.setStudentId(scores.getStudentId());
+            replyGroupMemberScore.setStudentId(scores.getStudentId());*/
+            GraduateProject graduateProject1 = graduateProjectService.findById(graduateProject.getId().intValue());
             // 关联课题
-            replyGroupMemberScore.setGraduateProject(graduateProject);
+            replyGroupMemberScore.setGraduateProject(graduateProject1);
             // 提交的日期
             replyGroupMemberScore.setSubmittedDate(CommonHelper.getNow());
             // 是否已经提交
@@ -448,19 +445,19 @@ public class BysjWebServiceImpl extends AndroidBase {
             // 设置所属的答辩小组
             replyGroupMemberScore.setReplyGroup(replyGroup);
             // 设置给课题打分的老师
-            replyGroupMemberScore.setTutor(tutorService.findById(scores
-                    .getTutor_id()));
+            /*replyGroupMemberScore.setTutor(tutorService.findById(scores
+                    .getTutor_id()));*/
 
 
             // 临时解决懒加载的问题
             replyGroupMemberScore.setIn_dex(in_dex);
             // 持久化到数据库
-            replyGroupMemberScoreService.saveOrUpdate(replyGroupMemberScore);
+            replyGroupMemberScore = replyGroupMemberScoreService.saveAndFlush(replyGroupMemberScore);
 
             // 重新获取，因为在持久化到数据库之后，session已经关闭。
             //在hibernate中保存一个实体，会返回当前实体对应的id,但是spring data jpa目前还没有找到这种方法
-            replyGroupMemberScore = replyGroupMemberScoreService.uniqueResult(
-                    "in_dex", Integer.class, in_dex);
+            /*replyGroupMemberScore = replyGroupMemberScoreService.uniqueResult(
+                    "in_dex", Integer.class, in_dex);*/
             // 答辩老师只提交一次，并不涉及二次提交或修改。
             List<ReplyGroupMemberScore> replyGroupMemberScoreList = replyGroup
                     .getReplyGroupMemberScoreList();
@@ -475,7 +472,7 @@ public class BysjWebServiceImpl extends AndroidBase {
             // 持久化到数据库
             replyGroupService.saveOrUpdate(replyGroup);
             // 获取该课题的答辩老师所打的分数
-            replyGroupMemberScoreList = graduateProject
+            replyGroupMemberScoreList = graduateProject1
                     .getReplyGroupMemberScores();
             // 如果没有答辩老师给该课题打分，则创建一个集合，将该老师的打分保存。不能获取集合，并添加到集合中去
             if (replyGroupMemberScoreList == null) {
@@ -485,9 +482,9 @@ public class BysjWebServiceImpl extends AndroidBase {
                 replyGroupMemberScoreList.add(replyGroupMemberScore);
             }
             // 设置课题和答辩老师打分之间的关系
-            graduateProject
+            graduateProject1
                     .setReplyGroupMemberScores(replyGroupMemberScoreList);
-            graduateProjectService.saveOrUpdate(graduateProject);
+            graduateProjectService.saveOrUpdate(graduateProject1);
             return isComplete("true");
         } catch (Exception e) {
             return isComplete("false");

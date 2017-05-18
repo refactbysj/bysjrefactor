@@ -8,7 +8,7 @@ public class Addressee {
     private Long id;
     private Long addresseeId;
     private Long noticeId;
-    private boolean isSelected;
+    private Boolean isSelected = false;
     private String addresseeType;
     private String name;
 
@@ -47,11 +47,11 @@ public class Addressee {
         this.noticeId = noticeId;
     }
 
-    public boolean isSelected() {
+    public Boolean getSelected() {
         return isSelected;
     }
 
-    public void setSelected(boolean selected) {
+    public void setSelected(Boolean selected) {
         isSelected = selected;
     }
 

@@ -8,12 +8,16 @@ import java.util.List;
  */
 public class Notice {
     private Long id;
-    private String title;             //通知的题目
-    private String content;        //通知的内容
-    private long addressTime;        //通知的时
-    private Long addressor_id;   //发送通知者的id
-    private String addressor_name; //发送通知者的姓名
-    private List<Addressee> addressees;
+    private String title;                       //通知的题目
+    private String content;                     //通知的内容
+    private Long addressTime;                   //通知的时间
+    private Long addressor_id;               //发送者的id
+    private String addressor_name;              //发送者的姓名
+    private List<Long> addresseeIdList;
+
+    private List<String> addresseeNameList;
+
+    //private List<Addressee> addressees;
     public Notice() {
     }
 
@@ -41,6 +45,14 @@ public class Notice {
         this.content = content;
     }
 
+    public Long getAddressTime() {
+        return addressTime;
+    }
+
+    public void setAddressTime(Long addressTime) {
+        this.addressTime = addressTime;
+    }
+
     public Long getAddressor_id() {
         return addressor_id;
     }
@@ -57,19 +69,20 @@ public class Notice {
         this.addressor_name = addressor_name;
     }
 
-    public long getAddressTime() {
-        return addressTime;
+
+    public List<Long> getAddresseeIdList() {
+        return addresseeIdList;
     }
 
-    public void setAddressTime(long addressTime) {
-        this.addressTime = addressTime;
+    public void setAddresseeIdList(List<Long> addresseeIdList) {
+        this.addresseeIdList = addresseeIdList;
     }
 
-    public List<Addressee> getAddressees() {
-        return addressees;
+    public List<String> getAddresseeNameList() {
+        return addresseeNameList;
     }
 
-    public void setAddressees(List<Addressee> addressees) {
-        this.addressees = addressees;
+    public void setAddresseeNameList(List<String> addresseeNameList) {
+        this.addresseeNameList = addresseeNameList;
     }
 }

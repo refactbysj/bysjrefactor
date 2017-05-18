@@ -105,9 +105,13 @@ public class AndroidBase {
         graduateProject1.setCorrectnessScoreByGroup(commentByGroup != null ? commentByGroup.getCorrectnessSocre().intValue() : null);
         graduateProject1.setQualityScoreBtGroup(commentByGroup != null ? commentByGroup.getQualityScore().intValue(): null);
         graduateProject1.setReplyScoreByGroup(commentByGroup != null ? commentByGroup.getReplyScore().intValue() : null);
-        graduateProject1.setStudent_name(graduateProject.getStudent() != null ? this.getAndroidStudentByStudent(graduateProject.getStudent()) : null);
+        graduateProject1.setStudent(graduateProject.getStudent() != null ? this.getAndroidStudentByStudent(graduateProject.getStudent()) : null);
         graduateProject1.setAuditByDirector(graduateProject.getAuditByDirector() != null ? graduateProject.getAuditByDirector().getApprove() : null);
         graduateProject1.setTutorId(graduateProject.getProposer().getId().longValue());
+        graduateProject1.setCorrectnessScoreByGroup(graduateProject.getCommentByGroup() != null ? graduateProject.getCommentByGroup().getCorrectnessSocre().intValue() : null);
+        graduateProject1.setCompletenessScoreByGroup(graduateProject.getCommentByGroup() != null ? graduateProject.getCommentByGroup().getCompletenessScore().intValue() : null);
+        graduateProject1.setQualityScoreBtGroup(graduateProject.getCommentByGroup() != null ? graduateProject.getCommentByGroup().getQualityScore().intValue() : null);
+        graduateProject1.setReplyScoreByGroup(graduateProject.getCommentByGroup() != null ? graduateProject.getCommentByGroup().getReplyScore().intValue() : null);
         return graduateProject1;
     }
 
@@ -153,13 +157,24 @@ public class AndroidBase {
         notice.setAddressTime(mail.getAddressTime().getTimeInMillis());
         notice.setAddressor_id(mail.getAddressor().getId().longValue());
         notice.setAddressor_name(mail.getAddressor().getName());
-        List<Addressee> addressees = new ArrayList<>();
+        List<Long> addresseeId = new ArrayList<>();
+        List<String> addresseeName = new ArrayList<>();
+        if (mail.getAddresses() != null) {
+            for (Actor actor : mail.getAddresses()) {
+                addresseeId.add(actor.getId().longValue());
+                addresseeName.add(actor.getName());
+            }
+        }
+
+        notice.setAddresseeIdList(addresseeId);
+        notice.setAddresseeNameList(addresseeName);
+        /*List<Addressee> addressees = new ArrayList<>();
         if (mail.getAddresses() != null) {
             for (Actor actor : mail.getAddresses()) {
                 addressees.add(this.getAddresseeByAddressee(actor,mail.getId().longValue()));
             }
             notice.setAddressees(addressees);
-        }
+        }*/
         return notice;
     }
 
