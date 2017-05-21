@@ -9,11 +9,9 @@ import com.newview.bysj.web.baseController.BaseController;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -50,9 +48,9 @@ public class AssignSchoolExcellentProjectController extends BaseController {
         GraduateProject graduateProject = graduateProjectService.findById(graduateProjectId);
         SchoolExcellentProject schoolExcellentProject = new SchoolExcellentProject();
         schoolExcellentProject.setGraduateProject(graduateProject);
-        schoolExcellentProjectService.save(schoolExcellentProject);
+        schoolExcellentProject = schoolExcellentProjectService.saveAndFlush(schoolExcellentProject);
         //重新获取保存的schoolExcellentProject否则更新graduateProject会出错
-        schoolExcellentProject = schoolExcellentProjectService.uniqueResult("graduateProject", GraduateProject.class, graduateProject);
+        //schoolExcellentProject = schoolExcellentProjectService.uniqueResult("graduateProject", GraduateProject.class, graduateProject);
         graduateProject.setSchoolExcellentProject(schoolExcellentProject);
         graduateProjectService.saveOrUpdate(graduateProject);
         CommonHelper.buildSimpleJson(httpServletResponse);

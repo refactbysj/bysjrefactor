@@ -75,7 +75,7 @@
                 url = '${basePath}usersManage/addSchool.html';
             }else{
                 title='修改学院';
-                url = '${basePath}usersManage/editSchool.html';
+                url = '${basePath}usersManage/editSchool.html?schoolId='+id;
 			}
 			parent.$.modalDialog({
 				href:url,
@@ -93,7 +93,7 @@
 				    text:'提交',
 					iconCls:'icon-ok',
 					handler:function () {
-						parent.$.modalDialog.scheduleGrid = schoolGrid;
+						parent.$.modalDialog.schoolGrid = schoolGrid;
                         var f = parent.$.modalDialog.handler.find('#editSchoolForm');
                         f.submit();
                     }
@@ -102,7 +102,7 @@
         }
 
         function viewDepartment(id) {
-
+            window.location.href = '${basePath}usersManage/listDepartment.html?schoolId=' + id;
         }
 	</script>
 
@@ -124,41 +124,6 @@
 
 	<div style="height: 100%;">
 		<table id="schoolTable" style="height: 100%;"></table>
-		<%--<table
-			class="table table-striped table-bordered table-hover datatable">
-			<thead>
-				<tr>
-					<th>学院</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:choose>
-					<c:when test="${empty schools}">
-						<div class="alert alert-warning alert-dismissable" role="alert">
-							<button class="close" type="button" data-dismiss="alert">&times;</button>
-							没有数据
-						</div>
-					</c:when>
-					<c:otherwise>
-						<c:forEach items="${schools}" var="school">
-							<tr id="schoolRow${school.id}">
-								<td>${school.description}</td>
-								<td>
-								<a class="btn btn-danger btn-xs" onclick="deleteSchool(${school.id})"><i class="icon-remove "></i>删除</a>
-									<a class="btn btn-warning btn-xs" href="/bysj3/usersManage/editSchool.html?schoolId=${school.id}"
-										data-toggle="modal" data-target="#addorEditSchool">
-										<i class="icon-edit"></i> 修改
-									</a>
-									<a class="btn btn-success btn-xs" href="/bysj3/usersManage/listDepartment.html?schoolId=${school.id}">
-										<i class="icon-lock"></i> 查看或添加教研室
-									</a></td>
-							</tr>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
-			</tbody>
-		</table>--%>
 	</div>
 </body>
 </html>

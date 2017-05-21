@@ -2,19 +2,40 @@
 	pageEncoding="UTF-8"%>
 
 
-	<form class="form-horizontal" role="form" action="${postActionUrl}"
+<script type="text/javascript">
+	$(function () {
+		$("#editForm").form({
+			url:'${postActionUrl}',
+			onSubmit:function () {
+				progressLoad();
+                var isValid = $("#editForm").form('validate');
+                if(!isValid) {
+					progressClose();
+                    $.messager.alert('提示', '请输入专业名称', 'warning');
+                    return isValid;
+                }
+            },
+			success:function (result) {
+			    progressClose();
+                result = $.parseJSON(result);
+                if(result.success) {
+                    parent.$.modalDialog.majorGrid.datagrid('reload');
+                    parent.$.modalDialog.handler.dialog('close');
+                    $.messager.alert('提示', result.msg, 'info');
+                }else{
+                    $.messager.alert('提示', result.msg, 'warning');
+                }
+            }
+		})
+    })
+</script>
+	<form id="editForm" style="padding: 10px;"
 		method="post">
 		<input type="hidden" id="majorId" name="editId" value="${major.id}"/>
-		<div class="form-group">
-		<label for="inputEmail5" class="col-sm-2">教研室：</label>
-		<input type="text" id="departmentDescription" name="departmentDescription" value="${department.description}" disabled>
+		教研室：${department.description}
 		<input type="hidden" id="departmentId" name="departmentId" value="${department.id}">
-		</div>
-		<div class="form-group">
-			<label for="inputName" class="col-sm-2">专业名称：</label>
-			<div class="col-sm-4">
-				<input type="text" class="form-control" id="inputName"
+		<br>
+			专业名称：
+				<input type="text" class="easyui-textbox easyui-validatebox" data-options="required:true" id="inputName"
 					name="description" value="${major.description}">
-			</div>
-		</div>
 	</form>

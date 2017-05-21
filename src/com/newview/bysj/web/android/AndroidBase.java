@@ -33,20 +33,14 @@ public class AndroidBase {
     @Autowired
     ReplyGroupService replyGroupService;
 
-    private com.newview.bysj.web.android.model.Department getAndroidDepartmentByDepartment(Department department) {
-        com.newview.bysj.web.android.model.Department department1 = new com.newview.bysj.web.android.model.Department();
-        department1.setDescription(department.getDescription());
-        department1.setId(department.getId());
-        return department1;
-    }
 
     com.newview.bysj.web.android.model.Tutor getAndroidTutorByTutor(Tutor tutor) {
         com.newview.bysj.web.android.model.Tutor tutor1 = new com.newview.bysj.web.android.model.Tutor();
-        tutor1.setId(tutor.getId());
+        tutor1.setId(tutor.getId().longValue());
         tutor1.setName(tutor.getName());
         tutor1.setNo(tutor.getNo());
         tutor1.setSex(tutor.getSex());
-        tutor1.setDepartment(this.getAndroidDepartmentByDepartment(tutor.getDepartment()));
+        tutor1.setDepartmentName(tutor.getDepartment().getDescription());
         List<Student> students = tutor.getStudent();
         List<com.newview.bysj.web.android.model.Student> students1 = new ArrayList<>();
         if (students != null) {
@@ -55,32 +49,30 @@ public class AndroidBase {
             }
         }
         tutor1.setStudentList(students1);
+        StringBuilder sb = new StringBuilder();
+        if (tutor.getReplyGroup() != null) {
+            for (ReplyGroup replyGroup : tutor.getReplyGroup()) {
+                sb.append(replyGroup.getId()).append("、");
+            }
+            tutor1.setReplyId(sb.toString().substring(0,sb.toString().length()));
+        }
         return tutor1;
     }
 
-    private com.newview.bysj.web.android.model.Major getAndroidMajorByMajor(com.newview.bysj.domain.Major major) {
-        com.newview.bysj.web.android.model.Major major1 = new com.newview.bysj.web.android.model.Major();
-        major1.setId(major.getId());
-        major1.setDescription(major.getDescription());
-        return major1;
-    }
 
-    private com.newview.bysj.web.android.model.StudentClass getAndroidStudentClassByStudentClass(com.newview.bysj.domain.StudentClass studentClass) {
-        com.newview.bysj.web.android.model.StudentClass studentClass1 = new com.newview.bysj.web.android.model.StudentClass();
-        studentClass1.setId(studentClass.getId());
-        studentClass1.setDescription(studentClass.getDescription());
-        return studentClass1;
-    }
+
 
     com.newview.bysj.web.android.model.Student getAndroidStudentByStudent(Student student) {
         com.newview.bysj.web.android.model.Student student1 = new com.newview.bysj.web.android.model.Student();
-        student1.setId(student.getId());
+        student1.setId(student.getId().longValue());
         student1.setName(student.getName());
         student1.setNo(student.getNo());
-        student1.setContact(student.getContact());
-        student1.setTutorId(student.getTutor().getId().longValue());
-        student1.setMajor(this.getAndroidMajorByMajor(student.getStudentClass().getMajor()));
-        student1.setStudentClass(this.getAndroidStudentClassByStudentClass(student.getStudentClass()));
+        student1.setMajorDecription(student.getStudentClass()!=null&&student.getStudentClass().getMajor()!=null?student.getStudentClass().getMajor().getDescription():null);
+        student1.setContact(student.getContact() !=null ? student.getContact().getMoblie() : null);
+        student1.setTutorId(student.getTutor() != null ? student.getTutor().getId().longValue() : null);
+        student1.setStudentClass(student.getStudentClass()!=null?student.getStudentClass().getDescription():null);
+        student1.setReplyGroupId(student.getReplyGroup() != null ? student.getReplyGroup().getId().longValue() : null);
+        student1.setProjectId(student.getGraduateProject() != null ? student.getGraduateProject().getId().longValue() : null);
         return student1;
     }
 
@@ -101,17 +93,20 @@ public class AndroidBase {
         graduateProject1.setReference(graduateProject.getReference());
         graduateProject1.setMajor(graduateProject.getMajor()!=null?graduateProject.getMajor().getDescription():null);
         CommentByGroup commentByGroup = graduateProject.getCommentByGroup();
-        graduateProject1.setCompletenessScoreByGroup(commentByGroup != null ? commentByGroup.getCompletenessScore().intValue() : null);
-        graduateProject1.setCorrectnessScoreByGroup(commentByGroup != null ? commentByGroup.getCorrectnessSocre().intValue() : null);
-        graduateProject1.setQualityScoreBtGroup(commentByGroup != null ? commentByGroup.getQualityScore().intValue(): null);
-        graduateProject1.setReplyScoreByGroup(commentByGroup != null ? commentByGroup.getReplyScore().intValue() : null);
+        graduateProject1.setCompletenessScoreByGroup(commentByGroup != null ? commentByGroup.getCompletenessScore()!=null?commentByGroup.getCompletenessScore().intValue():null : null);
+        graduateProject1.setCorrectnessScoreByGroup(commentByGroup != null ? commentByGroup.getCorrectnessSocre()!=null?commentByGroup.getCorrectnessSocre().intValue():null : null);
+        graduateProject1.setQualityScoreBtGroup(commentByGroup != null ? commentByGroup.getQualityScore()!=null?commentByGroup.getQualityScore().intValue():null: null);
+        graduateProject1.setReplyScoreByGroup(commentByGroup != null ? commentByGroup.getReplyScore()!=null?commentByGroup.getReplyScore().intValue() :null: null);
+        graduateProject1.setReplyGroupId(graduateProject.getReplyGroup() != null ? graduateProject.getReplyGroup().getId().longValue() : null);
         graduateProject1.setStudent(graduateProject.getStudent() != null ? this.getAndroidStudentByStudent(graduateProject.getStudent()) : null);
-        graduateProject1.setAuditByDirector(graduateProject.getAuditByDirector() != null ? graduateProject.getAuditByDirector().getApprove() : null);
+        graduateProject1.setAuditByDirector(graduateProject.getAuditByDirector() != null ? graduateProject.getAuditByDirector().getApprove() : false);
         graduateProject1.setTutorId(graduateProject.getProposer().getId().longValue());
-        graduateProject1.setCorrectnessScoreByGroup(graduateProject.getCommentByGroup() != null ? graduateProject.getCommentByGroup().getCorrectnessSocre().intValue() : null);
-        graduateProject1.setCompletenessScoreByGroup(graduateProject.getCommentByGroup() != null ? graduateProject.getCommentByGroup().getCompletenessScore().intValue() : null);
-        graduateProject1.setQualityScoreBtGroup(graduateProject.getCommentByGroup() != null ? graduateProject.getCommentByGroup().getQualityScore().intValue() : null);
-        graduateProject1.setReplyScoreByGroup(graduateProject.getCommentByGroup() != null ? graduateProject.getCommentByGroup().getReplyScore().intValue() : null);
+        graduateProject1.setCorrectnessScoreByGroup(graduateProject.getCommentByGroup() != null&&graduateProject.getCommentByGroup().getCorrectnessSocre()!=null ? graduateProject.getCommentByGroup().getCorrectnessSocre().intValue() : null);
+        graduateProject1.setCompletenessScoreByGroup(graduateProject.getCommentByGroup() != null&&graduateProject.getCommentByGroup().getCompletenessScore()!=null ? graduateProject.getCommentByGroup().getCompletenessScore().intValue() : null);
+        graduateProject1.setQualityScoreBtGroup(graduateProject.getCommentByGroup() != null&&graduateProject.getCommentByGroup().getQualityScore()!=null ? graduateProject.getCommentByGroup().getQualityScore().intValue() : null);
+        graduateProject1.setReplyScoreByGroup(graduateProject.getCommentByGroup() != null &&graduateProject.getCommentByGroup().getReplyScore()!=null? graduateProject.getCommentByGroup().getReplyScore().intValue() : null);
+        graduateProject1.setScoresState(graduateProject1.getCompletenessScoreByGroup()+graduateProject1.getCorrectnessScoreByGroup()+
+                                        graduateProject1.getQualityScoreBtGroup()+graduateProject1.getReplyScoreByGroup());
         return graduateProject1;
     }
 
@@ -122,32 +117,32 @@ public class AndroidBase {
         replyGroup1.setLocation(replyGroup.getClassRoom() != null ? replyGroup.getClassRoom().getDescription() : null);
         replyGroup1.setLeader_id(replyGroup.getLeader() != null ? replyGroup.getLeader().getId() : null);
         replyGroup1.setLeader_name(replyGroup.getLeader() != null ? replyGroup.getLeader().getName() : null);
-        replyGroup1.setReplyTime(replyGroup.getReplyTime() != null ? this.getAndroidReplyTimeByReplyTime(replyGroup.getReplyTime()) : null);
+        if (replyGroup.getReplyTime() != null) {
+            replyGroup1.setBeginTime(replyGroup.getReplyTime().getBeginTime() != null ? replyGroup.getReplyTime().getBeginTime().getTimeInMillis() : -1L);
+            replyGroup1.setEndTime(replyGroup.getReplyTime().getEndTime() != null ? replyGroup.getReplyTime().getEndTime().getTimeInMillis() : -1L);
+        }
+
+        //replyGroup1.setReplyTime(replyGroup.getReplyTime() != null ? this.getAndroidReplyTimeByReplyTime(replyGroup.getReplyTime()) : null);
         List<GraduateProject> graduateProjects = replyGroup.getGraduateProject();
         List<com.newview.bysj.web.android.model.GraduateProject> graduateProjects1 = new ArrayList<>();
         if (graduateProjects != null) {
             for (GraduateProject graduateProject : graduateProjects) {
+                replyGroup1.setMajor(graduateProject.getMajor().getDescription());
                 graduateProjects1.add(this.getAndroidGraduateProjectByGraduateProject(graduateProject));
             }
         }
-        List<com.newview.bysj.web.android.model.Tutor> tutors = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        String tutorNames = "";
         if (replyGroup.getMembers() != null) {
             for (Tutor tutor : replyGroup.getMembers()) {
-                tutors.add(this.getAndroidTutorByTutor(tutor));
+                sb.append(tutor.getName()).append("、");
             }
+            tutorNames = sb.toString().substring(0, sb.toString().length());
         }
-        replyGroup1.setTutorId(tutors);
+        replyGroup1.setReplyMembers(tutorNames);
         replyGroup1.setGraduateProjects(graduateProjects1);
         return replyGroup1;
     }
-
-    private com.newview.bysj.web.android.model.ReplyTime getAndroidReplyTimeByReplyTime(com.newview.bysj.domain.ReplyTime replyTime) {
-        com.newview.bysj.web.android.model.ReplyTime replyTime1 = new com.newview.bysj.web.android.model.ReplyTime();
-        replyTime1.setBeginTime(replyTime.getBeginTime().getTimeInMillis());
-        replyTime1.setEndTime(replyTime.getEndTime().getTimeInMillis());
-        return replyTime1;
-    }
-
 
     protected Notice getNoticeByMail(Mail mail) {
         Notice notice = new Notice();
@@ -168,13 +163,6 @@ public class AndroidBase {
 
         notice.setAddresseeIdList(addresseeId);
         notice.setAddresseeNameList(addresseeName);
-        /*List<Addressee> addressees = new ArrayList<>();
-        if (mail.getAddresses() != null) {
-            for (Actor actor : mail.getAddresses()) {
-                addressees.add(this.getAddresseeByAddressee(actor,mail.getId().longValue()));
-            }
-            notice.setAddressees(addressees);
-        }*/
         return notice;
     }
 

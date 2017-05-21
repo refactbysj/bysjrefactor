@@ -185,7 +185,7 @@
                                     }
                                 } else {
                                     //指导老师评审通过
-                                    if (row.commentByTutor.qualifiedByTutor) {
+                                    if (row.commentByTutor!=null&&row.commentByTutor.qualifiedByTutor) {
                                         str += $.formatString('<a href="javascript:void(0)" class="evaluateBtn" onclick="evalute(\'{0}\')"></a>', row.id);
                                     }
                                 }

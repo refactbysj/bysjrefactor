@@ -7,30 +7,24 @@ import java.util.List;
  *         Created on 2017/05/08  23:12
  */
 public class Tutor {
-    private long id;
-    private String name;
-    private String no;
-    private String sex;
-    private Department department;
-    private List<Student> studentList;
+    private Long id;
+    private String name;                  //姓名
+    private String no;                    //职工号
+    private String sex;                   //性别
+    private String departmentName;      //部门
+    private List<Student> studentList; //学生
+    private String replyId;
+
+
 
     public Tutor() {
     }
 
-    public Tutor(long id, String name, String no, String sex, Department department, List<Student> studentList) {
-        this.id = id;
-        this.name = name;
-        this.no = no;
-        this.sex = sex;
-        this.department = department;
-        this.studentList = studentList;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -58,12 +52,14 @@ public class Tutor {
         this.sex = sex;
     }
 
-    public Department getDepartment() {
-        return department;
+
+
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public List<Student> getStudentList() {
@@ -72,5 +68,13 @@ public class Tutor {
 
     public void setStudentList(List<Student> studentList) {
         this.studentList = studentList;
+    }
+
+    public String getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(String replyId) {
+        this.replyId = replyId;
     }
 }

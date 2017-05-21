@@ -1,118 +1,127 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/jsps/includeURL.jsp"%>
-<script type="text/javascript">
-	function deleteDepartment(departmentId){
-		//var confirmDelete=window.confirm("确认删除？");
-		window.wxc.xcConfirm("确认删除？","confirm",{
-			onOk: function(){
-				$.ajax({
-					url:'/bysj3/usersManage/deleteDepartment.html',
-					type:'GET',
-					dataType:'json',
-					data:{"departmentId":departmentId},
-					success:function(data){
-						$("#departmentRow"+departmentId).remove();
-						myAlert("删除成功");
-						return true;
-					},
-					error:function(){
-						myAlert("请删除该教研室下的专业后，再删除教研室");
-						return false;
-					}
-				});
-			}});
-		/*if(confirmDelete){
-			$.ajax({
-				url:'/bysj3/usersManage/deleteDepartment.html',
-				type:'GET',
-				dataType:'json',
-				data:{"departmentId":departmentId},
-				success:function(data){
-					$("#departmentRow"+departmentId).remove();
-					myAlert("删除成功");
-					return true;
-				},
-				error:function(){
-					myAlert("请删除该教研室下的专业后，再删除教研室");
-					return false;
-				}
-			});
-		}*/
-	}
-</script>
-<div class="container-fluid" style="width: 100%">
-	<div class="row-fluid">
-		<ul class="breadcrumb">
-			<li>用户管理</li>
-			<li>查看教研室<span class="divider">/</span>
-			</li>
-		</ul>
-	</div>
-	<br>
-	<div class="row">
-		<a class="btn btn-primary btn-sm"
-			href="/bysj3/usersManage/addDepartment.html?schoolId=${schoolId}" data-toggle="modal"
-			data-target="#addorEditDepartment"> <i class="icon-plus"></i> 添加教研室
-		</a>
-	</div>
-	<br>
-	<div class="row-fluid">
-		<table
-			class="table table-striped table-bordered table-hover datatable">
-			<thead>
-				<tr>
-					<th>教研室</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:choose>
-					<c:when test="${empty departments}">
-						<div class="alert alert-warning alert-dismissable" role="alert">
-							<button class="close" type="button" data-dismiss="alert">&times;</button>
-							没有数据
-						</div>
-					</c:when>
-					<c:otherwise>
-						<c:forEach items="${departments}" var="department">
-							<tr id="departmentRow${department.id }">
-								<td>${department.description}</td>
-								<td>
-								<a class="btn btn-danger btn-xs" onclick="deleteDepartment(${department.id })"><i class="icon-remove "></i>删除</a>
-									<a class="btn btn-warning btn-xs" href="/bysj3/usersManage/editDepartment.html?departmentId=${department.id}&&schoolId=${schoolId}"
-										data-toggle="modal" data-target="#addorEditDepartment">
-										<i class="icon-edit"></i> 修改
-									</a>
-									<a class="btn btn-success btn-xs" href="/bysj3/usersManage/listMajor.html?departmentId=${department.id}">
-										<i class="icon-lock"></i> 查看或添加专业
-									</a></td>
-							</tr>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
-			</tbody>
-		</table>
-	</div>
-	<!-- 分页 -->
-	<div class="row">
-	</div>
-	<div class="modal fade" id="addorEditDepartment" tabindex="-1" role="dialog"
-		aria-hidden="true" aria-labelledby="modelOpeningReportTime">
-		<div class="modal-dialog">
-			<div class="modal-content"></div>
-		</div>
-	</div>
-	<div class="modal fade" id="addorEditMajor" tabindex="-1" role="dialog"
-		aria-hidden="true" aria-labelledby="modelOpeningReportTime">
-		<div class="modal-dialog">
-			<div class="modal-content"></div>
-		</div>
-	</div>
-	<div class="modal fade" id="addorEditStudentClass" tabindex="-1" role="dialog"
-		aria-hidden="true" aria-labelledby="modelOpeningReportTime">
-		<div class="modal-dialog">
-			<div class="modal-content"></div>
-		</div>
-	</div>
+<html>
+<head>
+	<%@ include file="/WEB-INF/jsps/includeURL.jsp"%>
+	<script type="text/javascript">
+		var departmentGrid;
+
+        $(function () {
+            var url = '';
+            if(${schoolId!=null&&schoolId!=''}) {
+                url = '${basePath}usersManage/school/getData.html?schoolId=${schoolId}';
+            }else{
+                url = '${basePath}usersManage/school/getData.html';
+            }
+            departmentGrid = $("#departmentTable").datagrid({
+				url:url,
+				pagination:true,
+				fit:true,
+				striped:true,
+				singleSelect:true,
+				columns:[[{
+				    title:'教研室',
+					field:'description',
+					width:'40%'
+				},{
+				    title:'操作',
+					field:'action',
+					width:'40%',
+					formatter:function (value,row) {
+                        var str = '';
+                        str += $.formatString('<a href="javascript:void(0)" class="delBtn" onclick="delFun(\'{0}\')"></a>', row.id);
+                        str += $.formatString('<a href="javascript:void(0)" class="editBtn" onclick="editFun(\'{0}\')"></a>', row.id);
+                        str += $.formatString('<a href="javascript:void(0)" class="viewBtn" onclick="viewMajor(\'{0}\')"></a>', row.id);
+                        return str;
+                    }
+				}]],
+				onLoadSuccess:function () {
+                    $(".delBtn").linkbutton({text: '删除', iconCls: 'icon-cancel', plain: true});
+                    $(".editBtn").linkbutton({text: '修改', iconCls: 'icon-edit', plain: true});
+                    $(".viewBtn").linkbutton({text: '查看专业', iconCls: 'icon-more', plain: true});
+                }
+			})
+        });
+
+        function delFun(id) {
+            $.messager.confirm('询问','确认删除？',function (t) {
+                if(t) {
+                    progressLoad();
+                    $.ajax({
+                        url:'${basePath}usersManage/deleteDepartment.html',
+                        type:'GET',
+                        dataType:'json',
+                        data:{"departmentId":id},
+                        success:function(result){
+                            progressClose();
+                            if(result.success) {
+                                $("#departmentTable").datagrid('reload');
+                                $.messager.alert('提示', result.msg, 'info');
+                            }else{
+                                $.messager.alert('提示', result.msg, 'warning');
+                            }
+                            return true;
+                        },
+                        error:function(data){
+                            progressClose();
+                            $.messager.alert('错误', '网络错误，请联系管理员', 'error');
+                            return false;
+                        }
+                    })
+                }
+            })
+        }
+
+        function editFun(id) {
+            var title = '';
+            var url = '';
+            if(id==null||id=='') {
+                title = '添加教研室';
+                url = '${basePath}usersManage/addDepartment.html?schoolId=${schoolId}';
+            }else{
+                title='修改教研室';
+                url = '${basePath}usersManage/editDepartment.html?departmentId='+id;
+            }
+            parent.$.modalDialog({
+                href:url,
+                modal:true,
+                width:'30%',
+                height:'25%',
+                title:title,
+                buttons:[{
+                    text:'取消',
+                    iconCls:'icon-cancel',
+                    handler:function () {
+                        parent.$.modalDialog.handler.dialog('close');
+                    }
+                },{
+                    text:'提交',
+                    iconCls:'icon-ok',
+                    handler:function () {
+                        parent.$.modalDialog.departmentGrid = departmentGrid;
+                        var f = parent.$.modalDialog.handler.find('#editForm');
+                        f.submit();
+                    }
+                }]
+            })
+        }
+
+        function viewMajor(id) {
+            window.location.href = '${basePath}usersManage/listMajor.html?departmentId=' + id;
+        }
+
+	</script>
+
+</head>
+<body>
+<div style="position: absolute;top: 10px;left: 2%;">
+	<a class="easyui-linkbutton" onclick="editFun()"  data-options="iconCls:'icon-add'" style="left: 5%;"
+	   href="javascript:void(0)"> 添加教研室
+	</a>
 </div>
+
+<div style="height: 100%;">
+	<table id="departmentTable" style="height: 100%;"></table>
+</div>
+</body>
+</html>

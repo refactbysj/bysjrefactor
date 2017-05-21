@@ -1,36 +1,29 @@
 package com.newview.bysj.web.android.model;
 
-import com.newview.bysj.domain.Contact;
-
 /**
  * @author zhan
  *         Created on 2017/05/08  23:08
  */
 public class Student {
-    private  long id;
-    private  String no;
-    private String name;
-    private Contact contact;
-    private Major major;
-    private StudentClass studentClass;
-    private long tutorId;
+    private Long id;
+    private String no;                   //学生的学号
+    private String contact;             //学生的手机号
+    private String name;                //学生的姓名
+    private String majorDecription;   //学生所在的专业
+    private String studentClass;      //学生所在的班级名称
+    private Long tutorId;              //指导老师的id
+    private Long projectId;           //学生答辩课题的id
+    private Long replyGroupId;
+
+
     public Student() {
     }
 
-    public Student(long id, String no, String name, Contact contact, Major major, StudentClass studentClass) {
-        this.id = id;
-        this.no = no;
-        this.name = name;
-        this.contact = contact;
-        this.major = major;
-        this.studentClass = studentClass;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -42,6 +35,14 @@ public class Student {
         this.no = no;
     }
 
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
     public String getName() {
         return name;
     }
@@ -50,27 +51,28 @@ public class Student {
         this.name = name;
     }
 
-    public Contact getContact() {
-        return contact;
+    public String getMajorDecription() {
+        return majorDecription;
     }
 
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    public void setMajorDecription(String majorDecription) {
+        this.majorDecription = majorDecription;
     }
 
-    public Major getMajor() {
-        return major;
+
+    public Long getReplyGroupId() {
+        return replyGroupId;
     }
 
-    public void setMajor(Major major) {
-        this.major = major;
+    public void setReplyGroupId(Long replyGroupId) {
+        this.replyGroupId = replyGroupId;
     }
 
-    public StudentClass getStudentClass() {
+    public String getStudentClass() {
         return studentClass;
     }
 
-    public void setStudentClass(StudentClass studentClass) {
+    public void setStudentClass(String studentClass) {
         this.studentClass = studentClass;
     }
 
@@ -80,5 +82,13 @@ public class Student {
 
     public void setTutorId(Long tutorId) {
         this.tutorId = tutorId;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 }

@@ -211,7 +211,12 @@ public class BysjWebServiceImpl extends AndroidBase {
             List<com.newview.bysj.web.android.model.ReplyGroup> replyGroups1 = new ArrayList<>();
             if (graduateProjects != null) {
                 for (GraduateProject graduateProject : graduateProjects) {
-                    graduateProjects1.add(this.getAndroidGraduateProjectByGraduateProject(graduateProject));
+                    com.newview.bysj.web.android.model.GraduateProject graduateProject1 = this.getAndroidGraduateProjectByGraduateProject(graduateProject);
+                    //答辩小组成员对答辩小组的打分
+                    if (graduateProject.getReplyGroupMemberScores() != null) {
+
+                    }
+                    //graduateProjects1.add();
                 }
             }
             if (replyGroups != null) {
@@ -244,7 +249,9 @@ public class BysjWebServiceImpl extends AndroidBase {
             return replyGroups;
         }
         for (ReplyGroup replyGroup : tutor.getReplyGroup()) {
-            replyGroups.add(this.getAndroidReplyGroupByReplyGroup(replyGroup));
+            com.newview.bysj.web.android.model.ReplyGroup replyGroup1 = this.getAndroidReplyGroupByReplyGroup(replyGroup);
+            replyGroup1.setTutorId(tutor.getId().longValue());
+            replyGroups.add(replyGroup1);
         }
         //返回该老师所在的答辩小组
         return replyGroups;
@@ -400,8 +407,9 @@ public class BysjWebServiceImpl extends AndroidBase {
                 in_dex = ++maxIn_dex;
             }
 
+            Tutor tutor = tutorService.findById(graduateProject.getTutorId().intValue());
             // 得到当前答辩老师所在的答辩小组
-            ReplyGroup replyGroup = replyGroupService.findById(graduateProject.getReplyGroup_id().intValue());
+            ReplyGroup replyGroup = replyGroupService.findById(graduateProject.getReplyGroupId()!=null?graduateProject.getReplyGroupId().intValue():null);
             // 创建一个新的答辩小组成员的分数的实体类
             ReplyGroupMemberScore replyGroupMemberScore = new ReplyGroupMemberScore();
             // 完成任务的要求水平得分
@@ -444,13 +452,12 @@ public class BysjWebServiceImpl extends AndroidBase {
             replyGroupMemberScore.setSubmitted(true);
             // 设置所属的答辩小组
             replyGroupMemberScore.setReplyGroup(replyGroup);
+            replyGroupMemberScore.setTutor(tutor);
             // 设置给课题打分的老师
             /*replyGroupMemberScore.setTutor(tutorService.findById(scores
                     .getTutor_id()));*/
 
 
-            // 临时解决懒加载的问题
-            replyGroupMemberScore.setIn_dex(in_dex);
             // 持久化到数据库
             replyGroupMemberScore = replyGroupMemberScoreService.saveAndFlush(replyGroupMemberScore);
 

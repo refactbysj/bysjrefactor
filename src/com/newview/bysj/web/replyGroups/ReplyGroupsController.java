@@ -44,7 +44,7 @@ public class ReplyGroupsController extends BaseController {
     /**
      * 获取答辩分组数据
      */
-    @RequestMapping("/getReplyGroup.html")
+    @RequestMapping(value = "/getReplyGroup.html",method = RequestMethod.POST)
     @ResponseBody
     public PageInfo getReplyGroupData(HttpSession httpSession, String replyGroupName, Integer page, Integer rows) {
         PageInfo pageInfo = new PageInfo();

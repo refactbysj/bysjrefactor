@@ -144,7 +144,7 @@
                                             items="${remarkTemplateItem.remarkTemplateItemsOption}"
                                             var="remarkTemplateItemsOption">
                                         <c:set var="itemOptionStr"
-                                               value="${itemOptionStr},${remarkTemplateItemsOption.itemOption}"/>
+                                               value="${itemOptionStr}，${remarkTemplateItemsOption.itemOption}"/>
                                     </c:forEach> <%--去除第一个逗号--%> <c:set var="itemOptionStr"
                                                                         value="${fn:substring(itemOptionStr, 1, fn:length(itemOptionStr))}"/>
                                         <input class="form-control" id="itemOptions${status.index}"

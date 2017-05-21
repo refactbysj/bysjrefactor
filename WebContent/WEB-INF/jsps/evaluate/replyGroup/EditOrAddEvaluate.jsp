@@ -88,7 +88,7 @@
                         </td>
                         <td> <%--path 对应 commandName所代表的对象的一个属性 --%>
                             <form:input cssClass="easyui-numberbox"
-                                        data-options="min:0,precision:1,max:10"
+                                        data-options="min:0,precision:0,max:10"
                                         id="commentByGroupCompletenessScore"
                                         path="commentByGroup.completenessScore"/>
                         </td>
@@ -99,7 +99,7 @@
                         </td>
                         <td> <%--path 对应 commandName所代表的对象的一个属性 --%>
                             <form:input cssClass="easyui-numberbox"
-                                        data-options="min:0,precision:1,max:10"
+                                        data-options="min:0,precision:0,max:10"
                                         path="commentByGroup.qualityScore"
                                         id="commentByGroupQualityScore"/>
                         </td>
@@ -113,7 +113,7 @@
                             <form:input path="commentByGroup.replyScore"
                                         id="commentByGroupeReplyScore"
                                         cssClass="easyui-numberbox"
-                                        data-options="min:0,precision:1,max:10"/>
+                                        data-options="min:0,precision:0,max:10"/>
                         </td>
                     </tr>
 
@@ -125,7 +125,7 @@
                             <form:input path="commentByGroup.correctnessSocre"
                                         id="commentByGroupCorrectnessScore"
                                         cssClass="easyui-numberbox"
-                                        data-options="min:0,precision:1,max:10"/>
+                                        data-options="min:0,precision:0,max:10"/>
 
                         </td>
                     </tr>

@@ -150,6 +150,7 @@ public class Department implements Serializable {
         this.replyGroup = replyGroup;
     }
 
+    @JsonIgnore
     public List<RemarkTemplate> getRemarkTemplate() {
         return remarkTemplate;
     }

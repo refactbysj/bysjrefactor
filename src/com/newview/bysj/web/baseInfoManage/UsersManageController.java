@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("usersManage")
@@ -34,50 +35,64 @@ public class UsersManageController extends BaseController {
     //根据教研室主任获取专业
     @RequestMapping("/department/getTitle")
     public String getTitleByDepartment() {
-        //获取当前用户
-        //Employee employee = employeeService.findById(((Employee) CommonHelper.getCurrentActor(httpSession)).getId());
-        //Page<Major> majors = majorService.getMajorByDepartment(employee.getDepartment(), pageNo, pageSize);
-        //CommonHelper.pagingHelp(modelMap, majors, "majors", CommonHelper.getRequestUrl(httpServletRequest), majors.getTotalElements());
-        //获取教研室主任所在教研室的id
-        //modelMap.addAttribute("departmentId", employee.getDepartment().getId());
         return "baseInfoManage/listMajor";
     }
 
     @RequestMapping("/department/getData")
     @ResponseBody
-    public PageInfo getMajorsByDepartment(HttpSession httpSession, Integer page, Integer rows) {
+    public PageInfo getMajorsByDepartment(HttpSession httpSession, Integer page, Integer rows,String departmentId) {
         PageInfo pageInfo = new PageInfo();
-        Employee employee = employeeService.findById(( CommonHelper.getCurrentActor(httpSession)).getId());
-        Page<Major> majors = majorService.getMajorByDepartment(employee.getDepartment(), page, rows);
-        if (majors != null) {
-            pageInfo.setRows(majors.getContent());
-            pageInfo.setTotal((int) majors.getTotalElements());
+
+        if (departmentId != null && !Objects.equals("", departmentId)) {
+            Department department = departmentService.findById(Integer.valueOf(departmentId));
+            List<Major> majors =  department.getMajor();
+            pageInfo.setRows(majors);
+            pageInfo.setTotal(majors.size());
+        }else{
+            Employee employee = employeeService.findById(( CommonHelper.getCurrentActor(httpSession)).getId());
+            Page<Major> majors = majorService.getMajorByDepartment(employee.getDepartment(), page, rows);
+            if (majors != null) {
+                pageInfo.setRows(majors.getContent());
+                pageInfo.setTotal((int) majors.getTotalElements());
+            }
         }
+
         return pageInfo;
     }
 
     //根据院级管理员获取教研室
     @RequestMapping("/school/getTitle")
-    public String getTitleBySchool(HttpSession httpSession, HttpServletRequest httpServletRequest, ModelMap modelMap, Integer pageNo, Integer pageSize) {
+    public String getTitleBySchool() {
         return "baseInfoManage/listDepartment";
     }
 
+    //根据学院获取教研室
     @RequestMapping("/school/getData")
     @ResponseBody
-    public PageInfo getDepartmentsBySchool(HttpSession httpSession, Integer page, Integer rows) {
+    public PageInfo getDepartmentsBySchool(HttpSession httpSession, Integer page, Integer rows,String schoolId) {
         PageInfo pageInfo = new PageInfo();
-        Employee employee = employeeService.findById(((Employee) CommonHelper.getCurrentActor(httpSession)).getId());
-        Page<Department> departments = departmentService.getDepartmentBySchool(employee.getDepartment().getSchool(), page, rows);
-        if (departments != null) {
-            pageInfo.setTotal((int) departments.getTotalElements());
-            pageInfo.setRows(departments.getContent());
+        if (schoolId != null && !Objects.equals("", schoolId)) {
+            School school = schoolService.findById(Integer.valueOf(schoolId));
+            if (school != null) {
+                List<Department> departments = school.getDepartment();
+                pageInfo.setTotal(departments.size());
+                pageInfo.setRows(departments);
+            }
+        }else{
+            Employee employee = employeeService.findById(( CommonHelper.getCurrentActor(httpSession)).getId());
+            Page<Department> departments = departmentService.getDepartmentBySchool(employee.getDepartment().getSchool(), page, rows);
+            if (departments != null) {
+                pageInfo.setTotal((int) departments.getTotalElements());
+                pageInfo.setRows(departments.getContent());
+            }
         }
+
         return pageInfo;
     }
 
     //根据校级管理员获取学院
     @RequestMapping("/college/getTitle")
-    public String getTitleByCollege(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer pageNo, Integer pageSize) {
+    public String getTitleByCollege() {
         return "baseInfoManage/listSchool";
     }
 
@@ -102,7 +117,7 @@ public class UsersManageController extends BaseController {
 
     @RequestMapping(value = "/addSchool", method = RequestMethod.POST)
     @ResponseBody
-    public Result addSchool(ModelMap modelMap, HttpServletResponse httpServletResponse, String description) {
+    public Result addSchool(String description) {
         Result result = new Result();
         try {
             School school = new School();
@@ -128,7 +143,7 @@ public class UsersManageController extends BaseController {
 
     @RequestMapping(value = "/addDepartment", method = RequestMethod.POST)
     @ResponseBody
-    public Result addDepartment(ModelMap modelMap, HttpServletResponse httpServletResponse, String description, Integer schoolId) {
+    public Result addDepartment( String description, Integer schoolId) {
         Result result = new Result();
         try {
             School school = schoolService.findById(schoolId);
@@ -148,8 +163,14 @@ public class UsersManageController extends BaseController {
 
     //添加专业
     @RequestMapping(value = "/addMajor", method = RequestMethod.GET)
-    public String addMajor(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer departmentId) {
-        modelMap.addAttribute("department", departmentService.findById(departmentId));
+    public String addMajor(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer departmentId,HttpSession httpSession) {
+        if (departmentId != null && !Objects.equals("", departmentId)) {
+            modelMap.addAttribute("department", departmentService.findById(departmentId));
+        }else{
+            Employee employee = employeeService.findById(( CommonHelper.getCurrentActor(httpSession)).getId());
+            modelMap.addAttribute("department", employee.getDepartment());
+        }
+
         modelMap.addAttribute("postActionUrl", CommonHelper.getRequestUrl(httpServletRequest));
         return "baseInfoManage/addorEditMajor";
     }
@@ -174,6 +195,19 @@ public class UsersManageController extends BaseController {
         return result;
     }
 
+    @RequestMapping(value = "studentClass/getData",method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo getStudentClassData(Integer majorId,Integer page,Integer rows) {
+        PageInfo pageInfo = new PageInfo();
+        Major major = majorService.findById(majorId);
+        Page<StudentClass> studentClass = studentClassService.getStudentClassByMajor(major, page,rows);
+        if (studentClass != null) {
+            pageInfo.setRows(studentClass.getContent());
+            pageInfo.setTotal((int) studentClass.getTotalElements());
+        }
+        return pageInfo;
+    }
+
     //添加班级
     @RequestMapping(value = "/addStudentClass", method = RequestMethod.GET)
     public String addClass(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer majorId) {
@@ -184,7 +218,7 @@ public class UsersManageController extends BaseController {
 
     @RequestMapping(value = "/addStudentClass", method = RequestMethod.POST)
     @ResponseBody
-    public Result addStudentClass(HttpServletResponse httpServletResponse, ModelMap modelMap, String description, Integer majorId) {
+    public Result addStudentClass( String description, Integer majorId) {
         Result result = new Result();
         try {
             StudentClass studentClass = new StudentClass();
@@ -212,27 +246,27 @@ public class UsersManageController extends BaseController {
 
     @RequestMapping(value = "/editSchool", method = RequestMethod.POST)
     @ResponseBody
-    public Result editSchool(HttpServletResponse httpServletResponse, Integer editId, String description) {
+    public Result editSchool( Integer editId, String description) {
         Result result = new Result();
         try {
             School school = schoolService.findById(editId);
             school.setDescription(description);
             schoolService.saveOrUpdate(school);
             result.setSuccess(true);
-            result.setMsg("添加失败");
+            result.setMsg("修改成功");
         } catch (Exception e) {
-            result.setMsg("添加失败");
+            result.setMsg("修改失败");
             e.printStackTrace();
-            logger.error("添加失败"+e);
+            logger.error("修改失败"+e);
         }
         return result;
     }
 
     //修改教研室
     @RequestMapping(value = "/editDepartment", method = RequestMethod.GET)
-    public String editDepartment(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer departmentId, Integer schoolId) {
+    public String editDepartment(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer departmentId) {
         Department department = departmentService.findById(departmentId);
-        modelMap.addAttribute("school", schoolService.findById(schoolId));
+        modelMap.addAttribute("school", department.getSchool());
         modelMap.addAttribute("department", department);
         modelMap.addAttribute("postActionUrl", CommonHelper.getRequestUrl(httpServletRequest));
         return "baseInfoManage/addorEditDepartment";
@@ -240,7 +274,7 @@ public class UsersManageController extends BaseController {
 
     @RequestMapping(value = "/editDepartment", method = RequestMethod.POST)
     @ResponseBody
-    public Result editDepartment(HttpServletResponse httpServletResponse, Integer schoolId, Integer editId, String description) {
+    public Result editDepartment( Integer editId, String description) {
         Result result = new Result();
         try {
             Department department = departmentService.findById(editId);
@@ -258,10 +292,10 @@ public class UsersManageController extends BaseController {
 
     //修改专业
     @RequestMapping(value = "/editMajor", method = RequestMethod.GET)
-    public String editMajor(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer majorId, Integer departmentId) {
+    public String editMajor(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer majorId) {
         Major major = majorService.findById(majorId);
         modelMap.addAttribute("major", major);
-        modelMap.addAttribute("department", departmentService.findById(departmentId));
+        modelMap.addAttribute("department",major.getDepartment());
         modelMap.addAttribute("postActionUrl", CommonHelper.getRequestUrl(httpServletRequest));
 
         return "baseInfoManage/addorEditMajor";
@@ -269,7 +303,7 @@ public class UsersManageController extends BaseController {
 
     @RequestMapping(value = "/editMajor", method = RequestMethod.POST)
     @ResponseBody
-    public Result editMajor(HttpServletResponse httpServletResponse, Integer editId, Integer departmentId, String description, HttpServletRequest request) {
+    public Result editMajor( Integer editId, String description) {
 
         Result result = new Result();
         try {
@@ -290,17 +324,17 @@ public class UsersManageController extends BaseController {
 
     //修改班级
     @RequestMapping(value = "/editStudentClass", method = RequestMethod.GET)
-    public String editStudentClass(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer studentClassId, Integer majorId) {
+    public String editStudentClass(HttpServletRequest httpServletRequest, ModelMap modelMap, Integer studentClassId) {
         StudentClass studentClass = studentClassService.findById(studentClassId);
         modelMap.addAttribute("studentClass", studentClass);
-        modelMap.addAttribute("major", majorService.findById(majorId));
+        modelMap.addAttribute("major", studentClass.getMajor());
         modelMap.addAttribute("postActionUrl", CommonHelper.getRequestUrl(httpServletRequest));
         return "baseInfoManage/addorEditStudentClass";
     }
 
     @RequestMapping(value = "/editStudentClass", method = RequestMethod.POST)
     @ResponseBody
-    public Result editStudentClass(HttpServletResponse httpServletResponse, Integer editId, Integer majorId, String description) {
+    public Result editStudentClass(Integer editId, String description) {
         Result result = new Result();
         try {
             StudentClass studentClass = studentClassService.findById(editId);
@@ -320,29 +354,22 @@ public class UsersManageController extends BaseController {
 
     //查看教研室
     @RequestMapping("/listDepartment")
-    public String listDepartment(ModelMap modelMap, HttpServletRequest httpServletRequest, Integer schoolId, Integer pageNo, Integer pageSize) {
-        School school = schoolService.findById(schoolId);
-        Page<Department> department = departmentService.getDepartmentBySchool(school, pageNo, pageSize);
-        CommonHelper.pagingHelp(modelMap, department, "departments", CommonHelper.getRequestUrl(httpServletRequest), department.getTotalElements());
+    public String listDepartment(ModelMap modelMap,Integer schoolId) {
+
         modelMap.addAttribute("schoolId", schoolId);
         return "baseInfoManage/listDepartment";
     }
 
     //查看专业
     @RequestMapping("/listMajor")
-    public String listMajor(ModelMap modelMap, HttpServletRequest httpServletRequest, Integer departmentId, Integer pageNo, Integer pageSize) {
-        Department department = departmentService.findById(departmentId);
-        modelMap.addAttribute("majors", department.getMajor());
+    public String listMajor(ModelMap modelMap,Integer departmentId) {
         modelMap.addAttribute("departmentId", departmentId);
         return "baseInfoManage/listMajor";
     }
 
     //查看班级
     @RequestMapping("/listStudentClass")
-    public String listStudentClass(ModelMap modelMap, HttpServletRequest httpServletRequest, Integer majorId, Integer pageNo, Integer pageSize) {
-        Major major = majorService.findById(majorId);
-        Page<StudentClass> studentClass = studentClassService.getStudentClassByMajor(major, pageNo, pageSize);
-        CommonHelper.pagingHelp(modelMap, studentClass, "studentClasses", CommonHelper.getRequestUrl(httpServletRequest), studentClass.getTotalElements());
+    public String listStudentClass(ModelMap modelMap, Integer majorId) {
         modelMap.addAttribute("majorId", majorId);
         return "baseInfoManage/listStudentClass";
     }
@@ -359,7 +386,7 @@ public class UsersManageController extends BaseController {
     //删除学院
     @RequestMapping(value = "/deleteSchool", method = RequestMethod.GET)
     @ResponseBody
-    public Result deleteSchool(HttpServletResponse httpServletResponse, Integer schoolId) {
+    public Result deleteSchool( Integer schoolId) {
         Result result = new Result();
         try {
             School school = schoolService.findById(schoolId);
@@ -378,7 +405,7 @@ public class UsersManageController extends BaseController {
     //删除教研室
     @RequestMapping(value = "/deleteDepartment", method = RequestMethod.GET)
     @ResponseBody
-    public Result deleteDepartment(HttpServletResponse httpServletResponse, Integer departmentId) {
+    public Result deleteDepartment( Integer departmentId) {
         Result result = new Result();
         try {
             Department department = departmentService.findById(departmentId);
@@ -397,7 +424,7 @@ public class UsersManageController extends BaseController {
     //删除专业
     @RequestMapping(value = "/deleteMajor", method = RequestMethod.GET)
     @ResponseBody
-    public Result deleteMajor(HttpServletResponse httpServletResponse, Integer majorId) {
+    public Result deleteMajor( Integer majorId) {
         Result result = new Result();
         try {
             Major major = majorService.findById(majorId);
@@ -417,7 +444,7 @@ public class UsersManageController extends BaseController {
     //删除班级
     @RequestMapping(value = "/deleteStudentClass", method = RequestMethod.GET)
     @ResponseBody
-    public Result deleteStudentClass(HttpServletResponse httpServletResponse, Integer studentClassId) {
+    public Result deleteStudentClass( Integer studentClassId) {
         Result result = new Result();
         try {
             StudentClass studentClass = studentClassService.findById(studentClassId);
