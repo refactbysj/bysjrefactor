@@ -121,7 +121,7 @@ public class VisitingAdminEmployeeController extends BaseController {
         return "/usersManage/visitingEmployee/visitingEmployeeList";
     }
 
-    public Page<VisitingEmployee> searchVisitingEmployee(Employee employee, String no, String name, Integer departmentId, Integer schoolId, Integer pageNo, Integer pageSize) {
+    private Page<VisitingEmployee> searchVisitingEmployee(Employee employee, String no, String name, Integer departmentId, Integer schoolId, Integer pageNo, Integer pageSize) {
         Page<VisitingEmployee> employees = null;
         if (name == "")
             name = null;

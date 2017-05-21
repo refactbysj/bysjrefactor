@@ -78,10 +78,28 @@ public class BysjWebServiceImpl extends AndroidBase {
         List<GraduateProject> graduateProjects = graduateProjectService.getCurrentYearGraduateProjectByTutor(tutor);
         if (graduateProjects != null) {
             for (GraduateProject graduateProject : graduateProjects) {
-                graduateProjectList.add(this.getAndroidGraduateProjectByGraduateProject(graduateProject));
+                com.newview.bysj.web.android.model.GraduateProject graduateProject1 = this.getAndroidGraduateProjectByGraduateProject(graduateProject);
+                this.setScore(graduateProject, graduateProject1, tutor);
+                graduateProjectList.add(graduateProject1);
             }
         }
         return graduateProjectList;
+    }
+
+    /**
+     * 获取答辩小组成员对课题的打分
+     */
+    private void setScore(GraduateProject graduateProject, com.newview.bysj.web.android.model.GraduateProject graduateProject1, Tutor tutor) {
+        if (graduateProject.getReplyGroupMemberScores() != null) {
+            for (ReplyGroupMemberScore replyGroupMemberScore : graduateProject.getReplyGroupMemberScores()) {
+                if (replyGroupMemberScore.getTutor_id().equals(tutor.getId())) {
+                    graduateProject1.setCompletenessScoreByGroup(replyGroupMemberScore.getCompletenessScoreByGroupTutor());
+                    graduateProject1.setCorrectnessScoreByGroup(replyGroupMemberScore.getCorrectnessScoreByGroupTutor());
+                    graduateProject1.setQualityScoreBtGroup(replyGroupMemberScore.getQualityScoreByGroupTutor());
+                    graduateProject1.setReplyScoreByGroup(replyGroupMemberScore.getReplyScoreByGroupTutor());
+                }
+            }
+        }
     }
 
 
@@ -213,10 +231,8 @@ public class BysjWebServiceImpl extends AndroidBase {
                 for (GraduateProject graduateProject : graduateProjects) {
                     com.newview.bysj.web.android.model.GraduateProject graduateProject1 = this.getAndroidGraduateProjectByGraduateProject(graduateProject);
                     //答辩小组成员对答辩小组的打分
-                    if (graduateProject.getReplyGroupMemberScores() != null) {
-
-                    }
-                    //graduateProjects1.add();
+                    this.setScore(graduateProject,graduateProject1,tutor);
+                    graduateProjects1.add(graduateProject1);
                 }
             }
             if (replyGroups != null) {
