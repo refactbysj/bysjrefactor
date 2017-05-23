@@ -90,13 +90,15 @@ public class BysjWebServiceImpl extends AndroidBase {
      * 获取答辩小组成员对课题的打分
      */
     private void setScore(GraduateProject graduateProject, com.newview.bysj.web.android.model.GraduateProject graduateProject1, Tutor tutor) {
-        if (graduateProject.getReplyGroupMemberScores() != null) {
-            for (ReplyGroupMemberScore replyGroupMemberScore : graduateProject.getReplyGroupMemberScores()) {
-                if (replyGroupMemberScore.getTutor_id().equals(tutor.getId())) {
-                    graduateProject1.setCompletenessScoreByGroup(replyGroupMemberScore.getCompletenessScoreByGroupTutor());
-                    graduateProject1.setCorrectnessScoreByGroup(replyGroupMemberScore.getCorrectnessScoreByGroupTutor());
-                    graduateProject1.setQualityScoreBtGroup(replyGroupMemberScore.getQualityScoreByGroupTutor());
-                    graduateProject1.setReplyScoreByGroup(replyGroupMemberScore.getReplyScoreByGroupTutor());
+        if (graduateProject != null&&graduateProject1!=null) {
+            if (graduateProject.getReplyGroupMemberScores() != null&&graduateProject.getReplyGroupMemberScores().size()>0) {
+                for (ReplyGroupMemberScore replyGroupMemberScore : graduateProject.getReplyGroupMemberScores()) {
+                    if (replyGroupMemberScore.getTutor_id()!=null&&replyGroupMemberScore.getTutor_id().equals(tutor!=null?tutor.getId():"")) {
+                        graduateProject1.setCompletenessScoreByGroup(replyGroupMemberScore.getCompletenessScoreByGroupTutor());
+                        graduateProject1.setCorrectnessScoreByGroup(replyGroupMemberScore.getCorrectnessScoreByGroupTutor());
+                        graduateProject1.setQualityScoreBtGroup(replyGroupMemberScore.getQualityScoreByGroupTutor());
+                        graduateProject1.setReplyScoreByGroup(replyGroupMemberScore.getReplyScoreByGroupTutor());
+                    }
                 }
             }
         }
@@ -469,6 +471,7 @@ public class BysjWebServiceImpl extends AndroidBase {
             // 设置所属的答辩小组
             replyGroupMemberScore.setReplyGroup(replyGroup);
             replyGroupMemberScore.setTutor(tutor);
+            replyGroupMemberScore.setTutor_id(tutor.getId());
             // 设置给课题打分的老师
             /*replyGroupMemberScore.setTutor(tutorService.findById(scores
                     .getTutor_id()));*/
