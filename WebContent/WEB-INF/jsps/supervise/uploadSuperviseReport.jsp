@@ -15,14 +15,6 @@
     $(function () {
         $("#upReportForm").form({
             url: '<%=basePath%>/process/uploadSupervisionReport.html',
-            onSubmit: function () {
-                progressLoad();
-                var isValid = $(this).form('validate');
-                if (!isValid) {
-                    progressClose();
-                }
-                return isValid;
-            },
             success: function (result) {
                 progressClose();
                 result = $.parseJSON(result);
