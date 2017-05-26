@@ -1,9 +1,12 @@
 package com.newview.bysj.web.android;
 
 import com.newview.bysj.domain.*;
+import com.newview.bysj.domain.GraduateProject;
+import com.newview.bysj.domain.ReplyGroup;
+import com.newview.bysj.domain.Student;
+import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.service.*;
-import com.newview.bysj.web.android.model.Addressee;
-import com.newview.bysj.web.android.model.Notice;
+import com.newview.bysj.web.android.model.*;
 import com.sun.istack.internal.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -110,7 +113,7 @@ public class AndroidBase {
         return graduateProject1;
     }
 
-    com.newview.bysj.web.android.model.ReplyGroup getAndroidReplyGroupByReplyGroup(ReplyGroup replyGroup) {
+    com.newview.bysj.web.android.model.ReplyGroup getAndroidReplyGroupByReplyGroup(ReplyGroup replyGroup,Tutor tutors) {
         com.newview.bysj.web.android.model.ReplyGroup replyGroup1 = new com.newview.bysj.web.android.model.ReplyGroup();
         replyGroup1.setId((long) replyGroup.getId());
         replyGroup1.setDescription(replyGroup.getDescription());
@@ -128,7 +131,9 @@ public class AndroidBase {
         if (graduateProjects != null) {
             for (GraduateProject graduateProject : graduateProjects) {
                 replyGroup1.setMajor(graduateProject.getMajor().getDescription());
-                graduateProjects1.add(this.getAndroidGraduateProjectByGraduateProject(graduateProject));
+                com.newview.bysj.web.android.model.GraduateProject graduateProject1 = this.getAndroidGraduateProjectByGraduateProject(graduateProject);
+                this.setScore(graduateProject, graduateProject1, tutors);
+                graduateProjects1.add(graduateProject1);
             }
         }
         StringBuilder sb = new StringBuilder();
@@ -164,6 +169,24 @@ public class AndroidBase {
         notice.setAddresseeIdList(addresseeId);
         notice.setAddresseeNameList(addresseeName);
         return notice;
+    }
+
+    /**
+     * 获取答辩小组成员对课题的打分
+     */
+    protected void setScore(GraduateProject graduateProject, com.newview.bysj.web.android.model.GraduateProject graduateProject1, Tutor tutor) {
+        if (graduateProject != null&&graduateProject1!=null) {
+            if (graduateProject.getReplyGroupMemberScores() != null&&graduateProject.getReplyGroupMemberScores().size()>0) {
+                for (ReplyGroupMemberScore replyGroupMemberScore : graduateProject.getReplyGroupMemberScores()) {
+                    if (replyGroupMemberScore.getTutor_id()!=null&&replyGroupMemberScore.getTutor_id().equals(tutor!=null?tutor.getId():"")) {
+                        graduateProject1.setCompletenessScoreByGroup(replyGroupMemberScore.getCompletenessScoreByGroupTutor());
+                        graduateProject1.setCorrectnessScoreByGroup(replyGroupMemberScore.getCorrectnessScoreByGroupTutor());
+                        graduateProject1.setQualityScoreBtGroup(replyGroupMemberScore.getQualityScoreByGroupTutor());
+                        graduateProject1.setReplyScoreByGroup(replyGroupMemberScore.getReplyScoreByGroupTutor());
+                    }
+                }
+            }
+        }
     }
 
     protected Addressee getAddresseeByAddressee(Actor actor,Long noticeId) {

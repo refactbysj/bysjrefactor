@@ -86,23 +86,7 @@ public class BysjWebServiceImpl extends AndroidBase {
         return graduateProjectList;
     }
 
-    /**
-     * 获取答辩小组成员对课题的打分
-     */
-    private void setScore(GraduateProject graduateProject, com.newview.bysj.web.android.model.GraduateProject graduateProject1, Tutor tutor) {
-        if (graduateProject != null&&graduateProject1!=null) {
-            if (graduateProject.getReplyGroupMemberScores() != null&&graduateProject.getReplyGroupMemberScores().size()>0) {
-                for (ReplyGroupMemberScore replyGroupMemberScore : graduateProject.getReplyGroupMemberScores()) {
-                    if (replyGroupMemberScore.getTutor_id()!=null&&replyGroupMemberScore.getTutor_id().equals(tutor!=null?tutor.getId():"")) {
-                        graduateProject1.setCompletenessScoreByGroup(replyGroupMemberScore.getCompletenessScoreByGroupTutor());
-                        graduateProject1.setCorrectnessScoreByGroup(replyGroupMemberScore.getCorrectnessScoreByGroupTutor());
-                        graduateProject1.setQualityScoreBtGroup(replyGroupMemberScore.getQualityScoreByGroupTutor());
-                        graduateProject1.setReplyScoreByGroup(replyGroupMemberScore.getReplyScoreByGroupTutor());
-                    }
-                }
-            }
-        }
-    }
+
 
 
     /**
@@ -239,7 +223,7 @@ public class BysjWebServiceImpl extends AndroidBase {
             }
             if (replyGroups != null) {
                 for (ReplyGroup replyGroup : replyGroups) {
-                    replyGroups1.add(this.getAndroidReplyGroupByReplyGroup(replyGroup));
+                    replyGroups1.add(this.getAndroidReplyGroupByReplyGroup(replyGroup,tutor));
                 }
             }
             projectAndReplyGroup.setGraduateProjectList(graduateProjects1);
@@ -267,7 +251,7 @@ public class BysjWebServiceImpl extends AndroidBase {
             return replyGroups;
         }
         for (ReplyGroup replyGroup : tutor.getReplyGroup()) {
-            com.newview.bysj.web.android.model.ReplyGroup replyGroup1 = this.getAndroidReplyGroupByReplyGroup(replyGroup);
+            com.newview.bysj.web.android.model.ReplyGroup replyGroup1 = this.getAndroidReplyGroupByReplyGroup(replyGroup,tutor);
             replyGroup1.setTutorId(tutor.getId().longValue());
             replyGroups.add(replyGroup1);
         }

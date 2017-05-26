@@ -22,6 +22,11 @@
             url:'<%=basePath%>notice/replyMail.html',
             onSubmit:function () {
                 progressLoad();
+                if($("#mailContent").val().length==0) {
+                    progressClose();
+                    $.messager.alert('提示', '内容不能为空', 'info');
+                    return false;
+                }
                 if ($("#mailContent").val().length > 200) {
                     progressClose();
                     $.messager.alert('提示', '字数不超过200字', 'info');

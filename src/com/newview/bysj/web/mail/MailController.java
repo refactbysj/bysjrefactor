@@ -92,7 +92,7 @@ public class MailController extends BaseController {
      * @return jsp中填写邮件的页面  mail/addMail.jsp
      */
     @RequestMapping(value = "/sendMail.html", method = RequestMethod.GET)
-    public String sendMail(HttpSession httpSession, ModelMap modelMap) {
+    public String sendMail(HttpSession httpSession, ModelMap modelMap,HttpServletRequest request) {
         Tutor tutor = tutorService.findById(CommonHelper.getCurrentTutor(httpSession).getId());
         /*if (CommonHelper.getCurrentActor(httpSession) instanceof Tutor) {
             tutor = (Tutor) CommonHelper.getCurrentActor(httpSession);
@@ -106,6 +106,7 @@ public class MailController extends BaseController {
         modelMap.put("mail", mail);
         modelMap.put("schoolList", schoolService.findAll());
         modelMap.put("myStudent", studentList);
+        modelMap.put("actionUrl", request.getRequestURI());
         return "mail/addMail";
     }
 

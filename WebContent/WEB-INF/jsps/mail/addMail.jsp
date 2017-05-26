@@ -148,7 +148,7 @@
 
 	$(function () {
 		$("#sendMailForm").form({
-			url:'<%=basePath%>notice/sendMail.html',
+			url:'${actionUrl}',
 			onSubmit:function () {
 			    progressLoad();
                 var isValid = $(this).form('validate');
@@ -156,10 +156,11 @@
 					progressClose();
                     return isValid;
                 }
-                var mailTitleLength = $("#mailTitle").val().length;
-                if (mailTitleLength > 30) {
-                    progressClose();
-                    $.messager.alert('提示', '标题的字数应在30字以内', 'info');
+
+                var recevie = $("#addresseeName").val();
+				if(recevie==null||recevie=='') {
+					progressClose();
+                    $.messager.alert('提示', '请选择收件人', 'info');
                     return false;
                 }
                 var mailContentLength = $("#mailContent").val().length;
@@ -218,8 +219,8 @@
 				</dd>
 				<dt>标题：<span style="color: #808080;font-size: smaller">(30字以内)</span></dt>
 				<dd>
-					<input name="title" value="" type="text" id="mailTitle" class="form-control"
-						   required="required" min="2"/>
+					<input name="title" value="" type="text" id="mailTitle" class="easyui-validatebox form-control"
+						   data-options="required:true" min="2"/>
 				</dd>
 
 				<dt>内容：<span style="color: #808080;font-size: smaller">(200字以内)</span></dt>
