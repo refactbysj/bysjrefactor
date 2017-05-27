@@ -28,12 +28,19 @@
             }
 
         })
+        $('#superReportFile').filebox({
+            onChange: function (newValue, oldValue) {
+                //现在只督导》提交督导报告，修改显示路径问题
+                //在mac下文件显示的路径不对，因此直接只显示文件名，不显示路径
+                $('#superReportFile').filebox('setValue', newValue.replace("C:\\fakepath\\", ""));
+            }
+        });
     })
 </script>
 <form method="post" style="padding: 10px;"
       id="upReportForm"
       enctype="multipart/form-data">
     <input class="easyui-filebox" style="width: 70%;" data-options="buttonText:'选择文件',required:true"
-           name="superReportFile"/>
+           id="superReportFile" name="superReportFile"/>
 
 </form>

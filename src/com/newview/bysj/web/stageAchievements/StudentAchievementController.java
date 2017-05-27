@@ -125,11 +125,15 @@ public class StudentAchievementController extends BaseController {
     //下载阶段成果
     @RequestMapping(value = "student/download/stageAchievement")
     public ResponseEntity<byte[]> download(Integer stageAchievementId, HttpSession httpSession) throws IOException {
-
+        //根据id找到阶段成果对象
         StageAchievement stageAchievement = stageAchievementService.findById(stageAchievementId);
+        //获取上传阶段成果的学生
         Student student = stageAchievement.getGraduateProject().getStudent();
+        //获取.出现的索引，获取.之后的字符串，即文件的扩展名
         String extendName = stageAchievement.getFileName().substring(stageAchievement.getFileName().lastIndexOf("."));
+        //设置下载文件名字
         String fileName = "阶段成果" + student.getName() +"-"+ student.getNo() + extendName;
+        //return：将文件对应的二进制流输出到客户端
         return CommonHelper.download(httpSession, stageAchievement.getUrl(), fileName);
     }
 }

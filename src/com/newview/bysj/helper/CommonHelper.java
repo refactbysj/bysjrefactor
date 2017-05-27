@@ -454,9 +454,20 @@ public class CommonHelper {
      * @param httpSession 当前会话
      * @return 上传路径
      */
+    //有一些linus上行，window不行，则Matcher.quoteReplacement(separator))
+    public static final String separator = File.separator;
     public static String getUploadPath(HttpSession httpSession) {
+        //获取根路径，D:\IJ-github\bysj2\classes\artifacts\bysj3\
+        //   /Users/apple/Library/tomcat7
         String rootPath = httpSession.getServletContext().getRealPath("/");
-        String uploadPath = rootPath.substring(0, rootPath.lastIndexOf("\\")) + Common.UPDATE_DIR;
+
+        //获取的路径是用\\分隔的,D:\IJ-github\bysj2\classes\artifacts\bysj3//update//
+        String uploadPath = rootPath.substring(0, rootPath.lastIndexOf(separator)) + Common.UPDATE_DIR;
+
+//        //为了适配linux，更改文件分割符，其中\\.为转义\
+//        String uploadPath1 =uploadPath.replaceAll("\\.", separator);
+//        System.out.println(uploadPath1);
+
         return uploadPath;
     }
 
@@ -496,7 +507,7 @@ public class CommonHelper {
         // 文件的扩展名
         String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."),
                 file.getOriginalFilename().length());
-        String name = folderName + "/" + fileName;
+        String name = folderName + separator + fileName;
         //logger.error("name====="+name);
         // 上传文件
         if (!file.isEmpty()) {
@@ -556,6 +567,7 @@ public class CommonHelper {
             throws IOException {
         //获取上传的路径
         String folder = CommonHelper.getUploadPath(httpSession);
+
         File file = new File(folder + url);
         if (!file.exists()) {
             throw new FileNotFoundException();
@@ -563,7 +575,9 @@ public class CommonHelper {
         //String nameFile = name + "." + url.split("\\\\")[0];
 
         HttpHeaders headers = new HttpHeaders();
+        //设置协议头的一些信息
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        //对name进行编码,把其中的\替换成MIME编码
         headers.setContentDispositionFormData("attachment",
                 URLEncoder.encode(name, "utf-8").replaceAll("\\+", "%20"));
         return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
