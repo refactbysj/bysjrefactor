@@ -822,6 +822,7 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
                 predicates.add(cb.equal(root.get("schoolExcellentProject").get("recommended"), true));
                 ////获取是校级优秀的课题
                 predicates.add(cb.isNotNull(root.get("schoolExcellentProject").as(SchoolExcellentProject.class)));
+
                 if (title != null) {
                     predicates.add(cb.like(root.get("title").as(String.class), "%" + title + "%"));
                 }
