@@ -97,7 +97,7 @@
 					{
 						title: '姓名',
 						align:'center',
-						width:'5%',
+						width:'7%',
 						field: 'name',
 						formatter: function (value, row, index) {
 							return row.student.name;
@@ -106,7 +106,7 @@
 					{
 						title: '班级',
 						align:'center',
-						width:'5%',
+						width:'7%',
 						field: 'class',
 						formatter: function (value, row, index) {
 							return row.student.studentClass.description;
@@ -115,7 +115,7 @@
 					{
 						title: '专业',
 						align:'center',
-						width:'7%',
+						width:'10%',
 						field: 'major1',
 						formatter: function (value, row, index) {
 							return row.major.description;
@@ -152,7 +152,7 @@
 					{
 						title: '题目',
 						align:'center',
-						width:'12%',
+						width:'15%',
 						field: 'title',
 						formatter: function (value, row, index) {
 							if(row.subTitle==null)
@@ -163,14 +163,14 @@
 					{
 						title: '类别',
 						align:'center',
-						width:'5%',
+						width:'7%',
 						field: 'category',
 					},
 
 					{
 						title: '教师姓名',
 						align:'center',
-						width:'5%',
+						width:'7%',
 						field: 'proposer',
 						formatter: function (value, row, index) {
 							return row.proposer.name;
@@ -198,7 +198,7 @@
 					{
 						title: '指定校级优秀',
 						align:'center',
-						width:'8%',
+						width:'10%',
 						field: 'recommended',
 						formatter: function (value, row, index) {
 							if(row.recommended==true&&row.schoolExcellentProject!=null)

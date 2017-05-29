@@ -94,7 +94,7 @@
                 {
                         title: '姓名',
                         align:'center',
-                        width:'5%',
+                        width:'7%',
                         field: 'name',
                         formatter: function (value, row, index) {
                             return row.student.name;
@@ -103,7 +103,7 @@
                     {
                         title: '班级',
                         align:'center',
-                        width:'5%',
+                        width:'7%',
                         field: 'class',
                         formatter: function (value, row, index) {
                             return row.student.studentClass.description;
@@ -112,7 +112,7 @@
                     {
                         title: '专业',
                         align:'center',
-                        width:'7%',
+                        width:'10%',
                         field: 'major1',
                         formatter: function (value, row, index) {
                             return row.major.description;

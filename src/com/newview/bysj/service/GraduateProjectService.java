@@ -1034,7 +1034,7 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
         graduateProjectDao.delete(graduateProject);
 
     }
-    @MethodDescription("获取校优候选人")
+    @MethodDescription("获取被推荐为校优的课题")
     public Page<GraduateProject> getPagesForExcellentCandidate(String title, String tutorName, Boolean recommend, Integer pageNo, Integer pageSize,List<Integer> ids) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
         pageSize = CommonHelper.getPageSize(pageSize);
@@ -1047,6 +1047,32 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
                     predicates.add(cb.equal(root.get("schoolExcellentProject").get("recommended").as(Boolean.class), recommend));
                 }
 
+                if (title != null) {
+                    predicates.add(cb.like(root.get("title").as(String.class), "%" + title + "%"));
+                }
+                if (title != null) {
+                    predicates.add(cb.like(root.get("proposer").get("name").as(String.class), "%" + tutorName + "%"));
+                }
+                predicates.add(cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear()));
+
+                predicates.add(root.get("id").as(Integer.class).in(ids));
+
+                Predicate[] p = new Predicate[predicates.size()];
+                return cb.and(predicates.toArray(p));
+            }
+        }, new PageRequest(pageNo, pageSize, new Sort(Direction.DESC, "id")));
+        return result;
+    }
+
+    @MethodDescription("获取被推荐为省优的课题")
+    public Page<GraduateProject> getPagesForProvinceExcellentCandidate(String title, String tutorName, Integer pageNo, Integer pageSize,List<Integer> ids) {
+        pageNo = CommonHelper.getPageNo(pageNo, pageSize);
+        pageSize = CommonHelper.getPageSize(pageSize);
+        Page<GraduateProject> result = graduateProjectDao.findAll(new Specification<GraduateProject>() {
+            @Override
+            public Predicate toPredicate(Root<GraduateProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                // TODO Auto-generated method stub
+                List<Predicate> predicates = new ArrayList<Predicate>();
                 if (title != null) {
                     predicates.add(cb.like(root.get("title").as(String.class), "%" + title + "%"));
                 }
