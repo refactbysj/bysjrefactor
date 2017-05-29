@@ -33,7 +33,7 @@ public class AssignProvinceExcellentProject extends BaseController {
         PageInfo pageInfo = new PageInfo();
         Page<GraduateProject> graduateProject = graduateProjectService.getPagesForProvinceExcellentCandidate(title == null ? null : title, tutorName == null ? null : tutorName, page, rows);
         pageInfo.setRows(graduateProject.getContent());
-        pageInfo.setTotal((int) graduateProject.getNumberOfElements());
+        pageInfo.setTotal(graduateProject.getNumberOfElements());
         return pageInfo;
     }
 
