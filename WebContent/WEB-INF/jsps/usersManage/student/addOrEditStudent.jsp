@@ -41,12 +41,12 @@
             <tr>
                 <td>学号：</td>
                 <td>
-                    <form:input type="text" class="easyui-textbox" id="inputName"
+                    <form:input type="text" class="easyui-textbox easyui-validatebox" data-options="required:true" id="inputName"
                                 path="no"/>
                 </td>
                 <td>姓名：</td>
                 <td>
-                    <form:input path="name" type="text" class="easyui-textbox" id="inputNum"/>
+                    <form:input path="name" type="text" class="easyui-textbox easyui-validatebox" data-options="required:true" id="inputNum"/>
                 </td>
             </tr>
             <tr>

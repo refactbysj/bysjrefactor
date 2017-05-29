@@ -165,6 +165,10 @@ public class ReplyGroupsController extends BaseController {
             List<GraduateProject> graduateProjectSet = new ArrayList<>();
             //List<GraduateProject> graduateProjectList = new ArrayList<>();
             GraduateProject graduateProject;
+            if (studentIds == null || studentIds.length == 0) {
+                result.setMsg("请选择答辩学生");
+                return result;
+            }
             for (Integer studentId : studentIds) {
                 Student student = studentService.findById(studentId);
                 if (student.getGraduateProject() == null) {
