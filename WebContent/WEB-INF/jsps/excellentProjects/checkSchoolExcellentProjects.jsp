@@ -250,7 +250,7 @@
 <table id ="checkSchoolExcellentProjects" style="height: 100%"></table>
 <div id ="detailWindow">
 	<div id="details" data-options="region:'center'" >
-		引用外部html文件
+		<%--引用外部html文件--%>
 	</div>
 </div>
 </body>
