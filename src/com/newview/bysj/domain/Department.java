@@ -77,7 +77,6 @@ public class Department implements Serializable {
      * @generated
      */
     @OneToOne
-    @JsonIgnore
     private ConstraintOfProposeProject constraintOfProposeProject;
     /**
      * 审核开题报告的时间
@@ -116,7 +115,7 @@ public class Department implements Serializable {
         this.description = description;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public School getSchool() {
         return school;
     }
@@ -159,7 +158,7 @@ public class Department implements Serializable {
         this.remarkTemplate = remarkTemplate;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public ConstraintOfProposeProject getConstraintOfProposeProject() {
         return constraintOfProposeProject;
     }

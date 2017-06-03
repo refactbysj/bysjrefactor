@@ -233,7 +233,8 @@
                 <c:forEach items="${parentResourceList}" var="parentResource">
                     <li><a data-toggle="collapse" data-parent="#accordion"
                            style="color: dodgerblue;background-color:ghostwhite;width: 100%;font-size: medium"
-                           href="#collapse${parentResource.id }"> <c:choose>
+                           href="#collapse${parentResource.id }">
+                        <c:choose>
                         <c:when test="${parentResource.id == 1}">
                             <span class="glyphicon glyphicon-bell">${parentResource.description}</span>
                         </c:when>
@@ -264,7 +265,8 @@
                         <c:when test="${parentResource.id == 51}">
                             <span class="glyphicon glyphicon-stats">${parentResource.description}</span>
                         </c:when>
-                    </c:choose> <i class=" icon-angle-left"
+                    </c:choose>
+                        <i class=" icon-angle-left"
                                    style="font-size: 10px; float: right"></i>
                     </a>
 

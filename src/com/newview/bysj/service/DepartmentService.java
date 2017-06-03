@@ -5,10 +5,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.newview.bysj.domain.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -80,4 +80,20 @@ public class DepartmentService extends BasicService<Department, Integer> {
         });
         return departmentList;
     }
+
+    @MethodDescription("院级管理员查看各教研室的时间设置")
+    public Page<Department> getPagesForDepartmentCandidate(Integer pageNo, Integer pageSize) {
+        pageNo = CommonHelper.getPageNo(pageNo, pageSize);
+        pageSize = CommonHelper.getPageSize(pageSize);
+        Page<Department> result = departmentDao.findAll(new Specification<Department>() {
+            @Override
+            public Predicate toPredicate(Root<Department> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                //query.orderBy(cb.desc(root.get("id").as(Integer.class)));
+                //query.getRestriction();
+                return null;
+            }
+        }, new PageRequest(pageNo, pageSize, new Sort(Sort.Direction.DESC, "id")));
+        return result;
+    }
+
 }

@@ -17,6 +17,7 @@
             $("#remarkByTutorTextareaToShow").html(" ");
 //            获取选择的模版
             var remarkString = $("#remarkTemplateItem" + $(this).val());
+
             $("#remarkByTutorTextareaToShow").html(remarkString.html());
         });
 
@@ -45,7 +46,10 @@
                  remarkByTutorTextarea.find("span").each(function () {
                  $(this).replaceWith($(this).html());
                  });
+                //$("#remarkByGroup").val(remarkByTutorTextarea.text());
+                remarkByTutorTextarea.html($('#textarea').val());
                 $("#remarkByGroup").val(remarkByTutorTextarea.text());
+
             },
             success: function (result) {
                 result = $.parseJSON(result);
@@ -145,9 +149,9 @@
                         <!-- 用于表单提交的textarea -->
                         <textarea id="remarkByGroup" rows="10" cols="60" name="remark" style="display:none;"></textarea>
                         <!-- 用于显示的textarea -->
-                        <div id="remarkByTutorTextareaToShow" contenteditable="true" class="form-control"
+                        <div id="remarkByTutorTextareaToShow" class="form-control"
                              style="width:100%;height:156px;border:1px solid black;font-size:18px;">
-                                ${graduateProject.commentByGroup.remarkByGroup}
+                            <textarea rows="5" cols="80" id="textarea">${graduateProject.commentByGroup.remarkByGroup}</textarea>
                         </div>
                         <c:forEach items="${remarkTemplates }" var="remarkTemplate">
                             <!-- 评语内容 -->
