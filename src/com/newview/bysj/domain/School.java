@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -111,6 +112,7 @@ public class School implements Serializable {
     }
 
     @JsonBackReference
+    @JsonIgnore
     public List<Department> getDepartment() {
         return department;
     }
