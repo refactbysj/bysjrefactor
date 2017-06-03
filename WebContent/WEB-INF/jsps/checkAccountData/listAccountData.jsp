@@ -19,7 +19,6 @@
         <sec:authorize ifAllGranted="ROLE_DEPARTMENT_DIRECTOR" ifNotGranted="ROLE_SCHOOL_ADMIN">
         url='${basePath}dataAccount/checkDataAccountByDepartmentList.html';
         </sec:authorize>
-
         <%--同时拥有院级管理员和教研室主任两个角色--%>
         <sec:authorize ifAllGranted="ROLE_SCHOOL_ADMIN,ROLE_DEPARTMENT_DIRECTOR">
         url='${basePath}dataAccount/checkDataAccountByDeanList.html';

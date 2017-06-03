@@ -10,7 +10,6 @@ public class DataBean {
 
     public DataBean() {
     }
-
     public DataBean(int shouldCompleteCount, int alreadyCompleteCount) {
         super();
         this.shouldCompleteCount = shouldCompleteCount;

@@ -37,7 +37,6 @@ public class DepartmentAcountCompleted {
      * 指导教师评审表数据统计
      */
     private DataBean tutorEvaluate = new DataBean();
-
     /**
      * 评阅人评审表数据统计
      */

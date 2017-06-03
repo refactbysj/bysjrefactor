@@ -5,7 +5,6 @@
 <h4 class="modal-title" id="myModalLabel">
     ${description},总数：${fn:length(graduateProjectList)}
 </h4>
-
 <table id="graduateProjectDetail"  class="table table-striped table-bordered table-hover datatable">
     <thead>
     <tr>
