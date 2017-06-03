@@ -1,15 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-
 	<%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
 	<script type="text/javascript">
-        var assginProvinceExcellentProjectsGrid, sum=new Array();
+        var checkSchoolExcellentProjectsGrid, sum=new Array();
         //查询
         function searchFun() {
-            $("#assginProvinceExcellentProjects").datagrid('load', $.serializeObject($("#form")));
+            $("#checkSchoolExcellentProjects").datagrid('load', $.serializeObject($("#form")));
         }
-
         //显示细节的弹出框
         function openWindow(id) {
             $('#detailWindow').window({
@@ -25,18 +23,18 @@
             $("#details").html(hrefs);
         }
 		/*点击推优的函数*/
-        function passProvinceExcellent(graduateProjectId) {
+        function passSchoolExcellent(graduateProjectId) {
             $.messager.confirm("提示","确认推优？", function(r){
                 if(r){
                     $.ajax({
-                        url: '${basePath}projects/approveProvinceExcellentProject.html',
+                        url: '${basePath}projects/approveProvinceExcellentProjectByDirector.html',
                         data: {"graduateProjectId": graduateProjectId},
                         dataType: 'json',
                         type: 'post',
                         success: function (data){
                             if(data) {
                                 $.messager.alert('提示', "推优成功");
-                                $('#assginProvinceExcellentProjects').datagrid('reload');
+                                $('#checkSchoolExcellentProjects').datagrid('reload');
                             }else
                                 $.messager.alert('提示', "推优失败");
                         },
@@ -45,18 +43,18 @@
             });
         }
 		/*点击驳回的函数*/
-        function backProvinceExcellent(graduateProjectId) {
+        function backSchoolExcellent(graduateProjectId) {
             $.messager.confirm("提示","确认驳回？", function(r){
                 if(r){
                     $.ajax({
-                        url: '${basePath}projects/cancelProvinceExcellentProject.html',
+                        url: '${basePath}projects/cancelProvinceExcellentProjectByDirector.html',
                         data: {"graduateProjectId": graduateProjectId},
                         dataType: 'json',
                         type: 'post',
                         success: function (data) {
                             if(data) {
                                 $.messager.alert('提示',"驳回成功");
-                                $('#assginProvinceExcellentProjects').datagrid('reload');
+                                $('#checkSchoolExcellentProjects').datagrid('reload');
                             }else
                                 $.messager.alert('提示', "驳回失败");
 
@@ -67,8 +65,8 @@
         }
 
         $(function () {
-            assginProvinceExcellentProjectsGrid = $("#assginProvinceExcellentProjects").datagrid({
-                url: '${basePath}projects/saveProvenceExcellentProjectsLists.html',
+            checkSchoolExcellentProjectsGrid = $("#checkSchoolExcellentProjects").datagrid({
+                url: '${basePath}projects/listSchoolExcellentProjectsList.html',
                 striped: true,
                 pagination:true,
                 pageSize: 15,
@@ -77,12 +75,12 @@
                 idField:'id',
                 singleSelect:true,
                 columns: [[
-                {
+                    {
                         title: 'ID',
                         field: 'id',
                         hidden:true
                     },
-                    {
+					{
                         title: '学号',
                         align:'center',
                         width:'9%',
@@ -91,7 +89,7 @@
                             return row.student.no;
                         }
                     },
-                {
+                    {
                         title: '姓名',
                         align:'center',
                         width:'7%',
@@ -119,7 +117,8 @@
 
                         }
                     },
-                    {
+
+                {
                         title: '成绩',
                         align:'center',
                         width:'5%',
@@ -161,6 +160,9 @@
                         align:'center',
                         width:'7%',
                         field: 'category',
+                        formatter: function (value, row, index) {
+                            return row.category;
+                        }
                     },
 
                     {
@@ -192,12 +194,12 @@
                         }
                     },
                     {
-                        title: '指定省级优秀',
+                        title: '省优候选状态',
                         align:'center',
                         width:'8%',
                         field: 'recommended',
                         formatter: function (value, row, index) {
-                            if(row.provinceExcellentProject!=null)
+                            if(row.schoolExcellentProject.recommended==true)
                                 return '<p id=projectRecommended'+row.id+'>优秀</p>';
                             return '<p id=projectRecommended'+row.id+'>否</p>';
                         }
@@ -208,10 +210,10 @@
                         width:'7%',
                         field: 'option',
                         formatter: function (value, row, index) {
-                            if (row.provinceExcellentProject!=null) {
-                                return '<a id=projectOperation' + row.id + ' onclick=backProvinceExcellent(' + row.id + ')><button>驳回</button></a>';
+                            if (row.schoolExcellentProject.recommended==true) {
+                                return '<a id=projectOperation' + row.id + ' onclick=backSchoolExcellent(' + row.id + ')><button>驳回</button></a>';
                             }
-                            return '<a id=projectOperation' + row.id + ' onclick=passProvinceExcellent(' + row.id + ')><button>通过</button></a>';
+                            return '<a id=projectOperation' + row.id + ' onclick=passSchoolExcellent(' + row.id + ')><button>通过</button></a>';
                         }
 
                     },
@@ -245,7 +247,7 @@
 
 	</form>
 </div>
-<table id ="assginProvinceExcellentProjects" style="height: 100%"></table>
+<table id ="checkSchoolExcellentProjects" style="height: 100%"></table>
 <div id ="detailWindow">
 	<div id="details" data-options="region:'center'" >
 		<%--引用外部html文件--%>
@@ -253,4 +255,6 @@
 </div>
 </body>
 </html>
+
+
 

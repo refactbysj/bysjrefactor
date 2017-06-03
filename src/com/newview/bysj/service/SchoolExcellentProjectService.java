@@ -3,11 +3,10 @@ package com.newview.bysj.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
+import com.newview.bysj.dao.GraduateProjectDao;
+import com.newview.bysj.domain.GraduateProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +25,7 @@ import com.newview.bysj.myAnnotation.MethodDescription;
 public class SchoolExcellentProjectService extends BasicService<SchoolExcellentProject, Integer> {
 
     SchoolExcellentProjectDao schoolExcellentProjectDao;
+    GraduateProjectDao graduateProjectDao;
 
     @Override
     @Autowired
@@ -34,6 +34,7 @@ public class SchoolExcellentProjectService extends BasicService<SchoolExcellentP
         schoolExcellentProjectDao = (SchoolExcellentProjectDao) basicDao;
     }
 
+    //由于schoolExcellentProject类的graduate必须不能转化成json，如果不注解，则会反复循环解析成json，因此此方法没用
     @MethodDescription("获取被推荐为校优的课题")
     public Page<SchoolExcellentProject> getPagesSchoolExcellentProjectBySchoolAmin(String title, String tutorName, Boolean recommended, Integer pageNo, Integer pageSize) {
         pageNo = CommonHelper.getPageNo(pageNo, pageSize);
@@ -41,7 +42,6 @@ public class SchoolExcellentProjectService extends BasicService<SchoolExcellentP
         Page<SchoolExcellentProject> result = schoolExcellentProjectDao.findAll(new Specification<SchoolExcellentProject>() {
             @Override
             public Predicate toPredicate(Root<SchoolExcellentProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 List<Predicate> predicates = new ArrayList<Predicate>();
                 if (recommended != null) {
                     predicates.add(cb.equal(root.get("recommended").as(Boolean.class), recommended));
@@ -60,5 +60,7 @@ public class SchoolExcellentProjectService extends BasicService<SchoolExcellentP
         return result;
 
     }
+
+
 
 }

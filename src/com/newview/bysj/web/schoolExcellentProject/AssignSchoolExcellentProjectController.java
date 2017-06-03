@@ -48,19 +48,9 @@ public class AssignSchoolExcellentProjectController extends BaseController {
 
         SchoolExcellentProject schoolExcellentProject = new SchoolExcellentProject();
         schoolExcellentProject.setGraduateProject(graduateProject);
-        schoolExcellentProject.setRecommended(true);
         schoolExcellentProject = schoolExcellentProjectService.saveAndFlush(schoolExcellentProject);
 
-        ProvinceExcellentProject provinceExcellentProject= new ProvinceExcellentProject();
-        provinceExcellentProject.setGraudateProject(graduateProject);
-        provinceExcellentProject= provinceExcellentProjectService.saveAndFlush(provinceExcellentProject);
-
-//        //重新获取保存的schoolExcellentProject否则更新graduateProject会出错
-//        schoolExcellentProject = schoolExcellentProjectService.uniqueResult("graduateProject", GraduateProject.class, graduateProject);
-//        provinceExcellentProject = provinceExcellentProjectService.uniqueResult("graduateProject", GraduateProject.class, graduateProject);
-
         graduateProject.setSchoolExcellentProject(schoolExcellentProject);
-        graduateProject.setProvinceExcellentProject(provinceExcellentProject);
         graduateProjectService.saveOrUpdate(graduateProject);
 
         CommonHelper.buildSimpleJson(httpServletResponse);
@@ -73,18 +63,10 @@ public class AssignSchoolExcellentProjectController extends BaseController {
 
         SchoolExcellentProject schoolExcellentProject = graduateProject.getSchoolExcellentProject();
         schoolExcellentProject.setGraduateProject(null);
-        schoolExcellentProject.setRecommended(null);
-
-        ProvinceExcellentProject provinceExcellentProject = graduateProject.getProvinceExcellentProject();
-        if(graduateProject.getProvinceExcellentProject()!=null) {
-            provinceExcellentProject.setGraudateProject(null);
-        }
 
         graduateProject.setSchoolExcellentProject(null);
 
         schoolExcellentProjectService.deleteObject(schoolExcellentProject);
-        provinceExcellentProjectService.deleteObject(provinceExcellentProject);
-
 
         graduateProjectService.saveOrUpdate(graduateProject);
         CommonHelper.buildSimpleJson(httpServletResponse);

@@ -1,15 +1,14 @@
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-
 	<%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
 	<script type="text/javascript">
-        var assginProvinceExcellentProjectsGrid, sum=new Array();
+        var checkProvinceExcellentProjectsGrid, sum=new Array();
         //查询
         function searchFun() {
-            $("#assginProvinceExcellentProjects").datagrid('load', $.serializeObject($("#form")));
+            $("#checkProvinceExcellentProjects").datagrid('load', $.serializeObject($("#form")));
         }
-
         //显示细节的弹出框
         function openWindow(id) {
             $('#detailWindow').window({
@@ -24,51 +23,10 @@
             var hrefs = "<iframe id='son'  src=${basePath}process/showDetail.html?graduateProjectId="+id+ " allowTransparency='true' style='border:0;width:99%;height:99%;padding-left:2px;' frameBorder='0'></iframe>";
             $("#details").html(hrefs);
         }
-		/*点击推优的函数*/
-        function passProvinceExcellent(graduateProjectId) {
-            $.messager.confirm("提示","确认推优？", function(r){
-                if(r){
-                    $.ajax({
-                        url: '${basePath}projects/approveProvinceExcellentProject.html',
-                        data: {"graduateProjectId": graduateProjectId},
-                        dataType: 'json',
-                        type: 'post',
-                        success: function (data){
-                            if(data) {
-                                $.messager.alert('提示', "推优成功");
-                                $('#assginProvinceExcellentProjects').datagrid('reload');
-                            }else
-                                $.messager.alert('提示', "推优失败");
-                        },
-                    });
-                }
-            });
-        }
-		/*点击驳回的函数*/
-        function backProvinceExcellent(graduateProjectId) {
-            $.messager.confirm("提示","确认驳回？", function(r){
-                if(r){
-                    $.ajax({
-                        url: '${basePath}projects/cancelProvinceExcellentProject.html',
-                        data: {"graduateProjectId": graduateProjectId},
-                        dataType: 'json',
-                        type: 'post',
-                        success: function (data) {
-                            if(data) {
-                                $.messager.alert('提示',"驳回成功");
-                                $('#assginProvinceExcellentProjects').datagrid('reload');
-                            }else
-                                $.messager.alert('提示', "驳回失败");
-
-                        }
-                    });
-                }
-            })
-        }
 
         $(function () {
-            assginProvinceExcellentProjectsGrid = $("#assginProvinceExcellentProjects").datagrid({
-                url: '${basePath}projects/saveProvenceExcellentProjectsLists.html',
+            checkProvinceExcellentProjectsGrid = $("#checkProvinceExcellentProjects").datagrid({
+                url: '${basePath}projects/listProvenceExcellentProjectsList.html',
                 striped: true,
                 pagination:true,
                 pageSize: 15,
@@ -77,7 +35,7 @@
                 idField:'id',
                 singleSelect:true,
                 columns: [[
-                {
+                    {
                         title: 'ID',
                         field: 'id',
                         hidden:true
@@ -85,13 +43,13 @@
                     {
                         title: '学号',
                         align:'center',
-                        width:'9%',
+                        width:'10%',
                         field: 'no',
                         formatter: function (value, row, index) {
                             return row.student.no;
                         }
                     },
-                {
+                    {
                         title: '姓名',
                         align:'center',
                         width:'7%',
@@ -119,10 +77,11 @@
 
                         }
                     },
+
                     {
                         title: '成绩',
                         align:'center',
-                        width:'5%',
+                        width:'7%',
                         field: 'score',
                         formatter: function (value, row, index) {
                             if(row.commentByTutor!=null&&row.commentByReviewer!=null&&row.commentByGroup!=null) {
@@ -148,7 +107,7 @@
                     {
                         title: '题目',
                         align:'center',
-                        width:'15%',
+                        width:'20%',
                         field: 'title',
                         formatter: function (value, row, index) {
                             if(row.subTitle==null)
@@ -159,14 +118,16 @@
                     {
                         title: '类别',
                         align:'center',
-                        width:'7%',
+                        width:'9%',
                         field: 'category',
+                        formatter: function (value, row, index) {
+                            return row.category;
+                        }
                     },
-
-                    {
+					{
                         title: '教师姓名',
                         align:'center',
-                        width:'7%',
+                        width:'10%',
                         field: 'proposer',
                         formatter: function (value, row, index) {
                             return row.proposer.name;
@@ -175,7 +136,7 @@
                     {
                         title: '职称/学位',
                         align:'center',
-                        width:'10%',
+                        width:'12%',
                         field: 'proTitle',
                         formatter: function (value, row, index) {
                             if(row.proposer.proTitle==null) {
@@ -190,30 +151,6 @@
                                     return row.proposer.proTitle.description + '/' + row.proposer.degree.description;
                             }
                         }
-                    },
-                    {
-                        title: '指定省级优秀',
-                        align:'center',
-                        width:'8%',
-                        field: 'recommended',
-                        formatter: function (value, row, index) {
-                            if(row.provinceExcellentProject!=null)
-                                return '<p id=projectRecommended'+row.id+'>优秀</p>';
-                            return '<p id=projectRecommended'+row.id+'>否</p>';
-                        }
-                    },
-                    {
-                        title: '操作',
-                        align:'center',
-                        width:'7%',
-                        field: 'option',
-                        formatter: function (value, row, index) {
-                            if (row.provinceExcellentProject!=null) {
-                                return '<a id=projectOperation' + row.id + ' onclick=backProvinceExcellent(' + row.id + ')><button>驳回</button></a>';
-                            }
-                            return '<a id=projectOperation' + row.id + ' onclick=passProvinceExcellent(' + row.id + ')><button>通过</button></a>';
-                        }
-
                     },
                     {
                         title: '详情',
@@ -245,7 +182,7 @@
 
 	</form>
 </div>
-<table id ="assginProvinceExcellentProjects" style="height: 100%"></table>
+<table id ="checkProvinceExcellentProjects" style="height: 100%"></table>
 <div id ="detailWindow">
 	<div id="details" data-options="region:'center'" >
 		<%--引用外部html文件--%>
@@ -253,4 +190,6 @@
 </div>
 </body>
 </html>
+
+
 
