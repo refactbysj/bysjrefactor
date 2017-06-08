@@ -1,7 +1,7 @@
 package com.newview.bysj.domain;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -114,7 +114,6 @@ public class ReplyGroupMemberScore implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "replyGroup_id")
-    @JsonIgnore
     private ReplyGroup replyGroup;
 
 
@@ -147,7 +146,7 @@ public class ReplyGroupMemberScore implements Serializable {
         this.submittedDate = submittedDate;
     }
 
-    @JsonBackReference
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public GraduateProject getGraduateProject() {
         return graduateProject;
     }
@@ -277,7 +276,7 @@ public class ReplyGroupMemberScore implements Serializable {
         this.studentResponse_3 = studentResponse_3;
     }
 
-    @JsonBackReference
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public ReplyGroup getReplyGroup() {
         return replyGroup;
     }

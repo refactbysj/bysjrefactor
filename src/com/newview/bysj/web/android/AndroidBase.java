@@ -183,6 +183,7 @@ public class AndroidBase {
                         graduateProject1.setCorrectnessScoreByGroup(replyGroupMemberScore.getCorrectnessScoreByGroupTutor());
                         graduateProject1.setQualityScoreBtGroup(replyGroupMemberScore.getQualityScoreByGroupTutor());
                         graduateProject1.setReplyScoreByGroup(replyGroupMemberScore.getReplyScoreByGroupTutor());
+                        break;
                     }
                 }
             }

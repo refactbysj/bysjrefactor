@@ -250,9 +250,21 @@ public class BysjWebServiceImpl extends AndroidBase {
             replyGroups.add(new com.newview.bysj.web.android.model.ReplyGroup());
             return replyGroups;
         }
+
         for (ReplyGroup replyGroup : tutor.getReplyGroup()) {
             com.newview.bysj.web.android.model.ReplyGroup replyGroup1 = this.getAndroidReplyGroupByReplyGroup(replyGroup,tutor);
             replyGroup1.setTutorId(tutor.getId().longValue());
+            List<com.newview.bysj.web.android.model.GraduateProject> graduateProjects = new ArrayList<>();
+            if (replyGroup.getGraduateProject() != null) {
+                //分数赋值
+                for (GraduateProject graduateProject : replyGroup.getGraduateProject()) {
+                    com.newview.bysj.web.android.model.GraduateProject graduateProject1 = this.getAndroidGraduateProjectByGraduateProject(graduateProject);
+                    this.setScore(graduateProject, graduateProject1, tutor);
+                    graduateProjects.add(graduateProject1);
+                }
+                replyGroup1.setGraduateProjects(graduateProjects);
+            }
+
             replyGroups.add(replyGroup1);
         }
         //返回该老师所在的答辩小组
@@ -409,7 +421,7 @@ public class BysjWebServiceImpl extends AndroidBase {
                 in_dex = ++maxIn_dex;
             }
 
-            Tutor tutor = tutorService.findById(graduateProject.getTutorId().intValue());
+
             // 得到当前答辩老师所在的答辩小组
             ReplyGroup replyGroup = replyGroupService.findById(graduateProject.getReplyGroupId()!=null?graduateProject.getReplyGroupId().intValue():null);
             // 创建一个新的答辩小组成员的分数的实体类
@@ -454,8 +466,12 @@ public class BysjWebServiceImpl extends AndroidBase {
             replyGroupMemberScore.setSubmitted(true);
             // 设置所属的答辩小组
             replyGroupMemberScore.setReplyGroup(replyGroup);
-            replyGroupMemberScore.setTutor(tutor);
-            replyGroupMemberScore.setTutor_id(tutor.getId());
+            //打分者id是否为空
+            if (graduateProject.getUserId()!=0) {
+                Tutor tutor = tutorService.findById((int)graduateProject.getUserId());
+                replyGroupMemberScore.setTutor(tutor);
+                replyGroupMemberScore.setTutor_id(tutor.getId());
+            }
             // 设置给课题打分的老师
             /*replyGroupMemberScore.setTutor(tutorService.findById(scores
                     .getTutor_id()));*/

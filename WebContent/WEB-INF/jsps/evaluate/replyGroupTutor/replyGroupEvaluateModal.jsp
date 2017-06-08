@@ -6,12 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="/WEB-INF/jsps/includeURL.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal"
-            aria-hidden="true">×
-    </button>
     <h4 class="modal-title" id="myModalLabel1">
         附表11：
         山东建筑大学毕业设计（论文）答辩提问及成绩汇总表
@@ -19,14 +16,14 @@
         题目名称：${graduateProject.title}
         <br>
         班级：${graduateProject.student.studentClass.description}&nbsp;&nbsp;学生姓名：${graduateProject.student.name}&nbsp;&nbsp;学号:${graduateProject.student.no}
-        ${tutor}的评审
+        <br/>${tutor}的评审
     </h4>
 </div>
 <div class="modal-body">
     <c:set value="${replyGroupMemberScore}" var="replyGroupMemberScore"/>
     <table class="table">
         <tbody>
-        <tr>
+        <%--<tr>
             <td>提问的内容1</td>
             <td>
                 <c:choose>
@@ -97,25 +94,27 @@
                     </c:otherwise>
                 </c:choose>
             </td>
-        </tr>
+        </tr>--%>
         <tr>
             <td colspan="1.5">论文与实物的质量评分（0-10分）</td>
-            <td colspan="0.5">${replyGroupMemberScore.qualityScoreByGroupTutor}</td>
+            <td colspan="0.5">${replyGroupMemberScore.qualityScoreByGroupTutor}分</td>
+
+        </tr>
+        <tr>
             <td colspan="1.5">完成任务书规定的要求与水平评分（0-10分)</td>
-            <td colspan="0.5">${replyGroupMemberScore.completenessScoreByGroupTutor}</td>
+            <td colspan="0.5">${replyGroupMemberScore.completenessScoreByGroupTutor}分</td>
         </tr>
         <tr>
             <td colspan="1.5">论文内容的答辩陈述评分（0-10分）</td>
-            <td colspan="0.5">${replyGroupMemberScore.replyScoreByGroupTutor}</td>
+            <td colspan="0.5">${replyGroupMemberScore.replyScoreByGroupTutor}分</td>
+
+        </tr>
+        <tr>
             <td colspan="1.5">回答问题的正确性评分（0-10分）</td>
-            <td colspan="0.5">${replyGroupMemberScore.correctnessScoreByGroupTutor}</td>
+            <td colspan="0.5">${replyGroupMemberScore.correctnessScoreByGroupTutor}分</td>
         </tr>
         </tbody>
     </table>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-default"
-            data-dismiss="modal">关闭
-    </button>
-</div>
+
 

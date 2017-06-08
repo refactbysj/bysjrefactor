@@ -49,7 +49,6 @@ public class ReplyGroup implements Serializable {
      *
      * @generated
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "replyGroup")
     private List<GraduateProject> graduateProject;
     /**

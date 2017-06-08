@@ -33,7 +33,7 @@ public class GraduateProject {
     private Long replyGroupId;        //该课题所在的答辩小组
     private boolean auditByDirector;           //审核状态
     private int scoresState;    //登陆用户对该学生的答辩打分
-
+    private long userId;
 
 
     public GraduateProject() {
@@ -157,6 +157,14 @@ public class GraduateProject {
 
     public void setCorrectnessScoreByGroup(Integer correctnessScoreByGroup) {
         this.correctnessScoreByGroup = correctnessScoreByGroup;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public Integer getQualityScoreBtGroup() {

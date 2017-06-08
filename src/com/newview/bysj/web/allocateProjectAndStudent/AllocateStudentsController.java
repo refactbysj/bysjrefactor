@@ -188,7 +188,7 @@ public class AllocateStudentsController extends BaseController {
      *
      * @param stuIds 需要删除的学生的id集合
      */
-    @RequestMapping(value = "/delStudents.html", method = RequestMethod.POST)
+    @RequestMapping(value = "/delStudents.html", method = RequestMethod.GET)
     @ResponseBody
     public Result delStudent(String stuIds) {
         Result result = new Result();
@@ -216,15 +216,15 @@ public class AllocateStudentsController extends BaseController {
             result.setSuccess(true);
             //判断是否有 没有删除的学生
             if (Objects.equals("", cannotDel.toString())) {
-                result.setMsg("删除成功");
+                result.setMsg("取消分配成功");
             } else {
                 String info = cannotDel.toString().substring(0, cannotDel.toString().length());
-                result.setMsg("以下学生已分配课题，删除失败：" + info);
+                result.setMsg("以下学生已分配课题，取消分配失败：" + info);
             }
             return result;
         } catch (Exception e) {
             logger.error("删除学生失败" + e);
-            result.setMsg("删除失败");
+            result.setMsg("取消分配失败");
             result.setSuccess(false);
             return result;
         }

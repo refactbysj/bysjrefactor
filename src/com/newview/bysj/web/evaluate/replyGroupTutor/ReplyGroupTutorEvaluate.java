@@ -94,8 +94,20 @@ public class ReplyGroupTutorEvaluate extends BaseController {
         return "evaluate/replyGroupTutor/replyTutorEvaluateList";
     }
 
+
+    @RequestMapping("/getMemberScoreDetail")
+    public String evaluateDetail(String memberScoreId, Model model) {
+        ReplyGroupMemberScore replyGroupMemberScore = replyGroupMemberScoreService.findById(Integer.valueOf(memberScoreId));
+        if (replyGroupMemberScore != null) {
+            model.addAttribute("graduateProject", replyGroupMemberScore.getGraduateProject());
+            model.addAttribute("tutor", replyGroupMemberScore.getTutor().getName());
+            model.addAttribute("replyGroupMemberScore", replyGroupMemberScore);
+        }
+        return "evaluate/replyGroupTutor/replyGroupEvaluateModal";
+    }
+
     //根据集合中的数据，计算出此集合中数值的平均值，小数点后面保留一位小数
-    public Double getAvgByList(List<Integer> intList) {
+    private Double getAvgByList(List<Integer> intList) {
         /*double avgNum = 0.0;
         for (Integer num : intList) {
             avgNum = avgNum + num;

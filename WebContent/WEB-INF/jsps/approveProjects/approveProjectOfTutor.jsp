@@ -130,6 +130,7 @@
                 success: function (result) {
                     if (result.success) {
                         $("#approveProjectTable").datagrid('reload');
+                        $.messager.alert('提示', result.msg, 'info');
                         return true;
                     } else {
                         $.messager.alert('提示', '操作失败', 'warning');

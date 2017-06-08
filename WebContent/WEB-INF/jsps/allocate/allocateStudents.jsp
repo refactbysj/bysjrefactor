@@ -92,13 +92,13 @@
             parent.$.modalDialog({
                 title: '已匹配学生',
                 href: url,
-                width: 700,
-                height: 400,
+                width: '70%',
+                height: '80%',
                 modal: true,
                 buttons: [{
-                    text: '确定',
-                    iconCls: 'icon-ok',
-                    handler: function () {
+                    text:'关闭',
+                    iconCls:'icon-cancel',
+                    handler:function () {
                         parent.$.modalDialog.handler.dialog('close');
                     }
                 }]
@@ -111,14 +111,22 @@
             parent.$.modalDialog({
                 title: '已分配学生',
                 href: url,
-                width: 700,
-                height: 400,
+                width: '70%',
+                height: '80%',
                 modal: true,
                 buttons: [{
+                    text: '提交',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        parent.$.modalDialog.studentGrid = studentGrid;
+                        var f = parent.$.modalDialog.handler.find('#allocatedForm1');
+                        f.submit();
+                    }
+                },{
                     text: '关闭',
+                    iconCls:'icon-cancel',
                     handler: function () {
                         parent.$.modalDialog.handler.dialog('close');
-                        $("#studentTable").datagrid('load');
                     }
                 }]
 
@@ -128,6 +136,7 @@
         //给指导老师分配学生
         function allocateStudent(tutorId) {
             var students = $("#studentTable").datagrid('getChecked');
+            console.log(students);
             var studentCount = students.length;
             if (studentCount == 0 || studentCount == null) {
                 $.messager.alert("提示", "请选择学生", "warning");
@@ -148,6 +157,7 @@
                             success: function (data) {
                                 progressClose();
                                 $("#studentTable").datagrid("reload");
+                                $("#studentTable").datagrid("clearChecked");
                                 $.messager.alert("提示", "匹配成功", "info");
                                 return true;
                             },

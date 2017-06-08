@@ -7,8 +7,21 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+
 <head>
     <%@include file="/WEB-INF/jsps/includeURL.jsp" %>
+    <script type="text/javascript">
+        //获取老师打分的详细信息
+        function getDetail(id) {
+            $("#evaluateDetail").window({
+                href:'${basePath}evaluate/replyGroupTutor/getMemberScoreDetail.html?memberScoreId='+id,
+                title:'打分详情',
+                width:'60%',
+                height:'80%',
+                modal:true
+            })
+        }
+    </script>
 </head>
 <body class="easyui-layout" data-options="border:false" style="width: 100%;height: 100%;">
 <div data-options="region:'north'" style="height: 10%;">
@@ -46,26 +59,15 @@
                                 ${tutor.name}
                         </td>
                         <td>
-                            <c:choose>
-                                <c:when test="${empty graduateProject.replyGroupMemberScores}">
-                                    <p style="color: red">未评审</p>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:forEach items="${graduateProject.replyGroupMemberScores}"
-                                               var="replyGroupMemberScore">
-                                        <c:choose>
-                                            <%--用来判断老师的姓名和答辩小组成员老师的姓名相等，则显示出来--%>
-                                            <c:when test="${fn:startsWith(replyGroupMemberScore.tutor.name,tutor.name)&&fn:endsWith(replyGroupMemberScore.tutor.name,tutor.name)}">
-                                                <a class="btn btn-default" data-toggle="modal" data-target="#showDetail"
-                                                   href=""><i class="icon icon-coffee"></i> 查看</a>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <p style="color: red">未评审</p>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                </c:otherwise>
-                            </c:choose>
+
+                            <%--获取当前老师是否已进行评审操作--%>
+                            <c:forEach items="${graduateProject.replyGroupMemberScores}"
+                                       var="replyGroupMemberScore">
+                                <c:if test="${replyGroupMemberScore.tutor.id==tutor.id}">
+                                    <a href="javascript:void(0)" onclick="getDetail('${replyGroupMemberScore.id}')" class="easyui-linkbutton" iconCls="icon-search">查看</a>
+                                </c:if>
+
+                            </c:forEach>
                         </td>
                     </tr>
                 </c:forEach>
@@ -142,10 +144,10 @@
         </tbody>
 
     </table>
-    <span style="color: grey;margin-left: 10px;">* 以上分数为建议各项评分</span>
+    <span style="color: grey;margin-left: 10px;">* 以上各项分数为各老师打分的平均分</span>
 </div>
 
-
+<div id="evaluateDetail"></div>
 </body>
 </html>
 
