@@ -95,7 +95,6 @@ public class CheckAcountController extends BaseController {
         departmentAcountCompletedList.add(departmentAcountCompleted);
 //        modelMap.put("departmentDataList", departmentAcountCompletedList);
         pageInfo.setRows(departmentAcountCompletedList);
-        System.out.print(departmentAcountCompletedList.toString());
         pageInfo.setTotal(departmentAcountCompletedList.size());
         return pageInfo;
     }
@@ -113,12 +112,6 @@ public class CheckAcountController extends BaseController {
         Department department = departmentService.findById(departmentId);
         //用于存放未完成的课题
         Set<GraduateProject> graduateProjectSet = new HashSet<>();
-
-        /*
-
-        建议对当教研室为空时，增加相应的处理
-
-         */
         if (department != null) {
             //获取当前教研室所有的课题
             List<GraduateProject> graduateProjectList = graduateProjectService.getPageByDepartment(department);
@@ -131,7 +124,7 @@ public class CheckAcountController extends BaseController {
                 }
             }
             modelMap.put("description", "未完成的任务书");
-            modelMap.put("graduateProjectList", graduateProjectList);
+            modelMap.put("graduateProjectList", graduateProjectSet);
         }
 
         return "checkAccountData/notCompletedList";
@@ -164,7 +157,7 @@ public class CheckAcountController extends BaseController {
                         graduateProjects.add(paperProject);
                 }
             }
-            modelMap.put("graduateProjectList", graduateProjectList);
+            modelMap.put("graduateProjectList", graduateProjects);
             modelMap.put("description", "未完成的开题报告");
         }
 
@@ -196,7 +189,7 @@ public class CheckAcountController extends BaseController {
                     }
                 }
             }
-            modelMap.put("graduateProjectList", graduateProjectList);
+            modelMap.put("graduateProjectList", graduateProjectSet);
             modelMap.put("description", "未完成工作进程表的课题");
         }
 
@@ -225,7 +218,7 @@ public class CheckAcountController extends BaseController {
                 if (commentByTutor == null || commentByTutor.getSubmittedByTutor() == null || !commentByTutor.getSubmittedByTutor())
                     graduateProjectSet.add(graduateProject);
             }
-            modelMap.put("graduateProjectList", graduateProjectList);
+            modelMap.put("graduateProjectList", graduateProjectSet);
             modelMap.put("description", "未完成的指导老师评审表");
         }
         return "checkAccountData/notCompletedList";
@@ -254,7 +247,7 @@ public class CheckAcountController extends BaseController {
                 if (commentByReviewer == null || commentByReviewer.getSubmittedByReviewer() == null || !commentByReviewer.getSubmittedByReviewer())
                     graduateProjectSet.add(graduateProject);
             }
-            modelMap.put("graduateProjectList", graduateProjectList);
+            modelMap.put("graduateProjectList", graduateProjectSet);
             modelMap.put("description", "未完成的评阅人评审表");
 
         }
@@ -285,7 +278,7 @@ public class CheckAcountController extends BaseController {
                 if (commentByGroup == null || commentByGroup.getSubmittedByGroup() == null || !commentByGroup.getSubmittedByGroup())
                     graduateProjectSet.add(graduateProject);
             }
-            modelMap.put("graduateProjectList", graduateProjectList);
+            modelMap.put("graduateProjectList", graduateProjectSet);
         }
         modelMap.put("description", "未完成的答辩小组意见表");
         return "checkAccountData/notCompletedList";

@@ -20,7 +20,7 @@
         }
         $(function () {
             checkTimeTableGrid = $("#checkTimeTable").datagrid({
-                url: '${basePath}/getCheckTimeList.html',
+                url: '${basePath}process/getCheckTimeList.html',
                 striped: true,
                 pagination:true,
                 pageSize: 15,

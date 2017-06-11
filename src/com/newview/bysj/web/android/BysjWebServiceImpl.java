@@ -363,9 +363,9 @@ public class BysjWebServiceImpl extends AndroidBase {
             // 获取邮件的发送者
             Tutor tutor = tutorService.findById(notice.getAddressor_id().intValue());
             // 通过set集合来去重
-            Set<Actor> actorSet = new HashSet<>();
-            String[] tutorStrs = new String[notice.getAddresseeIdList().size()];
-            for (int i = 0; i < notice.getAddresseeIdList().size(); i++) {
+            //Set<Actor> actorSet = new HashSet<>();
+            //String[] tutorStrs = new String[notice.getAddresseeIdList().size()];
+            /*for (int i = 0; i < notice.getAddresseeIdList().size(); i++) {
                 tutorStrs[i] = notice.getAddresseeIdList().get(i).toString();
             }
             for (String tutorStrId : tutorStrs) {
@@ -373,13 +373,14 @@ public class BysjWebServiceImpl extends AndroidBase {
             }
 
             // 使用迭代器来对set集合进行遍历，将接收者添加到List集合中
-            Iterator<Actor> actorIterator = actorSet.iterator();
+            Iterator<Actor> actorIterator = actorSet.iterator();*/
             // 临时存储接收者的集合
             List<Actor> actorList = new ArrayList<>();
-            while (actorIterator.hasNext()) {
-                actorList.add(actorIterator.next());
+            if (notice.getAddresseeIdList() != null) {
+                for (Long aLong : notice.getAddresseeIdList()) {
+                    actorList.add(actorService.findById(aLong.intValue()));
+                }
             }
-            actorList.add(tutorService.findById(1));
             // 创建一个新的邮件
             Mail sendMail = new Mail();
             // 设置接收者

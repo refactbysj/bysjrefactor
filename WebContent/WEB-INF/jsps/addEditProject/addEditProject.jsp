@@ -17,11 +17,18 @@
             url: '${actionUrl}',
             onSubmit: function () {
                 progressLoad();
+                var tlenght = $("#title").val().length;
+                if(tlenght==0) {
+                    progressClose();
+                    $.messager.alert('提示', '请输入课题名称', 'warning');
+                    return false;
+                }
                 var isValid = $(this).form('validate');
                 if (!isValid) {
                     progressClose();
                 }
                 return isValid;
+
             },
             success: function (result) {
                 result = $.parseJSON(result);
@@ -56,29 +63,18 @@
         $("#majorId").val(majorSelectId);
     }
 
-    function checkValue() {
-        var tlenght = $("#title").val().length;
-        var slenght = $("#subTitle").val().length;
-        if (tlenght == 0 || slenght == 0) {
-            window.wxc.xcConfirm("请输入必填项", "warning");
-            return false;
-        } else {
-            return true;
-        }
-    }
-
 
 </script>
 <div style="padding: 10px;">
-    <form:form commandName="toEditProject" onsubmit="return checkValue()" id="editProject"
+    <form:form commandName="toEditProject" id="editProject"
                method="post">
 
         <input type="hidden" name="id" value="${toEditProject.id}">
         <dl>
-            <dt>题目名称：</dt>
+            <dt>课题名称：</dt>
             <dd>
                 <div class="row">
-                    <div class="col-sm9">
+                    <div class="col-sm-10">
                         <form:input id="title" path="title" type="text" cssClass="form-control" maxlength="60"/>
                     </div>
                     <div class="col-sm-2">
@@ -92,9 +88,6 @@
                     <div class="col-sm-10">
                         <form:input id="subTitle" path="subTitle" type="text" size="40" maxlength="40"
                                     cssClass="form-control"/>
-                    </div>
-                    <div class="col-sm-2">
-                        <span style="color: red;"> *</span>
                     </div>
                 </div>
 

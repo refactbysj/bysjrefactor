@@ -6,7 +6,6 @@ import com.newview.bysj.exception.MessageException;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.jpaRepository.MyRepository;
 import com.newview.bysj.myAnnotation.MethodDescription;
-import org.apache.cxf.binding.corba.wsdl.Array;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -1041,16 +1040,15 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
         Page<GraduateProject> result = graduateProjectDao.findAll(new Specification<GraduateProject>() {
             @Override
             public Predicate toPredicate(Root<GraduateProject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // TODO Auto-generated method stub
                 List<Predicate> predicates = new ArrayList<Predicate>();
-                if(recommend!=null) {
+                if(recommend!=null&&!recommend.equals("")) {
                     predicates.add(cb.equal(root.get("schoolExcellentProject").get("recommended").as(Boolean.class), recommend));
                 }
 
-                if (title != null) {
+                if (title != null&&!title.equals("")) {
                     predicates.add(cb.like(root.get("title").as(String.class), "%" + title + "%"));
                 }
-                if (title != null) {
+                if (tutorName != null&&!tutorName.equals("")) {
                     predicates.add(cb.like(root.get("proposer").get("name").as(String.class), "%" + tutorName + "%"));
                 }
                 predicates.add(cb.equal(root.get("year").as(Integer.class), CommonHelper.getYear()));

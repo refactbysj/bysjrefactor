@@ -18,7 +18,6 @@
             //获取该教研室老师
             $("#teacherGrid").datagrid({
                 url: '${basePath}process/getDepartmentTeacher.html',
-                fit: true,
                 idField: 'id',
                 singleSelect: true,
                 rownumbers: true,
@@ -38,14 +37,15 @@
                     width: '30%',
                     formatter: function (value, row, index) {
                         var str = '';
-                        str += $.formatString('<a class="editBtn" data-options="iconCls:\'icon-edit\',plain:true" onclick="allocateStudent(\'{0}\')">匹配</a>', row.id);
-                        str += $.formatString('<a class="viewBtn" data-options="iconCls:\'icon-search\',plain:true" onclick="viewAllocatedStudent(\'{0}\')">查看</a>', row.id);
+                        str += $.formatString('<a class="editBtn" data-options="plain:true" onclick="allocateStudent(\'{0}\')">匹配</a>', row.id);
+                        str += $.formatString('<a class="viewBtn" data-options="plain:true" onclick="viewAllocatedStudent(\'{0}\')">查看</a>', row.id);
                         return str;
                     }
                 }]],
                 onLoadSuccess: function () {
                     $(".editBtn").linkbutton({text: '匹配', iconCls: 'icon-ok'});
                     $(".viewBtn").linkbutton({text: '查看', iconCls: 'icon-search'});
+                    $("#teacherGrid").datagrid('fixRowHeight');
                 }
 
             });
@@ -208,12 +208,12 @@
 </div>
 
 <div id="content">
-    <div class="easyui-layout" style="height: 100%;width: 100%;">
+    <div class="easyui-layout" style="height: 99%;width: 100%;">
         <div data-options="region:'west',title:'老师',split:true" style="width: 50%">
-            <table id="teacherGrid" style="width: 100%;height: 80%;"></table>
+            <table id="teacherGrid"></table>
         </div>
         <div data-options="region:'center',title:'未分配学生',split:true">
-            <table id="studentTable" style="height: 80%;width: 100%;"></table>
+            <table id="studentTable" ></table>
         </div>
     </div>
 </div>

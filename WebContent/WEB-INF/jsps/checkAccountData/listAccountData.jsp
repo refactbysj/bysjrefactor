@@ -215,8 +215,8 @@
             parent.$.modalDialog({
                 title:'详情',
                 href:url,
-                width:500,
-                height:300,
+                width:'70%',
+                height:'80%',
                 buttons:[{
                     text:'关闭',
                     iconCls:'icon-cancel',

@@ -1,7 +1,6 @@
 package com.newview.bysj.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -77,7 +76,8 @@ public class GraduateProject implements Serializable {
     @ManyToOne
     @JoinColumn(name = "proposer_id")
     private Tutor proposer;
-    /*
+    /*.
+
      * 题目来源
      * 多对一
      */
@@ -208,9 +208,9 @@ public class GraduateProject implements Serializable {
     }
 
     /*
-     * 答辩小组成员的答辩分数
-     * 一对多
-     */
+         * 答辩小组成员的答辩分数
+         * 一对多
+         */
     @OneToMany(mappedBy = "graduateProject", cascade = CascadeType.ALL)
     private List<ReplyGroupMemberScore> replyGroupMemberScores;
 
@@ -231,12 +231,19 @@ public class GraduateProject implements Serializable {
      * 一对一
      */
     @OneToOne(mappedBy = "graduateProject", cascade = CascadeType.ALL)
+    @JsonIgnore
     private SchoolExcellentProject schoolExcellentProject;
+
+    private Boolean isSchoolExcellentPro;
+
+    private Boolean isProvinceExcellentPro;
+
     /*
      * 省优毕业论文
      * 一对一
      */
     @OneToOne(mappedBy = "graudateProject", cascade = CascadeType.ALL)
+    @JsonIgnore
     private ProvinceExcellentProject provinceExcellentProject;
 
     public GraduateProject() {
@@ -291,6 +298,22 @@ public class GraduateProject implements Serializable {
         this.title = title;
     }
 
+    public Boolean getSchoolExcellentPro() {
+        return isSchoolExcellentPro;
+    }
+
+    public void setSchoolExcellentPro(Boolean schoolExcellentPro) {
+        isSchoolExcellentPro = schoolExcellentPro;
+    }
+
+    public Boolean getProvinceExcellentPro() {
+        return isProvinceExcellentPro;
+    }
+
+    public void setProvinceExcellentPro(Boolean provinceExcellentPro) {
+        isProvinceExcellentPro = provinceExcellentPro;
+    }
+
     public String getSubTitle() {
         return subTitle;
     }
@@ -314,6 +337,12 @@ public class GraduateProject implements Serializable {
     public void setBasicRequirement(String basicRequirement) {
         this.basicRequirement = basicRequirement;
     }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+
 
     public String getBasicSkill() {
         return basicSkill;

@@ -1,7 +1,6 @@
 package com.newview.bysj.web.schoolExcellentProject;
 
 import com.newview.bysj.domain.GraduateProject;
-import com.newview.bysj.domain.ProvinceExcellentProject;
 import com.newview.bysj.domain.SchoolExcellentProject;
 import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.helper.CommonHelper;
@@ -35,8 +34,11 @@ public class AssignSchoolExcellentProjectController extends BaseController {
         Tutor tutor = tutorService.findById(CommonHelper.getCurrentActor(httpSession).getId());
         //筛选
         Page<GraduateProject> graduateProject = graduateProjectService.getPagesForSchoolExcellenceCandidate(tutor.getDepartment().getSchool(),  page, rows,title,tutorName);
-        pageInfo.setRows(graduateProject.getContent());
-        pageInfo.setTotal((int)graduateProject.getTotalElements());
+        if (graduateProject != null) {
+            pageInfo.setRows(graduateProject.getContent());
+            pageInfo.setTotal((int)graduateProject.getTotalElements());
+        }
+
         return pageInfo;
     }
 
@@ -49,8 +51,8 @@ public class AssignSchoolExcellentProjectController extends BaseController {
         SchoolExcellentProject schoolExcellentProject = new SchoolExcellentProject();
         schoolExcellentProject.setGraduateProject(graduateProject);
         schoolExcellentProject = schoolExcellentProjectService.saveAndFlush(schoolExcellentProject);
-
         graduateProject.setSchoolExcellentProject(schoolExcellentProject);
+        graduateProject.setSchoolExcellentPro(true);
         graduateProjectService.saveOrUpdate(graduateProject);
 
         CommonHelper.buildSimpleJson(httpServletResponse);
@@ -63,11 +65,9 @@ public class AssignSchoolExcellentProjectController extends BaseController {
 
         SchoolExcellentProject schoolExcellentProject = graduateProject.getSchoolExcellentProject();
         schoolExcellentProject.setGraduateProject(null);
-
-        graduateProject.setSchoolExcellentProject(null);
-
         schoolExcellentProjectService.deleteObject(schoolExcellentProject);
-
+        graduateProject.setSchoolExcellentPro(false);
+        graduateProject.setSchoolExcellentProject(null);
         graduateProjectService.saveOrUpdate(graduateProject);
         CommonHelper.buildSimpleJson(httpServletResponse);
     }

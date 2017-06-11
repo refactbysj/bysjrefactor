@@ -1,6 +1,7 @@
 package com.newview.bysj.helper;
 
 import com.newview.bysj.domain.Actor;
+import com.newview.bysj.domain.GraduateProject;
 import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.domain.User;
 import com.newview.bysj.exception.MessageException;
@@ -709,6 +710,20 @@ public class CommonHelper {
         XWPFDocument document = new XWPFDocument(new FileInputStream("E:\\googledownload\\123.docx"));
         System.out.println(document.getProperties().getExtendedProperties().getUnderlyingProperties().getWords());
 
+    }
+
+    //是否是校优
+    public static void setSchoolExcellentProject(GraduateProject graduateProject) {
+        if (graduateProject.getSchoolExcellentProject() != null) {
+            graduateProject.setSchoolExcellentPro(true);
+        }
+    }
+
+    //是否是省优
+    public static void setProvinceExcellentProject(GraduateProject graduateProject) {
+        if (graduateProject.getProvinceExcellentProject() != null) {
+            graduateProject.setProvinceExcellentPro(true);
+        }
     }
 
 

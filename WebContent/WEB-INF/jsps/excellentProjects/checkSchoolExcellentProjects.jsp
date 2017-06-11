@@ -86,7 +86,7 @@
                         width:'9%',
                         field: 'no',
                         formatter: function (value, row, index) {
-                            return row.student.no;
+                            return row.graduateProject.student.no;
                         }
                     },
                     {
@@ -95,7 +95,7 @@
                         width:'7%',
                         field: 'name',
                         formatter: function (value, row, index) {
-                            return row.student.name;
+                            return row.graduateProject.student.name;
                         }
                     },
                     {
@@ -104,7 +104,7 @@
                         width:'7%',
                         field: 'class',
                         formatter: function (value, row, index) {
-                            return row.student.studentClass.description;
+                            return row.graduateProject.student.studentClass.description;
                         }
                     },
                     {
@@ -113,7 +113,7 @@
                         width:'10%',
                         field: 'major1',
                         formatter: function (value, row, index) {
-                            return row.major.description;
+                            return row.graduateProject.major.description;
 
                         }
                     },
@@ -124,20 +124,20 @@
                         width:'5%',
                         field: 'score',
                         formatter: function (value, row, index) {
-                            if(row.commentByTutor!=null&&row.commentByReviewer!=null&&row.commentByGroup!=null) {
-                                if(row.commentByTutor.basicAblityScore!=null&&
-                                    row.commentByTutor.workLoadScore!=null&&
-                                    row.commentByTutor.workAblityScore!=null&&
-                                    row.commentByTutor.achievementLevelScore!=null&&
-                                    row.commentByReviewer.qualityScore!=null&&
-                                    row.commentByReviewer.achievementScore!=null&&
-                                    row.commentByReviewer.qualityScore!=0.0&&
-                                    row.commentByGroup.completenessScore!=0.0&&
-                                    row.commentByGroup.replyScore!=0.0&&
-                                    row.commentByGroup.correctnessSocre!=0.0) {
-                                    sum[row.id] = row.commentByTutor.basicAblityScore + row.commentByTutor.workLoadScore + row.commentByTutor.workAblityScore + row.commentByTutor.achievementLevelScore
-                                        + row.commentByReviewer.qualityScore + row.commentByReviewer.achievementScore
-                                        + row.commentByGroup.qualityScore + row.commentByGroup.completenessScore + row.commentByGroup.replyScore + row.commentByGroup.correctnessSocre;
+                            if(row.graduateProject.commentByTutor!=null&&row.graduateProject.commentByReviewer!=null&&row.graduateProject.commentByGroup!=null) {
+                                if(row.graduateProject.commentByTutor.basicAblityScore!=null&&
+                                    row.graduateProject.commentByTutor.workLoadScore!=null&&
+                                    row.graduateProject.commentByTutor.workAblityScore!=null&&
+                                    row.graduateProject.commentByTutor.achievementLevelScore!=null&&
+                                    row.graduateProject.commentByReviewer.qualityScore!=null&&
+                                    row.graduateProject.commentByReviewer.achievementScore!=null&&
+                                    row.graduateProject.commentByReviewer.qualityScore!=0.0&&
+                                    row.graduateProject.commentByGroup.completenessScore!=0.0&&
+                                    row.graduateProject.commentByGroup.replyScore!=0.0&&
+                                    row.graduateProject.commentByGroup.correctnessSocre!=0.0) {
+                                    sum[row.id] = row.graduateProject.commentByTutor.basicAblityScore + row.graduateProject.commentByTutor.workLoadScore + row.graduateProject.commentByTutor.workAblityScore + row.graduateProject.commentByTutor.achievementLevelScore
+                                        + row.graduateProject.commentByReviewer.qualityScore + row.graduateProject.commentByReviewer.achievementScore
+                                        + row.graduateProject.commentByGroup.qualityScore + row.graduateProject.commentByGroup.completenessScore + row.graduateProject.commentByGroup.replyScore + row.graduateProject.commentByGroup.correctnessSocre;
                                     return sum[row.id];
                                 }
                             }
@@ -150,9 +150,9 @@
                         width:'15%',
                         field: 'title',
                         formatter: function (value, row, index) {
-                            if(row.subTitle==null)
-                                return row.title;
-                            return row.title+'---'+row.subTitle;
+                            if(row.graduateProject.subTitle==null)
+                                return row.graduateProject.title;
+                            return row.graduateProject.title+'——'+row.graduateProject.subTitle;
                         }
                     },
                     {
@@ -161,7 +161,7 @@
                         width:'7%',
                         field: 'category',
                         formatter: function (value, row, index) {
-                            return row.category;
+                            return row.graduateProject.category;
                         }
                     },
 
@@ -171,7 +171,7 @@
                         width:'7%',
                         field: 'proposer',
                         formatter: function (value, row, index) {
-                            return row.proposer.name;
+                            return row.graduateProject.proposer.name;
                         }
                     },
                     {
@@ -180,16 +180,16 @@
                         width:'10%',
                         field: 'proTitle',
                         formatter: function (value, row, index) {
-                            if(row.proposer.proTitle==null) {
-                                if (row.proposer.degree == null)
+                            if(row.graduateProject.proposer.proTitle==null) {
+                                if (row.graduateProject.proposer.degree == null)
                                     return '无/无';
                                 else
-                                    return '无/' + row.proposer.degree.description;
+                                    return '无/' + row.graduateProject.proposer.degree.description;
                             }else {
-                                if (row.proposer.degree == null)
-                                    return row.proposer.proTitle.description + '/无';
+                                if (row.graduateProject.proposer.degree == null)
+                                    return row.graduateProject.proposer.proTitle.description + '/无';
                                 else
-                                    return row.proposer.proTitle.description + '/' + row.proposer.degree.description;
+                                    return row.graduateProject.proposer.proTitle.description + '/' + row.graduateProject.proposer.degree.description;
                             }
                         }
                     },
@@ -199,7 +199,7 @@
                         width:'8%',
                         field: 'recommended',
                         formatter: function (value, row, index) {
-                            if(row.schoolExcellentProject.recommended==true)
+                            if(row.recommended==true)
                                 return '<p id=projectRecommended'+row.id+'>优秀</p>';
                             return '<p id=projectRecommended'+row.id+'>否</p>';
                         }
@@ -210,7 +210,7 @@
                         width:'7%',
                         field: 'option',
                         formatter: function (value, row, index) {
-                            if (row.schoolExcellentProject.recommended==true) {
+                            if (row.recommended==true) {
                                 return '<a id=projectOperation' + row.id + ' onclick=backSchoolExcellent(' + row.id + ')><button>驳回</button></a>';
                             }
                             return '<a id=projectOperation' + row.id + ' onclick=passSchoolExcellent(' + row.id + ')><button>通过</button></a>';
@@ -236,7 +236,7 @@
 
 </head>
 <body>
-<div id="search">
+<div id="search" style="position: absolute;top: 10px;left: 1%;">
 	<form id="form">
 		题目名称：
 		<input type="text" class="easyui-textbox"  name="title" id="title"/>
@@ -247,7 +247,10 @@
 
 	</form>
 </div>
-<table id ="checkSchoolExcellentProjects" style="height: 100%"></table>
+<div style="height: 100%;">
+	<table id ="checkSchoolExcellentProjects" style="height: 100%"></table>
+
+</div>
 <div id ="detailWindow">
 	<div id="details" data-options="region:'center'" >
 		<%--引用外部html文件--%>

@@ -46,7 +46,7 @@
                         width:'10%',
                         field: 'no',
                         formatter: function (value, row, index) {
-                            return row.student.no;
+                            return row.graudateProject.student.no;
                         }
                     },
                     {
@@ -55,7 +55,7 @@
                         width:'7%',
                         field: 'name',
                         formatter: function (value, row, index) {
-                            return row.student.name;
+                            return row.graudateProject.student.name;
                         }
                     },
                     {
@@ -64,7 +64,7 @@
                         width:'7%',
                         field: 'class',
                         formatter: function (value, row, index) {
-                            return row.student.studentClass.description;
+                            return row.graudateProject.student.studentClass.description;
                         }
                     },
                     {
@@ -73,7 +73,7 @@
                         width:'10%',
                         field: 'major1',
                         formatter: function (value, row, index) {
-                            return row.major.description;
+                            return row.graudateProject.major.description;
 
                         }
                     },
@@ -84,20 +84,20 @@
                         width:'7%',
                         field: 'score',
                         formatter: function (value, row, index) {
-                            if(row.commentByTutor!=null&&row.commentByReviewer!=null&&row.commentByGroup!=null) {
-                                if(row.commentByTutor.basicAblityScore!=null&&
-                                    row.commentByTutor.workLoadScore!=null&&
-                                    row.commentByTutor.workAblityScore!=null&&
-                                    row.commentByTutor.achievementLevelScore!=null&&
-                                    row.commentByReviewer.qualityScore!=null&&
-                                    row.commentByReviewer.achievementScore!=null&&
-                                    row.commentByReviewer.qualityScore!=0.0&&
-                                    row.commentByGroup.completenessScore!=0.0&&
-                                    row.commentByGroup.replyScore!=0.0&&
-                                    row.commentByGroup.correctnessSocre!=0.0) {
-                                    sum[row.id] = row.commentByTutor.basicAblityScore + row.commentByTutor.workLoadScore + row.commentByTutor.workAblityScore + row.commentByTutor.achievementLevelScore
-                                        + row.commentByReviewer.qualityScore + row.commentByReviewer.achievementScore
-                                        + row.commentByGroup.qualityScore + row.commentByGroup.completenessScore + row.commentByGroup.replyScore + row.commentByGroup.correctnessSocre;
+                            if(row.graudateProject.commentByTutor!=null&&row.graudateProject.commentByReviewer!=null&&row.graudateProject.commentByGroup!=null) {
+                                if(row.graudateProject.commentByTutor.basicAblityScore!=null&&
+                                    row.graudateProject.commentByTutor.workLoadScore!=null&&
+                                    row.graudateProject.commentByTutor.workAblityScore!=null&&
+                                    row.graudateProject.commentByTutor.achievementLevelScore!=null&&
+                                    row.graudateProject.commentByReviewer.qualityScore!=null&&
+                                    row.graudateProject.commentByReviewer.achievementScore!=null&&
+                                    row.graudateProject.commentByReviewer.qualityScore!=0.0&&
+                                    row.graudateProject.commentByGroup.completenessScore!=0.0&&
+                                    row.graudateProject.commentByGroup.replyScore!=0.0&&
+                                    row.graudateProject.commentByGroup.correctnessSocre!=0.0) {
+                                    sum[row.id] = row.graudateProject.commentByTutor.basicAblityScore + row.graudateProject.commentByTutor.workLoadScore + row.graudateProject.commentByTutor.workAblityScore + row.graudateProject.commentByTutor.achievementLevelScore
+                                        + row.graudateProject.commentByReviewer.qualityScore + row.graudateProject.commentByReviewer.achievementScore
+                                        + row.graudateProject.commentByGroup.qualityScore + row.graudateProject.commentByGroup.completenessScore + row.graudateProject.commentByGroup.replyScore + row.graudateProject.commentByGroup.correctnessSocre;
                                     return sum[row.id];
                                 }
                             }
@@ -110,9 +110,9 @@
                         width:'20%',
                         field: 'title',
                         formatter: function (value, row, index) {
-                            if(row.subTitle==null)
-                                return row.title;
-                            return row.title+'---'+row.subTitle;
+                            if(row.graudateProject.subTitle==null)
+                                return row.graudateProject.title;
+                            return row.graudateProject.title+'——'+row.graudateProject.subTitle;
                         }
                     },
                     {
@@ -121,7 +121,7 @@
                         width:'9%',
                         field: 'category',
                         formatter: function (value, row, index) {
-                            return row.category;
+                            return row.graudateProject.category;
                         }
                     },
 					{
@@ -130,7 +130,7 @@
                         width:'10%',
                         field: 'proposer',
                         formatter: function (value, row, index) {
-                            return row.proposer.name;
+                            return row.graudateProject.proposer.name;
                         }
                     },
                     {
@@ -139,16 +139,16 @@
                         width:'12%',
                         field: 'proTitle',
                         formatter: function (value, row, index) {
-                            if(row.proposer.proTitle==null) {
-                                if (row.proposer.degree == null)
+                            if(row.graudateProject.proposer.proTitle==null) {
+                                if (row.graudateProject.proposer.degree == null)
                                     return '无/无';
                                 else
-                                    return '无/' + row.proposer.degree.description;
+                                    return '无/' + row.graudateProject.proposer.degree.description;
                             }else {
-                                if (row.proposer.degree == null)
-                                    return row.proposer.proTitle.description + '/无';
+                                if (row.graudateProject.proposer.degree == null)
+                                    return row.graudateProject.proposer.proTitle.description + '/无';
                                 else
-                                    return row.proposer.proTitle.description + '/' + row.proposer.degree.description;
+                                    return row.graudateProject.proposer.proTitle.description + '/' + row.graudateProject.proposer.degree.description;
                             }
                         }
                     },
@@ -158,8 +158,7 @@
                         width:'10%',
                         field: 'detail',
                         formatter: function (value, row, index) {
-                            var url= "<a onclick='openWindow("+row.id+")'><button>显示细节</button></a>"
-
+                            var url= "<a onclick='openWindow("+row.graudateProject.id+")'><button>显示细节</button></a>"
                             return url;
                         }
                     },

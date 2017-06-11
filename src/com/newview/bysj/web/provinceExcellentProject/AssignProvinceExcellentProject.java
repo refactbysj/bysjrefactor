@@ -2,20 +2,15 @@ package com.newview.bysj.web.provinceExcellentProject;
 
 import com.newview.bysj.domain.GraduateProject;
 import com.newview.bysj.domain.ProvinceExcellentProject;
-import com.newview.bysj.exception.MessageException;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.util.PageInfo;
-import com.newview.bysj.util.Result;
 import com.newview.bysj.web.baseController.BaseController;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class AssignProvinceExcellentProject extends BaseController {
@@ -43,9 +38,9 @@ public class AssignProvinceExcellentProject extends BaseController {
         GraduateProject graduateProject = graduateProjectService.findById(graduateProjectId);
         ProvinceExcellentProject provinceExcellentProject = new ProvinceExcellentProject();
         provinceExcellentProject.setGraudateProject(graduateProject);
-        //加上这句话，会报错，会建立2个ProvinceExcellentProject对象，这个不知什么问题
-        //provinceExcellentProjectService.saveAndFlush(provinceExcellentProject);
+        provinceExcellentProject = provinceExcellentProjectService.saveAndFlush(provinceExcellentProject);
         graduateProject.setProvinceExcellentProject(provinceExcellentProject);
+        graduateProject.setProvinceExcellentPro(true);
         graduateProjectService.saveOrUpdate(graduateProject);
         CommonHelper.buildSimpleJson(httpServletResponse);
 
@@ -59,6 +54,7 @@ public class AssignProvinceExcellentProject extends BaseController {
         ProvinceExcellentProject provinceExcellentProject = graduateProject.getProvinceExcellentProject();
         provinceExcellentProject.setGraudateProject(null);
         graduateProject.setProvinceExcellentProject(null);
+        graduateProject.setProvinceExcellentPro(false);
         provinceExcellentProjectService.deleteObject(provinceExcellentProject);
         graduateProjectService.saveOrUpdate(graduateProject);
         CommonHelper.buildSimpleJson(httpServletResponse);

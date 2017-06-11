@@ -101,32 +101,46 @@
                         width: '20%',
                         formatter: function (value, row) {
                             var str = '';
-                            //如果已经提交了终稿
-                            if (row.finalDraft != null) {
-                                //如果已经评审，则显示分数
-                                if (row.commentByGroup != null && row.commentByGroup.submittedByGroup) {
-                                    str += $.formatString('<a href="javascript:void(0)" class="editBtn" onclick="evalute(\'{0}\')"></a>', row.id);
-                                    str += $.formatString('<a href="javascript:void(0)" class="printBtn" onclick="printFun(\'{0}\')"></a>', row.id);
-                                    //获取评审总分
-                                    var adminTotalScroe = row.commentByGroup.qualityScore +
-                                        row.commentByGroup.completenessScore +
-                                        row.commentByGroup.replyScore +
-                                        row.commentByGroup.correctnessSocre;
-                                    str += '<span>总分：' + adminTotalScroe + '</span>';
-                                    if (row.commentByGroup.qualifiedByGroup) {
-                                        str += '<span style="color: green;">通过答辩</span>';
-                                    } else {
-                                        str += '<span style="color: red">未通过答辩</span>';
-                                    }
+                            //是否已设置答辩时间
+                            if(row.replyGroup.replyTime!=null){
+                                //当前时间是否在答辩时间内
+                                var time = new Date().getTime();
+                                if(time>=row.replyGroup.replyTime.beginTime&&time<=row.replyGroup.replyTime.endTime) {
+                                    //如果已经提交了终稿
+                                    if (row.finalDraft != null) {
+                                        //如果已经评审，则显示分数
+                                        if (row.commentByGroup != null && row.commentByGroup.submittedByGroup) {
+                                            str += $.formatString('<a href="javascript:void(0)" class="editBtn" onclick="evalute(\'{0}\')"></a>', row.id);
+                                            str += $.formatString('<a href="javascript:void(0)" class="printBtn" onclick="printFun(\'{0}\')"></a>', row.id);
+                                            //获取评审总分
+                                            var adminTotalScroe = row.commentByGroup.qualityScore +
+                                                row.commentByGroup.completenessScore +
+                                                row.commentByGroup.replyScore +
+                                                row.commentByGroup.correctnessSocre;
+                                            str += '<span>总分：' + adminTotalScroe + '</span>';
+                                            if (row.commentByGroup.qualifiedByGroup) {
+                                                str += '<span style="color: green;">通过答辩</span>';
+                                            } else {
+                                                str += '<span style="color: red">未通过答辩</span>';
+                                            }
 
-                                } else {
-                                    if (row.commentByTutor.qualifiedByTutor && row.commentByReviewer.qualifiedByReviewer) {
-                                        str += $.formatString('<a href="javascript:void(0)" class="evaluateBtn" onclick="evalute(\'{0}\')"></a>', row.id);
+                                        } else {
+                                            if (row.commentByTutor.qualifiedByTutor && row.commentByReviewer.qualifiedByReviewer) {
+                                                str += $.formatString('<a href="javascript:void(0)" class="evaluateBtn" onclick="evalute(\'{0}\')"></a>', row.id);
+                                            }
+                                        }
+                                    } else {
+                                        str += '<span style="color: red;">未提交终稿</span>';
                                     }
+                                }else{
+                                    str = '<span style="color: red;">不在答辩时间内</span>';
                                 }
-                            } else {
-                                str += '<span style="color: red;">未提交终稿</span>';
+
+
+                            }else{
+                                str = '<span style="color:red">未设置答辩时间地点</span>';
                             }
+
                             return str;
                         }
                     }, {

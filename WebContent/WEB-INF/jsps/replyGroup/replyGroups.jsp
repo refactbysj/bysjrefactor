@@ -41,6 +41,15 @@
 
         }
 
+        //把毫秒值转换成日期
+        function getTimeByMillions(millions) {
+            var beginDate = new Date(millions);
+            var year = beginDate.getFullYear() + '年';
+            var month = beginDate.getMonth() + 1 + '月';
+            var day = beginDate.getDate() + '日';
+            return year + month + day;
+        }
+
         $(function () {
             replyGrid = $("#replyGroupGrid").datagrid({
                 url: '${basePath}process/getReplyGroup.html',
@@ -62,7 +71,7 @@
                 }, {
                     title: '答辩老师',
                     field: 'members',
-                    width: '30%',
+                    width: '15%',
                     formatter: function (value, row) {
                         var str = '';
                         var tutors = row.members;
@@ -74,7 +83,7 @@
                 }, {
                     title: '答辩学生',
                     field: 'replyStudent',
-                    width: '40%',
+                    width: '32%',
                     formatter: function (value, row) {
                         var str = '';
                         var students = row.student;
@@ -88,6 +97,36 @@
                     field: 'departmentName',
                     formatter: function (value, row) {
                         return row.department.description;
+                    }
+                },{
+                    title: '开始时间',
+                    field: 'startTime',
+                    formatter: function (value, row) {
+                        if (row.replyTime == null) {
+                            return '未设置';
+                        } else {
+                            return getTimeByMillions(row.replyTime.beginTime);
+                        }
+                    }
+                }, {
+                    title: '结束时间',
+                    field: 'endTime',
+                    formatter: function (value, row) {
+                        if (row.replyTime == null) {
+                            return '未设置';
+                        } else {
+                            return getTimeByMillions(row.replyTime.endTime);
+                        }
+                    }
+                }, {
+                    title: '答辩地点',
+                    field: 'classRoom',
+                    formatter: function (value, row) {
+                        if (row.classRoom == null) {
+                            return '未设置';
+                        } else {
+                            return row.classRoom.description;
+                        }
                     }
                 }, {
                     title: '操作',

@@ -28,7 +28,16 @@
             <c:forEach items="${graduateProjectList}" var="graduateProject" varStatus="status">
                 <tr>
                     <td>${status.index+1}</td>
-                    <td>${graduateProject.title}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${graduateProject.subTitle==null||graduateProject.subTitle==''}">
+                                ${graduateProject.title}
+                            </c:when>
+                            <c:otherwise>
+                                ${graduateProject.title}——${graduateProject.subTitle}
+                            </c:otherwise>
+                        </c:choose>
+                            </td>
                     <td>${graduateProject.mainTutorage.tutor.name}</td>
                     <td>${graduateProject.student.no}</td>
                     <td>${graduateProject.student.name}</td>

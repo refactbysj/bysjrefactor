@@ -113,7 +113,7 @@ public class EmployeeToRoleManageController extends BaseController {
             employees = employeeService.getEmployees(employeeNo, employeeName,
                     pageNo, pageSize);
         } else {
-            if (departmentId == 0) {
+            if (departmentId==null||departmentId == 0) {
                 if (employeeNo == null && employeeName == null) {
                     employees = employeeService.getEmployeeBySchool(schoolId,
                             pageNo, pageSize);

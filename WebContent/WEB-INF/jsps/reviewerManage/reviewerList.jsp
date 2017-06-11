@@ -121,7 +121,7 @@
                     field: 'title',
                     width: '40%',
                     formatter: function (value, row) {
-                        if (row.subTitle != null) {
+                        if (row.subTitle != null&&row.subTitle!='') {
                             return value + '——' + row.subTitle;
                         } else {
                             return value;
