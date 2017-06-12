@@ -28,17 +28,17 @@
             projectGrid = $("#projectTable").datagrid({
                 url: url,
                 striped: true,
-                pagination:true,
+                pagination: true,
                 pageSize: 15,
                 pageList: [10, 15, 20, 30, 40, 60],
-                fit:true,
-                idField:'id',
-                singleSelect:true,
+                fit: true,
+                idField: 'id',
+                singleSelect: true,
                 columns: [[{
                     title: '提交状态',
-                    align:'center',
+                    align: 'center',
                     field: 'proposerSubmitForApproval',
-                    width:'7%',
+                    width: '7%',
                     formatter: function (value, row, index) {
                         var str = '';
                         if (value) {
@@ -50,14 +50,14 @@
                     }
                 }, {
                     title: '题目名称',
-                    width:'25%',
-                    align:'center',
+                    width: '25%',
+                    align: 'center',
                     field: 'title'
                 }, {
                     title: '副标题',
-                    align:'center',
+                    align: 'center',
                     field: 'subTitle',
-                    width:'15%',
+                    width: '15%',
                     formatter: function (value, row, index) {
                         if (value == null || value == '') {
                             return '';
@@ -67,9 +67,9 @@
                     }
                 }, {
                     title: '年份',
-                    align:'center',
+                    align: 'center',
                     field: 'year',
-                    width:'7%',
+                    width: '7%',
                     formatter: function (value, row, index) {
                         if (value == null || value == '') {
                             return '未设置';
@@ -79,7 +79,7 @@
                     }
                 }, {
                     title: '类别',
-                    align:'center',
+                    align: 'center',
                     field: 'category',
                     width: '6%',
                     formatter: function (value, row, index) {
@@ -91,7 +91,7 @@
                     }
                 }, {
                     title: '出题教师',
-                    align:'center',
+                    align: 'center',
                     field: 'proposer.name',
                     width: '8%',
                     formatter: function (value, row, index) {
@@ -103,8 +103,8 @@
                     }
                 }, {
                     title: '审核状态',
-                    align:'center',
-                    width:'5%',
+                    align: 'center',
+                    width: '5%',
                     field: 'auditByDirector.approve',
                     formatter: function (value, row, index) {
                         var info = row.auditByDirector.approve;
@@ -119,7 +119,7 @@
                 }, {
                     title: '操作',
                     width: '18%',
-                    align:'center',
+                    align: 'center',
                     field: 'action',
                     formatter: function (value, row, index) {
                         var str = '';
@@ -146,7 +146,7 @@
 
                 }, {
                     title: '详情',
-                    align:'center',
+                    align: 'center',
                     width: '8%',
                     field: 'action1',
                     formatter: function (value, row, index) {
@@ -276,37 +276,33 @@
 
 </head>
 <body>
-<div style="float: left;margin-left: 1%;margin-top: 10px">
+<div style="position: absolute;top: 10px;">
+
+    <form id="titleForm">
         <c:choose>
             <c:when test="${ifShowAll=='0'}">
-                <div class="form-group">
-                    <c:choose>
-                        <c:when test="${ABLE_TO_UPDATE==1}">
-                            <a href="javascript:void(0)"
-                               onclick="editProject('${basePath}process/addOrEditDesignProject.html')"
-                               id="addDesignModel" data-options="iconCls:'icon-add'"
-                               class="easyui-linkbutton">
-                                添加设计题目
-                            </a>
-                            <a href="javascript:void(0)"
-                               onclick="editProject('${basePath}process/addOrEditPaperProject.html')"
-                               id="addPaperModel" data-options="iconCls:'icon-add'"
-                               class="easyui-linkbutton">
-                                添加论文题目
-                            </a>
-                        </c:when>
-                        <c:otherwise>
-                            <label class="label label-warning">当前时间不在审报题目的时间范围内</label>
-                        </c:otherwise>
-                    </c:choose>
-
-                </div>
-
+                <c:choose>
+                    <c:when test="${ABLE_TO_UPDATE==1}">
+                        <a href="javascript:void(0)"
+                           onclick="editProject('${basePath}process/addOrEditDesignProject.html')"
+                           id="addDesignModel" data-options="iconCls:'icon-add'"
+                           class="easyui-linkbutton">
+                            添加设计题目
+                        </a>
+                        <a href="javascript:void(0)"
+                           onclick="editProject('${basePath}process/addOrEditPaperProject.html')"
+                           id="addPaperModel" data-options="iconCls:'icon-add'"
+                           class="easyui-linkbutton">
+                            添加论文题目
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <label class="label label-warning">当前时间不在审报题目的时间范围内</label>
+                    </c:otherwise>
+                </c:choose>
             </c:when>
         </c:choose>
-</div>
-<div style="margin-right: 5%;float: right;margin-top: 10px">
-    <form id="titleForm">
+
         题目：
         <input type="text" class="easyui-textbox" id="projectTitle" name="title"/>
         <input type="radio" name="category" value="论文题目"/>论文
@@ -317,7 +313,10 @@
 
     </form>
 </div>
-<table id="projectTable" style="height: 100%"></table>
+<div style="height: 100%;">
+    <table id="projectTable" style="height: 100%"></table>
+
+</div>
 
 </body>
 </html>
