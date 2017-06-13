@@ -85,7 +85,10 @@
                         width:'9%',
                         field: 'no',
                         formatter: function (value, row, index) {
-                            return row.student.no;
+                            if(row.student!=null) {
+                                return row.student.no;
+
+                            }
                         }
                     },
                     {
@@ -94,7 +97,10 @@
                         width:'5%',
                         field: 'name',
                         formatter: function (value, row, index) {
-                            return row.student.name;
+                            if(row.student!=null) {
+                                return row.student.name;
+
+                            }
                         }
                     },
                     {
@@ -103,7 +109,10 @@
                         width:'5%',
                         field: 'class',
                         formatter: function (value, row, index) {
-                            return row.student.studentClass.description;
+                            if(row.student!=null) {
+                                return row.student.studentClass.description;
+
+                            }
                         }
                     },
                     {
@@ -113,7 +122,9 @@
                         field: 'major1',
                         formatter: function (value, row, index) {
                            // return row.student.studentClass.major.description
-                            return row.major.description;
+                            if(row.major!=null) {
+                                return row.major.description;
+                            }
 
                         }
                     },
@@ -157,16 +168,34 @@
                         width:'12%',
                         field: 'title',
                         formatter: function (value, row, index) {
-                            if(row.subTitle==null)
-                                return row.title;
-                            return row.title+'---'+row.subTitle;
+                            var isRepeat = false;
+                            $.ajax({
+                                url: '${basePath}process/isRepeatProject.html',
+                                data: {title: value},
+                                async: false,
+                                success: function (result) {
+                                    if(result=='true'){
+                                        isRepeat=true;
+                                    }
+                                }
+                            });
+                            if(isRepeat) {
+                                if(row.subTitle==null)
+                                    return '<span style="color: red;">'+row.title+'</span>';
+                                return '<span style="color: red;">'+row.title+'---'+row.subTitle+'</span>';
+                            }else{
+                                if(row.subTitle==null)
+                                    return row.title;
+                                return row.title+'---'+row.subTitle;
+                            }
+
                         }
                     },
                     {
                         title: '类别',
                         align:'center',
                         width:'5%',
-                        field: 'category',
+                        field: 'category'
                     },
                     {
                         title: '题目类型',
@@ -174,7 +203,9 @@
                         width:'5%',
                         field: 'projectType',
                         formatter: function (value, row, index) {
-                            return row.projectType.description;
+                            if(row.projectType!=null) {
+                                return row.projectType.description;
+                            }
                         }
                     },
                     {
@@ -183,7 +214,9 @@
                         width:'6%',
                         field: 'projectFidelity',
                         formatter: function (value, row, index) {
-                            return row.projectFidelity.description;
+                            if(row.projectFidelity!=null) {
+                                return row.projectFidelity.description;
+                            }
                         }
                     },
                     {
@@ -192,7 +225,9 @@
                         width:'6%',
                         field: 'projectFrom',
                         formatter: function (value, row, index) {
-                            return row.projectFrom.description;
+                            if(row.projectFrom!=null) {
+                                return row.projectFrom.description;
+                            }
                         }
                     },
                     {
@@ -201,7 +236,9 @@
                         width:'5%',
                         field: 'proposer',
                         formatter: function (value, row, index) {
-                            return row.proposer.name;
+                            if(row.proposer!=null) {
+                                return row.proposer.name;
+                            }
                         }
                     },
                     {
@@ -259,12 +296,11 @@
                         width:'7%',
                         field: 'detail',
                         formatter: function (value, row, index) {
-                            var url= "<a onclick='openWindow("+row.id+")'><button>显示详情</button></a>"
+                            return "<a onclick='openWindow("+row.id+")'><button>显示详情</button></a>"
 
-                            return url;
                         }
-                    },
-                ]],
+                    }
+                ]]
             })
 
         });

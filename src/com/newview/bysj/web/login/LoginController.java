@@ -8,7 +8,6 @@ import com.newview.bysj.util.ResourcesComparatorById;
 import com.newview.bysj.web.baseController.BaseController;
 import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -170,9 +169,9 @@ public class LoginController extends BaseController {
         List<Resource> childResourceList = new ArrayList<Resource>(resource);
         Collections.sort(childResourceList, new ResourcesComparatorById());
         Actor actor = CommonHelper.getCurrentActor(httpSession);
-        Page<MailAddresses> currentPage = mailAddressesService.getPageByAddresse(actor, pageCondition);
-        CommonHelper.paging(modelMap, currentPage, "recevieMailList");
-        modelMap.put("mailNum", currentPage.getContent().size());
+        //Page<MailAddresses> currentPage = mailAddressesService.getPageByAddresse(actor, pageCondition);
+        //CommonHelper.paging(modelMap, currentPage, "recevieMailList");
+        //modelMap.put("mailNum", currentPage.getContent().size());
         // 获取未读消息的条数
         modelMap.put("notreadmailnum", mailAddressesService.getNotReadMailNumber(actor));
         //将要解析的数据添加到map中，在jsp中进行解析

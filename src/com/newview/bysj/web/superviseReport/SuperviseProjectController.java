@@ -1,6 +1,7 @@
 package com.newview.bysj.web.superviseReport;
 
 import com.newview.bysj.domain.GraduateProject;
+import com.newview.bysj.domain.PaperProject;
 import com.newview.bysj.domain.Schedule;
 import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.helper.CommonHelper;
@@ -49,6 +50,19 @@ public class SuperviseProjectController extends BaseController {
             pageInfo.setTotal((int) graduateProjectPage.getTotalElements());
         }
         return pageInfo;
+    }
+
+    @ResponseBody
+    @RequestMapping("/hasOpenningReport")
+    public Boolean hasOpenningReport(String id) {
+        Boolean hasReport = false;
+        PaperProject graduateProject = (PaperProject) graduateProjectService.findById(Integer.valueOf(id));
+        if (graduateProject != null) {
+            if (graduateProject.getOpenningReport() != null) {
+                hasReport = true;
+            }
+        }
+        return hasReport;
     }
 
     /**

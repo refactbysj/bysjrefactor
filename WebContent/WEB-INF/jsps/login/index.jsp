@@ -9,65 +9,119 @@
 
     <title>毕业管理系统</title>
     <script type="text/javascript">
-        /*  获取浏览器的高度和宽度，并且为导航栏和右边的页面分配高度*/
-        /*function getContentSize() {
-            var wh = document.documentElement.clientHeight;
-            var cw = document.documentElement.clientWidth;
-            var nw = document.getElementById("navigation").clientWidth;
-            var pw = (cw - nw) + "px";
-            var eh = 150;
-            var oh = 100;
-            nw = nw + "px";
-            ch = (wh - eh) + "px";
-            ph = (wh - oh) + "px";
-            document.getElementById("page").style.height = ch;//根据id找到右边的页面page，更改style属性值height
-            document.getElementById("navigation").style.height = ph;//根据id找到左边的页面navigation，更改style属性值height
-            document.getElementById("footer").style.width = pw;//根据id修改footer的宽度
-            document.getElementById("footer").style.marginLeft = nw;//根据id修改footer的左边距
+        var receiveGrid;
+        $(function () {
+            receiveGrid = $("#recevieMailTable").datagrid({
+                url:'${basePath}notice/getMailToMeData.html',
+                pagination:true,
+                fit:true,
+                striped:true,
+                singleSelect:true,
+                columns:[[{
+                    title:'标题',
+                    field:'title',
+                    width:'30%',
+                    formatter:function (value, row) {
+                        return row.mail.title;
+                    }
+                },{
+                    title:'发布时间',
+                    field:'time',
+                    width:'15%',
+                    formatter:function (value, row) {
+                        var date = new Date();
+                        date.setTime(row.mail.addressTime);
+                        return date.toLocaleString();
+                    }
+                },{
+                    title:'发件人',
+                    width:'8%',
+                    field:'addressor',
+                    formatter:function (value, row) {
+                        return row.mail.addressor.name;
+                    }
+                },{
+                    title:'状态',
+                    field:'status',
+                    width:'5%',
+                    formatter:function (value, row) {
+                        if(row.isRead) {
+                            return '<span style="color: green;">已读</span>';
+                        }else{
+                            return '未读';
+                        }
+                    }
+                },{
+                    title:'操作',
+                    width:'20%',
+                    field:'action',
+                    formatter:function (value,row) {
+                        var str = '';
+                        str += $.formatString('<a href="javascript:void(0)" onclick="detailFun(\'{0}\')" class="detailBtn"></a>', row.id);
+                        str += $.formatString('<a href="javascript:void(0)" onclick="replyFun(\'{0}\')" class="replyBtn"></a>', row.mail.id);
+                        return str;
+                    }
+                }]],
+                onLoadSuccess:function () {
+                    $(".detailBtn").linkbutton({text: '详情', iconCls: 'icon-more', plain: true});
+                    $(".replyBtn").linkbutton({text: '回复', iconCls: 'icon-redo', plain: true});
+                }
+            })
+        });
+
+        //回复邮件
+        function replyFun(id) {
+            parent.$.modalDialog({
+                href:'${basePath}notice/replyMail.html?parentMailId='+id,
+                modal:true,
+                width:'50%',
+                height:'60%',
+                title:'回复邮件',
+                buttons:[{
+                    text:'关闭',
+                    iconCls:'icon-cancel',
+                    handler:function () {
+                        parent.$.modalDialog.handler.dialog('close');
+                    }
+                },{
+                    text:'回复',
+                    iconCls:'icon-ok',
+                    handler:function () {
+                        parent.$.modalDialog.receiveGrid =  receiveGrid;
+                        var f = parent.$.modalDialog.handler.find('#receiveMailForm');
+                        f.submit();
+                    }
+                }]
+            })
         }
 
-        window.onload = getContentSize;
-        window.onresize = getContentSize;*/
-
-        /*  设置加载页面*/
-        //获取浏览器页面可见高度和宽度
-        /*var _PageHeight = document.documentElement.clientHeight, _PageWidth = document.documentElement.clientWidth;
-        //计算loading框距离顶部和左部的距离（loading框的宽度为215px，高度为61px）
-        var _LoadingTop = _PageHeight > 61 ? (_PageHeight - 61) / 2 : 0, _LoadingLeft = _PageWidth > 215 ? (_PageWidth - 215) / 2
-            : 0;
-        //在页面未加载完毕之前显示的loading Html自定义内容
-        var _LoadingHtml = '<div id="loadingDiv" style="position:absolute;left:0;width:100%;height:'
-            + _PageHeight
-            + 'px;top:0;background:#f3f8ff;opacity:0.8;filter:alpha(opacity=80);z-index:10000;"><div style="position: absolute; cursor1: wait; left: '
-            + _LoadingLeft
-            + 'px; top:'
-            + _LoadingTop
-            + 'px; width: auto; height: 57px; line-height: 57px; padding-left: 50px; padding-right: 5px;  border: 2px solid #95B8E7; color: #696969; font-family:\'Microsoft YaHei\';"><i class="icon-spinner icon-spin"></i> 页面加载中，请等待...</div></div>';
-        //呈现loading效果
-        document.write(_LoadingHtml);
-
-        //监听加载状态改变
-        document.onreadystatechange = completeLoading;
-
-        //加载状态为complete时移除loading效果
-        function completeLoading() {
-            if (document.readyState == "complete") {
-                var loadingMask = document.getElementById('loadingDiv');
-                loadingMask.parentNode.removeChild(loadingMask);
-            }
-        }*/
+        //邮件详情
+        function detailFun(id) {
+            parent.$.modalDialog({
+                href:'${basePath}notice/receiveViewMail.html?mailId='+id,
+                modal:true,
+                width:'50%',
+                height:'50%',
+                title:'邮件详情',
+                buttons:[{
+                    text:'关闭',
+                    iconCls:'icon-cancel',
+                    handler:function () {
+                        $("#recevieMailTable").datagrid('reload');
+                        parent.$.modalDialog.handler.dialog('close');
+                    }
+                }]
+            })
+        }
     </script>
+
     <script type="text/javascript">
         function logout() {
-            window.wxc.xcConfirm("确认退出登录？", "confirm", {
-                onOk: function () {
+            $.messager.confirm('询问','确认退出登录？',function (t) {
+                if(t) {
                     window.location.href = "login.html";
                 }
-            });
-            /*var confirmlog = window.confirm("确认退出登录？");
-             if (confirmlog) {
-             window.location.href = "login.html";
-             }*/
+            })
         }
 
         function checkPassword() {
@@ -75,7 +129,7 @@
             var newpw = $("#newPassword").val();
             var confirmpw = $("#confirmNewPassword").val();
             if (newpw != confirmpw) {
-                myAlert("两次输入的新密码不一致");
+                $.messager.alert('提示', '两次输入的新密码不一致', 'warning');
                 return false;
             }
             window.wxc.xcConfirm("确认修改？", "confirm", {
@@ -297,7 +351,7 @@
     <%--页面正文区--%>
     <div data-options="region:'center',fig:true" id="index_tabs" class="easyui-tabs" style="background:#eee;">
         <div title="首页">
-            <span style="color: grey;font-size: x-large;margin-left: 20px">首页内容。。。</span>
+            <table id="recevieMailTable" style="height: 100%;"></table>
         </div>
     </div>
 </div>
