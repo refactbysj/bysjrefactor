@@ -73,10 +73,29 @@
                     {
                         title: '开题报告', field: 'action1', width: '10%', align: 'center',
                         formatter: function (value, row) {
+                            var hasReport = false;
+                            $.ajax({
+                                url:'${basePath}supervisor/school/hasOpenningReport.html',
+                                data:{'id':row.id},
+                                async: false,
+                                success:function (result) {
+                                    if(result=='true') {
+                                        hasReport = true;
+                                    }
+                                }
+                            })
                             if (row.category == "设计题目") {
-                                return '<p style="color:red;margin: auto">设计无开题报告</p>';
-                            } else
-                                return $.formatString('<a href="javascript:void(0)" class="downloadBtn" onclick="downLoadOpenningReport(\'{0}\')"></a>', row.id);
+                                return '设计无开题报告';
+                            } else{
+                                if(hasReport) {
+                                    return $.formatString('<a href="javascript:void(0)" class="downloadBtn" onclick="downLoadOpenningReport(\'{0}\')"></a>', row.id);
+
+                                }else{
+                                    return '未提交';
+
+                                }
+                            }
+
                         }
                     },
                     {

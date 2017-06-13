@@ -61,10 +61,29 @@
 
                     field: 'title',
                     formatter: function (value, row) {
-                        if (row.subTitle != null && row.subTitle != '') {
-                            return value + "——" + row.subTitle;
+                        var isRepeat = false;
+                        $.ajax({
+                            url: '${basePath}process/isRepeatProject.html',
+                            data: {title: value},
+                            async: false,
+                            success: function (result) {
+                                if(result=='true'){
+                                    isRepeat=true;
+                                }
+                            }
+                        });
+                        if (isRepeat) {
+                            if (row.subTitle != null && row.subTitle != '') {
+                                return '<span style="color: red;">' + value + "——" + row.subTitle + '</span>';
+                            } else {
+                                return '<span style="color: red">' + value + '</span>';
+                            }
                         } else {
-                            return value;
+                            if (row.subTitle != null && row.subTitle != '') {
+                                return value + "——" + row.subTitle;
+                            } else {
+                                return value;
+                            }
                         }
                     }
                 }, {
@@ -102,10 +121,10 @@
                         formatter: function (value, row) {
                             var str = '';
                             //是否已设置答辩时间
-                            if(row.replyGroup.replyTime!=null){
+                            if (row.replyGroup.replyTime != null) {
                                 //当前时间是否在答辩时间内
                                 var time = new Date().getTime();
-                                if(time>=row.replyGroup.replyTime.beginTime&&time<=row.replyGroup.replyTime.endTime) {
+                                if (time >= row.replyGroup.replyTime.beginTime && time <= row.replyGroup.replyTime.endTime) {
                                     //如果已经提交了终稿
                                     if (row.finalDraft != null) {
                                         //如果已经评审，则显示分数
@@ -132,12 +151,12 @@
                                     } else {
                                         str += '<span style="color: red;">未提交终稿</span>';
                                     }
-                                }else{
+                                } else {
                                     str = '<span style="color: red;">不在答辩时间内</span>';
                                 }
 
 
-                            }else{
+                            } else {
                                 str = '<span style="color:red">未设置答辩时间地点</span>';
                             }
 
@@ -199,7 +218,7 @@
                                     }
                                 } else {
                                     //指导老师评审通过
-                                    if (row.commentByTutor!=null&&row.commentByTutor.qualifiedByTutor) {
+                                    if (row.commentByTutor != null && row.commentByTutor.qualifiedByTutor) {
                                         str += $.formatString('<a href="javascript:void(0)" class="evaluateBtn" onclick="evalute(\'{0}\')"></a>', row.id);
                                     }
                                 }
@@ -373,9 +392,6 @@
                 }]
             })
         }
-
-
-
 
 
         //搜索

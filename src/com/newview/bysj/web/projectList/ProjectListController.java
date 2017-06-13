@@ -76,6 +76,16 @@ public class ProjectListController extends BaseController {
     }
 
 
+    @RequestMapping("isRepeatProject")
+    @ResponseBody
+    public Boolean isRepeatProject(String title) {
+        Boolean isRepeat = false;
+        Long i = graduateProjectService.findProjectCountByTitle(title);
+        if (i>1) {
+            isRepeat = true;
+        }
+        return isRepeat;
+    }
 
 
     /*//获取设计类型的课题

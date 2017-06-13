@@ -13,7 +13,7 @@
 </head>
 <body>
 <div style="margin-top: 20px;margin-left: 20px">
-    <span style="color: grey;font-size: xx-large">哎呀，出错啦！</span>
+   <%-- <span style="color: grey;font-size: xx-large">哎呀，出错啦！</span>
     <hr/>
     <span style="color: grey;">错误信息：${e}</span>
     <hr/>
@@ -22,7 +22,12 @@
     <c:forEach items="${detail}" var="info">
         ${info}<br/>
     </c:forEach>
-</span>
+</span>--%>
+    <img src="${basePath}/images/error.jpg" style="width: 40%">
+       <h3>
+           <a href="javascript:history.go(-1)"  style="margin-left: 40%">点击返回</a>
+
+       </h3>
 </div>
 
 </body>

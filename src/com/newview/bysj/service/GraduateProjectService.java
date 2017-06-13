@@ -99,6 +99,10 @@ public class GraduateProjectService extends BasicService<GraduateProject, Intege
         return result;
     }
 
+    @MethodDescription("通过题目名称获取课题数量")
+    public Long findProjectCountByTitle(String title) {
+        return graduateProjectDao.getProjectCount(title);
+    }
 
     @MethodDescription("获取通过教研室审核的所有课题")
     public Page<GraduateProject> getPageByAuditedDirector(Tutor director, Department department, Integer pageNo, Integer pageSize, Boolean approve) {
