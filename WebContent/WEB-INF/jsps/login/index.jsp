@@ -319,6 +319,9 @@
                         <c:when test="${parentResource.id == 51}">
                             <span class="glyphicon glyphicon-stats">${parentResource.description}</span>
                         </c:when>
+                            <c:when test="${parentResource.id == 62}">
+                                <span class="glyphicon glyphicon-tree-deciduous">${parentResource.description}</span>
+                            </c:when>
                     </c:choose>
                         <i class=" icon-angle-left"
                                    style="font-size: 10px; float: right"></i>
