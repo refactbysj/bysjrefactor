@@ -6,10 +6,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -33,8 +38,10 @@ public class TestMyProjectPage {
     private String baseUrl;
 
     //在被@Test注释标注的方法之前运行
-    @BeforeClass
+    @BeforeMethod
     public void before() {
+//        System.setProperty("webdriver.chrome.driver","/Users/apple/Downloads/chromedriver");
+//        driver =  new ChromeDriver();
         driver =  new FirefoxDriver();
         baseUrl = "http://localhost:8080/bysj3/login.html";
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -47,7 +54,7 @@ public class TestMyProjectPage {
 
     //只执行一次
     @org.testng.annotations.Test(invocationCount = 1)
-    public void test1() throws Exception {
+    public void test1() throws Exception  {
         driver.findElement(By.linkText("选题流程")).click();
         driver.findElement(By.id("url7")).click();
 //        WebElement webElement=driver.findElement(By.xpath(".//*[@id='datagrid-row-r1-2-0']/td[9]/div/a"));
@@ -94,29 +101,29 @@ public class TestMyProjectPage {
         driver.switchTo().defaultContent();
         System.out.println("测试查询后的清空功能");
 
-        //测试添加设计题目
-        driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@frameborder='0']"))).findElement(By.xpath("//a[@id='addDesignModel']")).click();
-        driver.switchTo().defaultContent();
-        WebElement webElement=driver.findElement(By.xpath("//div[@class='panel window']")).findElement(By.id("editProject"));
-        webElement.findElement(By.id("title")).sendKeys("山东建筑大学");
-        webElement.findElement(By.id("subTitle")).sendKeys("信管");
-        Select sel=new Select(webElement.findElement(By.id("projectType.id")));
-        sel.selectByValue("3");
-        Select sel1=new Select(webElement.findElement(By.id("fidelity")));
-        sel1.selectByValue("2");
-        Select sel2=new Select(webElement.findElement(By.id("projectFromSelect")));
-        sel2.selectByValue("4");
-        Thread.sleep(1000);
-//        用以下这种方式，无法定位select
-//        webElement.findElement(By.id("projectType.id")).findElement(By.xpath("//option[@value='3']")).isSelected();
-//        webElement.findElement(By.id("fidelity")).findElement(By.xpath("//option[text()=' 模拟']")).isSelected();
-//        webElement.findElement(By.id("projectFromSelect")).findElement(By.xpath("//option[text()=' 生产']"));
-        webElement.findElement(By.name("content")).sendKeys("恋爱观");
-        webElement.findElement(By.name("basicRequirement")).sendKeys("哈哈观");
-        webElement.findElement(By.name("basicSkill")).sendKeys("书费");
-        webElement.findElement(By.name("reference")).sendKeys("的横幅诶");
-        webElement.findElement(By.xpath("//div[@class='dialog-button']")).findElement(By.xpath("//span[text()='提交']")).click();
-        System.out.println("测试添加设计题目成功");
+//        //测试添加设计题目
+//        driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@frameborder='0']"))).findElement(By.xpath("//a[@id='addDesignModel']")).click();
+//        driver.switchTo().defaultContent();
+//        WebElement webElement=driver.findElement(By.xpath("//div[@class='panel window']")).findElement(By.id("editProject"));
+//        webElement.findElement(By.id("title")).sendKeys("山东建筑大学");
+//        webElement.findElement(By.id("subTitle")).sendKeys("信管");
+//        Select sel=new Select(webElement.findElement(By.id("projectType.id")));
+//        sel.selectByValue("3");
+//        Select sel1=new Select(webElement.findElement(By.id("fidelity")));
+//        sel1.selectByValue("2");
+//        Select sel2=new Select(webElement.findElement(By.id("projectFromSelect")));
+//        sel2.selectByValue("4");
+//        Thread.sleep(1000);
+////        用以下这种方式，无法定位select
+////        webElement.findElement(By.id("projectType.id")).findElement(By.xpath("//option[@value='3']")).isSelected();
+////        webElement.findElement(By.id("fidelity")).findElement(By.xpath("//option[text()=' 模拟']")).isSelected();
+////        webElement.findElement(By.id("projectFromSelect")).findElement(By.xpath("//option[text()=' 生产']"));
+//        webElement.findElement(By.name("content")).sendKeys("恋爱观");
+//        webElement.findElement(By.name("basicRequirement")).sendKeys("哈哈观");
+//        webElement.findElement(By.name("basicSkill")).sendKeys("书费");
+//        webElement.findElement(By.name("reference")).sendKeys("的横幅诶");
+//        webElement.findElement(By.xpath("//div[@class='dialog-button']")).findElement(By.xpath("//span[text()='提交']")).click();
+//        System.out.println("测试添加设计题目成功");
 
         // 测试添加论文题目
         driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@frameborder='0']"))).findElement(By.xpath("//a[@id='addPaperModel']")).click();
@@ -138,9 +145,40 @@ public class TestMyProjectPage {
         webElement1.findElement(By.xpath("//div[@class='dialog-button']")).findElement(By.xpath("//span[text()='提交']")).click();
         System.out.println("测试添加论文题目成功");
 
+        //workContent.get("工作内容")
+        //测试添加设计题目通过excel实现，select还不行，纯数字不行
+        Map<Integer,Map<String,String>> workContents = new ImportExcel1().importExcel();
+        for (int i=0;i< workContents.size();i++) {
+            Map<String, String> workContent = workContents.get(i + 1);
+            //测试添加设计题目
+            driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@frameborder='0']"))).findElement(By.xpath("//a[@id='addDesignModel']")).click();
+            driver.switchTo().defaultContent();
+            WebElement webElement=driver.findElement(By.xpath("//div[@class='panel window']")).findElement(By.id("editProject"));
+            webElement.findElement(By.id("title")).sendKeys(workContent.get("题目名称"));
+            webElement.findElement(By.id("subTitle")).sendKeys(workContent.get("副标题"));
+            Select sel=new Select(webElement.findElement(By.id("projectType.id")));
+            sel.selectByValue("3");
+            Select sel1=new Select(webElement.findElement(By.id("fidelity")));
+            sel1.selectByValue("2");
+            Select sel2=new Select(webElement.findElement(By.id("projectFromSelect")));
+            sel2.selectByValue("4");
+            Thread.sleep(1000);
+//        用以下这种方式，无法定位select
+//        webElement.findElement(By.id("projectType.id")).findElement(By.xpath("//option[@value='3']")).isSelected();
+//        webElement.findElement(By.id("fidelity")).findElement(By.xpath("//option[text()=' 模拟']")).isSelected();
+//        webElement.findElement(By.id("projectFromSelect")).findElement(By.xpath("//option[text()=' 生产']"));
+            webElement.findElement(By.name("content")).sendKeys(workContent.get("设计（论文）工作内容"));
+            webElement.findElement(By.name("basicRequirement")).sendKeys(workContent.get("设计（论文）基本要求"));
+            webElement.findElement(By.name("basicSkill")).sendKeys(workContent.get("所需基本技能"));
+            webElement.findElement(By.name("reference")).sendKeys(workContent.get("主要参考资料及参考文献"));
+            webElement.findElement(By.xpath("//div[@class='dialog-button']")).findElement(By.xpath("//span[text()='提交']")).click();
+            System.out.println("测试添加设计题目成功");
+
+        }
+
 
     }
-    @AfterClass
+    @AfterMethod
     public void after() {
         System.out.print("******");
         driver.quit();
