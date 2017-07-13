@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("process")
 public class ProjectDetailController extends BaseController {
-    @RequestMapping(value = "/showDetail.html", method = RequestMethod.GET)
+    @RequestMapping("/showDetail.html")
     public String showDetail(Integer graduateProjectId, ModelMap modelMap) {
         GraduateProject graduateProject = graduateProjectService.findById(graduateProjectId);
         if (graduateProject == null) {

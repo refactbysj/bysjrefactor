@@ -55,6 +55,12 @@
     <script type="text/javascript" src="<%=basePath%>/static/easyui/jquery.dialog.js" charset="utf-8"></script>
     <script type="text/javascript"
             src="<%=basePath%>/bootstrap/js/bootstrap.min.js"></script>
+    <%--bootstrap-table--%>
+    <script type="text/javascript"
+            src="<%=basePath%>/bootstrap-table-master/dist/bootstrap-table.min.js"></script>
+    <script type="text/javascript"
+            src="<%=basePath%>/bootstrap-table-master/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="<%=basePath%>/bootstrap-table-master/dist/extensions/export/bootstrap-table-export.min.js"></script>
 
 
     <script type="text/javascript" src="<%=basePath%>/js/myAlert.js"></script>
