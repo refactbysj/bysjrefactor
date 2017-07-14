@@ -40,18 +40,6 @@ public class NewScheduleGraduateProjectList extends BaseController {
         PageInfo pageInfo = new PageInfo();
         Tutor tutor = tutorService.findById(CommonHelper.getCurrentTutor(httpSession).getId());
         Page<GraduateProject> graduateProjectPage = graduateProjectService.getPageByDepartmentWithStudent(tutor, offset, limit);
-
-//        List list= new ArrayList();
-//        list = graduateProjectPage.getContent();
-//        //commentByTutor.getTotleScoreTutor();
-//        GraduateProject graduateProject =(GraduateProject)list;
-//
-//        JSONObject s=new JSONObject();
-//        s.put("score",graduateProjectPage.getContent().get(0).getCommentByTutor().getTotleScoreTutor());
-//        //List list1= (List)s;
-//        list.add(s);
-//        list.add(graduateProjectPage.getContent());
-//        System.out.print(graduateProjectPage.getContent().get(0).getCommentByTutor().getTotleScoreTutor());
         pageInfo.setRows(graduateProjectPage.getContent());
         pageInfo.setTotal((int)graduateProjectPage.getTotalElements());
         return pageInfo;

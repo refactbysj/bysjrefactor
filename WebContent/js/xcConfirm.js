@@ -12,7 +12,7 @@
  */
 (function ($) {
     window.wxc = window.wxc || {};
-    window.wxc.xcConfirm = function (popHtml, type, options) {;
+    window.wxc.xcConfirm = function (popHtml, type, options) {
         //按钮的类型
         var btnType = window.wxc.xcConfirm.btnEnum;
         //触发事件的类型

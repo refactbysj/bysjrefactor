@@ -5,70 +5,112 @@
     <%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
     <script type="text/javascript">
         var sum=new Array();
-        var obj = [];
         function ajax() {
             $.ajax({
                 url : "${basePath}new/scheduleOfGraduateProjectList.html",
                 type : "get",
                 dataType : "json",
                 success : function(value) {
-                    obj = [];
+                    var obj = [];
                     $.each(value.rows, function (i, d) {
 
                         obj.push(d);
                     });
+                    $('#scheduleGraduateProjectList').bootstrapTable('load',obj);
                 }
             })
 
         }
         /*点击驳回的函数*/
+        <%--function backSchoolExcellent(projectId) {--%>
+            <%--$.messager.confirm("提示","确认驳回？", function(r){--%>
+                <%--if(r){--%>
+                    <%--$.ajax({--%>
+                        <%--url: '${basePath}new/backProject.html',--%>
+                        <%--data: {"projectId": projectId},--%>
+                        <%--dataType: 'json',--%>
+                        <%--type: 'post',--%>
+                        <%--success: function () {--%>
+                            <%--ajax();--%>
+                            <%--$.messager.alert("提示","驳回成功！");--%>
+                        <%--},--%>
+                        <%--error: function () {--%>
+                            <%--$.messager.alert("提示","驳回失败！");--%>
+                        <%--}--%>
+                    <%--});--%>
+                <%--}--%>
+            <%--})--%>
+        <%--}--%>
+
+        /*点击推优的函数*/
+        <%--function passSchoolExcellent(projectId) {--%>
+            <%--$.messager.confirm("提示","确认推优？", function(r){--%>
+                <%--if(r){--%>
+                    <%--$.ajax({--%>
+                        <%--url: '${basePath}new/passProject.html',--%>
+                        <%--data: {"projectId": projectId},--%>
+                        <%--dataType: 'json',--%>
+                        <%--type: 'post',--%>
+                        <%--success: function () {--%>
+                            <%--ajax();--%>
+                            <%--$.messager.alert("提示","推优成功！");--%>
+                        <%--},--%>
+                        <%--error: function () {--%>
+                            <%--$.messager.alert("提示","推优失败！");--%>
+                        <%--}--%>
+                    <%--});--%>
+                <%--}--%>
+            <%--});--%>
+        <%--}--%>
+
+        /*bootstrap点击驳回的函数*/
         function backSchoolExcellent(projectId) {
-            $.messager.confirm("提示","确认驳回？", function(r){
-                if(r){
+            window.wxc.xcConfirm("确认驳回？", "confirm", {
+                onOk: function () {
                     $.ajax({
                         url: '${basePath}new/backProject.html',
                         data: {"projectId": projectId},
                         dataType: 'json',
                         type: 'post',
                         success: function () {
-//                            $("#projectRecommended" + projectId).html("<p id='projectRecommended"+projectId+"'>无</p>");
-//                            $("#projectOperation" + projectId).html("<a id='projectOperation"+projectId+"' onclick='passSchoolExcellent(" + projectId + ")'><button>推优</button></a>");
                             ajax();
-                            $('#scheduleGraduateProjectList').bootstrapTable('hideLoading');
-                            $('#scheduleGraduateProjectList').bootstrapTable('refresh');
-                            $.messager.alert("提示","驳回成功！");
+                            window.wxc.xcConfirm("驳回成功！", "success");
                         },
                         error: function () {
-                            $.messager.alert("提示","驳回失败！");
+                            window.wxc.xcConfirm("驳回失败！", "error");
                         }
                     });
                 }
             })
         }
 
-        /*点击推优的函数*/
+        /*bootstrap点击推优的函数*/
         function passSchoolExcellent(projectId) {
-            $.messager.confirm("提示","确认推优？", function(r){
-                if(r){
+            window.wxc.xcConfirm("确认推优？", "confirm", {
+                onOk: function () {
                     $.ajax({
                         url: '${basePath}new/passProject.html',
                         data: {"projectId": projectId},
                         dataType: 'json',
                         type: 'post',
                         success: function () {
-//                            $("#projectRecommended" + projectId).html("<p id='projectRecommended"+projectId+"'>优秀</p>");
-//                            $("#projectOperation" + projectId).html("<a id='projectOperation"+projectId+"' onclick='backSchoolExcellent(" + projectId + ")'><button>驳回</button></a>");
-
                             ajax();
-                            $('#scheduleGraduateProjectList').bootstrapTable('refresh');
-                            $.messager.alert("提示","推优成功！");
+                            window.wxc.xcConfirm("推优成功！", "success");
+                            return true;
                         },
                         error: function () {
-                            $.messager.alert("提示","推优失败！");
+                            window.wxc.xcConfirm("推优失败", "error");
+                            return false;
                         }
                     });
                 }
             });
+        }
+        function queryParams(params) {
+            return {
+                limit: params.limit,
+                offset: params.offset+1,
+            };
         }
 
         $(function () {
@@ -85,17 +127,18 @@
                     });
 
                     $("#scheduleGraduateProjectList").bootstrapTable({
-                        <%--url: "${basePath}new/scheduleOfGraduateProjectList.html",--%>
+                        url: "${basePath}new/scheduleOfGraduateProjectList.html",
                         <%--dataType: 'json',--%>
                         data:obj,
                         striped: true,
                         cache: false,
                         pagination:true,
 //                        pageList : [ 3, 5, 20 ],
-                        pageList:[10, 25, 50, 100, 'All'],
+//                        pageList:[10, 25, 50, 100, 'All'],
                         pageSize : 2,
 //                        pageNumber:1,
                         singleSelect:true,
+                        queryParams: queryParams,
                         columns: [[
                             {
                                 field: 'id',
@@ -104,13 +147,12 @@
                                 rowStyle:function(row,index) {
                                      return 'class="table table-bordered"'
                                 }
-
                             },
                             {
                                 field: 'no',
                                 title: '学号',
                                 align:'center',
-                                width:'9%',
+//                                width:'9%',
                                 formatter: function (value, row, index) {
                                     if(row.student!=null) {
                                         return row.student.no;
@@ -319,11 +361,11 @@
                                 field: 'detail',
                                 formatter: function (value, row, index) {
                                     <%--return "<a class='btn btn-primary' href='<%=basePath%>process/showDetail.html?graduateProjectId="+row.id+"' data-toggle='modal' data-target='#viewProjectModal'><i class='icon-coffee'></i>显示详情</a>"--%>
-                                    return "<a href='<%=basePath%>process/showDetail.html?graduateProjectId="+row.id+"' data-toggle='modal' data-target='#viewProjectModal'><button class='btn btn-info'>显示详情</button></a>"
+                                    return "<a href='<%=basePath%>new/show.html?graduateProjectId="+row.id+"' data-toggle='modal' data-target='#myModal'><button class='btn btn-info'>显示详情</button></a>"
 
                                 }
                             }
-                        ]]
+                        ]],
                     })
 
                 }
@@ -342,15 +384,12 @@
     </ol>
 </div>
 <div class="row-fluid">
-    <table id ="scheduleGraduateProjectList" class="table table-condensed "></table>
+    <table id ="scheduleGraduateProjectList" class="table table-bordered table-condensed"></table>
 </div>
 <!-- 模态框（Modal） -->
-<div class="modal fade" id="viewProjectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">
-                <%--显示另一个jsp--%>
-            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
