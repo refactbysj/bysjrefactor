@@ -134,8 +134,8 @@
                         striped: true,
                         cache: false,
                         pagination:true,
-//                        pageList : [ 3, 5, 20 ],
-//                        pageList:[10, 25, 50, 100, 'All'],
+//                        showPaginationSwitch:true,
+                        pageList:[0,1,2,3],
                         pageSize : 2,
 //                        pageNumber:1,
                         singleSelect:true,
@@ -390,6 +390,7 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <%--加载另一个页面jsp内容--%>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
