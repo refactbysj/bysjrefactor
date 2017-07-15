@@ -1,5 +1,6 @@
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<html lang="zh-CN">
 <head>
 
     <%@ include file="/WEB-INF/jsps/includeURL.jsp" %>
@@ -144,9 +145,9 @@
                                 field: 'id',
                                 title: 'ID',
                                 visible:false,//隐藏
-                                rowStyle:function(row,index) {
-                                     return 'class="table table-bordered"'
-                                }
+//                                rowStyle:function(row,index) {
+//                                     return 'class="table table-bordered"'
+//                                }
                             },
                             {
                                 field: 'no',
@@ -367,7 +368,6 @@
                             }
                         ]],
                     })
-
                 }
             })
 
