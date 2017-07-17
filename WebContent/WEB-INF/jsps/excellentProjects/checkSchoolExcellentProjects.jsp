@@ -210,6 +210,8 @@
                         width:'7%',
                         field: 'option',
                         formatter: function (value, row, index) {
+//                            if(row.graduateProject.provinceExcellentPro)
+//                                return '校优';
                             if (row.recommended==true) {
                                 return '<a id=projectOperation' + row.id + ' onclick=backSchoolExcellent(' + row.id + ')><button>驳回</button></a>';
                             }

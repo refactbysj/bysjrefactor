@@ -1,11 +1,13 @@
 package com.newview.bysj.web.schoolExcellentProject;
 
 import com.newview.bysj.domain.GraduateProject;
+import com.newview.bysj.domain.ProvinceExcellentProject;
 import com.newview.bysj.domain.SchoolExcellentProject;
 import com.newview.bysj.domain.Tutor;
 import com.newview.bysj.helper.CommonHelper;
 import com.newview.bysj.util.PageInfo;
 import com.newview.bysj.web.baseController.BaseController;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -65,10 +67,24 @@ public class AssignSchoolExcellentProjectController extends BaseController {
 
         SchoolExcellentProject schoolExcellentProject = graduateProject.getSchoolExcellentProject();
         schoolExcellentProject.setGraduateProject(null);
-        schoolExcellentProjectService.deleteObject(schoolExcellentProject);
+//        schoolExcellentProjectService.deleteObject(schoolExcellentProject);
         graduateProject.setSchoolExcellentPro(false);
         graduateProject.setSchoolExcellentProject(null);
+        schoolExcellentProjectService.deleteObject(schoolExcellentProject);
         graduateProjectService.saveOrUpdate(graduateProject);
+
+
+
+        //驳回校优时对应驳回省优
+        if(graduateProject.getProvinceExcellentProject()!=null) {
+            ProvinceExcellentProject provinceExcellentProject = graduateProject.getProvinceExcellentProject();
+            provinceExcellentProject.setGraudateProject(null);
+            graduateProject.setProvinceExcellentProject(null);
+            graduateProject.setProvinceExcellentPro(false);
+            provinceExcellentProjectService.deleteObject(provinceExcellentProject);
+            graduateProjectService.saveOrUpdate(graduateProject);
+        }
+
         CommonHelper.buildSimpleJson(httpServletResponse);
     }
 }

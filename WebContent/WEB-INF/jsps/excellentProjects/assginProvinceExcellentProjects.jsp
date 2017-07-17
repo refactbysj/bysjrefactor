@@ -197,7 +197,7 @@
                         width:'8%',
                         field: 'recommended',
                         formatter: function (value, row, index) {
-                            if(row.provinceExcellentProject!=null)
+                            if(row.provinceExcellentPro==true)
                                 return '<p id=projectRecommended'+row.id+'>优秀</p>';
                             return '<p id=projectRecommended'+row.id+'>否</p>';
                         }
@@ -208,7 +208,7 @@
                         width:'7%',
                         field: 'option',
                         formatter: function (value, row, index) {
-                            if (row.provinceExcellentPro) {
+                            if (row.provinceExcellentPro==true) {
                                 return '<a id=projectOperation' + row.id + ' onclick=backProvinceExcellent(' + row.id + ')><button>驳回</button></a>';
                             }
                             return '<a id=projectOperation' + row.id + ' onclick=passProvinceExcellent(' + row.id + ')><button>通过</button></a>';

@@ -68,8 +68,8 @@
                 url: '${basePath}director/scheduleOfGraduateProjectList.html',
                 striped: true,
                 pagination:true,
-                pageSize: 15,
-                pageList: [10, 15, 20, 30, 40, 60],
+                pageSize: 3,
+                pageList: [1,2,3,4],
                 fit:true,
                 idField:'id',
                 singleSelect:true,
@@ -77,7 +77,7 @@
                     {
                         title: 'ID',
                         field: 'id',
-                        hidden:true
+//                        hidden:true
                     },
                     {
                         title: '学号',
@@ -277,10 +277,10 @@
                         width:'7%',
                         field: 'option',
                         formatter: function (value, row, index) {
-                            if(row.schoolExcellentProject!=null)
+                            if(row.schoolExcellentPro==true)
                                 return '校优';
                             if(sum[row.id]>=90) {
-                                if (row.recommended == true && row.schoolExcellentProject == null) {
+                                if (row.recommended == true && row.schoolExcellentPro != true) {
                                     return '<a id=projectOperation' + row.id + ' onclick=backSchoolExcellent(' + row.id + ')><button>驳回</button></a>';
                                 }
                                 return '<a id=projectOperation' + row.id + ' onclick=passSchoolExcellent(' + row.id + ')><button>推优</button></a>';
