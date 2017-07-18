@@ -57,7 +57,6 @@ public class NewAssignSchoolExcellentProjectController extends BaseController {
 
         CommonHelper.buildSimpleJson(httpServletResponse);
     }
-
     //驳回推优
     @RequestMapping("project/cancelSchoolExcellentProject.html")
     public void cancelExcellentProjectByDirector(Integer graduateProjectId, HttpServletResponse httpServletResponse) {
