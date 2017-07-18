@@ -38,7 +38,6 @@
                     $('#newAssginSchoolExcellentProjects').bootstrapTable('load',obj);
                 }
             })
-
         }
         /*点击推优的函数*/
         function passSchoolExcellent(graduateProjectId) {

@@ -43,8 +43,6 @@ public class NewAssignSchoolExcellentProjectController extends BaseController {
 
         return pageInfo;
     }
-
-
     //确定校优
     @RequestMapping("project/approveSchoolExcellentProject.html")
     public void approveExcellentProjectByDirector(Integer graduateProjectId, HttpServletResponse httpServletResponse) {
